@@ -1,0 +1,8 @@
+EXPORTS
+	??1CXcapEarlyIms@@UAE@XZ @ 1 NONAME ; CXcapEarlyIms::~CXcapEarlyIms(void)
+	?CheckFileExistsL@XcapStaticUtils@@SAHAAVRFs@@ABVTDesC16@@@Z @ 2 NONAME ; int XcapStaticUtils::CheckFileExistsL(class RFs &, class TDesC16 const &)
+	?GenerateFileNameLC@XcapStaticUtils@@SAPAVHBufC16@@AAVRFs@@ABVTDesC16@@1@Z @ 3 NONAME ; class HBufC16 * XcapStaticUtils::GenerateFileNameLC(class RFs &, class TDesC16 const &, class TDesC16 const &)
+	?NewL@CXcapEarlyIms@@SAPAV1@XZ @ 4 NONAME ; class CXcapEarlyIms * CXcapEarlyIms::NewL(void)
+	?PublicIDL@CXcapEarlyIms@@QAE?AVTPtrC8@@XZ @ 5 NONAME ; class TPtrC8 CXcapEarlyIms::PublicIDL(void)
+	?RequestSimDataL@CXcapEarlyIms@@QAEXPAVMXcapEarlyImsObs@@@Z @ 6 NONAME ; void CXcapEarlyIms::RequestSimDataL(class MXcapEarlyImsObs *)
+

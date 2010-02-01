@@ -1,0 +1,140 @@
+EXPORTS
+	_ZN10CXdmEngine12CancelUpdateEP12CXdmDocument @ 1 NONAME
+	_ZN10CXdmEngine12CancelUpdateEP13CXdmDirectory @ 2 NONAME
+	_ZN10CXdmEngine13XdmSettingsLCER6RArrayIiE @ 3 NONAME
+	_ZN10CXdmEngine19CreateDocumentNodeLEv @ 4 NONAME
+	_ZN10CXdmEngine20CreateDocumentModelLERK7TDesC1611TXdmDocType @ 5 NONAME
+	_ZN10CXdmEngine20DeleteDocumentModelLEPK12CXdmDocument @ 6 NONAME
+	_ZN10CXdmEngine21CreateDirectoryModelLERK7TDesC16 @ 7 NONAME
+	_ZN10CXdmEngine21DeleteDirectoryModelLEPK13CXdmDirectory @ 8 NONAME
+	_ZN10CXdmEngine4NewLERK16CXdmProtocolInfo @ 9 NONAME
+	_ZN10CXdmEngine7UpdateLEP12CXdmDocumentR14TRequestStatus @ 10 NONAME
+	_ZN10CXdmEngine7UpdateLER14TRequestStatusP13CXdmDirectory15TDirUpdatePhase @ 11 NONAME
+	_ZN12CXdmDocument10FetchDataLEP16CXdmDocumentNode @ 12 NONAME
+	_ZN12CXdmDocument11DeleteDataLEP16CXdmDocumentNode @ 13 NONAME
+	_ZN12CXdmDocument11ResetSubsetEv @ 14 NONAME
+	_ZN12CXdmDocument14AppendToModelLEP16CXdmDocumentNodeS1_ @ 15 NONAME
+	_ZN12CXdmDocument14BaseConstructLEiRK6TDesC8 @ 16 NONAME
+	_ZN12CXdmDocument14BaseConstructLEiRK7TDesC16 @ 17 NONAME
+	_ZN12CXdmDocument15DocumentSubsetLERK7TDesC16 @ 18 NONAME
+	_ZN12CXdmDocument15ReplaceInModelLEP16CXdmDocumentNodeS1_ @ 19 NONAME
+	_ZN12CXdmDocument16RemoveFromModelLEP16CXdmDocumentNode @ 20 NONAME
+	_ZN12CXdmDocument7AppendLEP16CXdmDocumentNode @ 21 NONAME
+	_ZN12CXdmDocument7InsertLEP16CXdmDocumentNode @ 22 NONAME
+	_ZN12CXdmDocument8ReplaceLEP16CXdmDocumentNodeS1_ @ 23 NONAME
+	_ZN12CXdmDocument8ReplaceLEv @ 24 NONAME
+	_ZN12CXdmDocumentC2ER10CXdmEngine @ 25 NONAME
+	_ZN12CXdmDocumentD0Ev @ 26 NONAME
+	_ZN12CXdmDocumentD1Ev @ 27 NONAME
+	_ZN12CXdmDocumentD2Ev @ 28 NONAME
+	_ZN13CXdmDirectory14BaseConstructLERK7TDesC16 @ 29 NONAME
+	_ZN13CXdmDirectoryC2ER10CXdmEngine @ 30 NONAME
+	_ZN13CXdmDirectoryD0Ev @ 31 NONAME
+	_ZN13CXdmDirectoryD1Ev @ 32 NONAME
+	_ZN13CXdmDirectoryD2Ev @ 33 NONAME
+	_ZN13CXdmLogWriter4NewLERK7TDesC16 @ 34 NONAME
+	_ZN14XdmStaticUtils16CheckFileExistsLER3RFsRK7TDesC16 @ 35 NONAME
+	_ZN14XdmStaticUtils17CleanUpDirectoryLER3RFsRK7TDesC16 @ 36 NONAME
+	_ZN14XdmStaticUtils17GenerateFileNameLER3RFsRK7TDesC16S4_ @ 37 NONAME
+	_ZN15TXdmCredentialsC1ERK7TDesC16S2_ @ 38 NONAME
+	_ZN15TXdmCredentialsC1Ev @ 39 NONAME
+	_ZN15TXdmCredentialsC2ERK7TDesC16S2_ @ 40 NONAME
+	_ZN15TXdmCredentialsC2Ev @ 41 NONAME
+	_ZN16CXdmDocumentNode11SetLeafNodeEi @ 42 NONAME
+	_ZN16CXdmDocumentNode11SetNextNodeEPS_ @ 43 NONAME
+	_ZN16CXdmDocumentNode12SetEmptyNodeEi @ 44 NONAME
+	_ZN16CXdmDocumentNode14BaseConstructLERK7TDesC16 @ 45 NONAME
+	_ZN16CXdmDocumentNode14CopyConstructLERKS_S1_ @ 46 NONAME
+	_ZN16CXdmDocumentNode16AppendChileNodeLEPS_ @ 47 NONAME
+	_ZN16CXdmDocumentNode16CreateAttributeLERK7TDesC16 @ 48 NONAME
+	_ZN16CXdmDocumentNode16CreateAttributeLEv @ 49 NONAME
+	_ZN16CXdmDocumentNode16CreateChileNodeLERK7TDesC16 @ 50 NONAME
+	_ZN16CXdmDocumentNode16CreateChileNodeLEv @ 51 NONAME
+	_ZN16CXdmDocumentNode16InsertChileNodeLEiPS_ @ 52 NONAME
+	_ZN16CXdmDocumentNode16RemoveChileNodeLEPS_ @ 53 NONAME
+	_ZN16CXdmDocumentNode17ReplaceChileNodeLEPS_S0_ @ 54 NONAME
+	_ZN16CXdmDocumentNode19SetLeafNodeContentLERK6TDesC8 @ 55 NONAME
+	_ZN16CXdmDocumentNode19SetLeafNodeContentLERK7TDesC16 @ 56 NONAME
+	_ZN16CXdmDocumentNode5PrintEv @ 57 NONAME
+	_ZN16CXdmDocumentNode8SetNameLERK6TDesC8 @ 58 NONAME
+	_ZN16CXdmDocumentNode8SetNameLERK7TDesC16 @ 59 NONAME
+	_ZN16CXdmDocumentNodeC2ER10CXdmEngineR15MXdmNodeFactory @ 60 NONAME
+	_ZN16CXdmDocumentNodeC2ER10CXdmEngineR15MXdmNodeFactoryPS_ @ 61 NONAME
+	_ZN16CXdmDocumentNodeC2EiR10CXdmEngineR15MXdmNodeFactoryPS_ @ 62 NONAME
+	_ZN16CXdmDocumentNodeD0Ev @ 63 NONAME
+	_ZN16CXdmDocumentNodeD1Ev @ 64 NONAME
+	_ZN16CXdmDocumentNodeD2Ev @ 65 NONAME
+	_ZN16CXdmProtocolInfo11SetSecurityEi @ 66 NONAME
+	_ZN16CXdmProtocolInfo13SetCacheUsageEi @ 67 NONAME
+	_ZN16CXdmProtocolInfo14SetCredentialsE15TXdmCredentials @ 68 NONAME
+	_ZN16CXdmProtocolInfo4NewLEi @ 69 NONAME
+	_ZN16CXdmProtocolInfo4NewLEiiRK7TDesC16 @ 70 NONAME
+	_ZN16CXdmProtocolInfoD0Ev @ 71 NONAME
+	_ZN16CXdmProtocolInfoD1Ev @ 72 NONAME
+	_ZN16CXdmProtocolInfoD2Ev @ 73 NONAME
+	_ZN17CXdmNodeAttribute14BaseConstructLERK7TDesC16 @ 74 NONAME
+	_ZN17CXdmNodeAttribute18SetAttributeValueLERK6TDesC8 @ 75 NONAME
+	_ZN17CXdmNodeAttribute18SetAttributeValueLERK7TDesC16 @ 76 NONAME
+	_ZN17CXdmNodeAttributeC2ER10CXdmEngineR15MXdmNodeFactory @ 77 NONAME
+	_ZN17CXdmNodeAttributeC2ER10CXdmEngineR15MXdmNodeFactoryP16CXdmDocumentNode @ 78 NONAME
+	_ZN17CXdmNodeAttributeD0Ev @ 79 NONAME
+	_ZN17CXdmNodeAttributeD1Ev @ 80 NONAME
+	_ZN17CXdmNodeAttributeD2Ev @ 81 NONAME
+	_ZNK10CXdmEngine18DocumentCollectionEv @ 82 NONAME
+	_ZNK10CXdmEngine19DirectoryCollectionEv @ 83 NONAME
+	_ZNK12CXdmDocument4FindERK16CXdmDocumentNodeR13RPointerArrayIS0_E @ 84 NONAME
+	_ZNK12CXdmDocument4FindERK7TDesC16R13RPointerArrayI16CXdmDocumentNodeE @ 85 NONAME
+	_ZNK12CXdmDocument4FindERK7TDesC16R13RPointerArrayI16CXdmDocumentNodeERKS3_I15SXdmAttribute16E @ 86 NONAME
+	_ZNK12CXdmDocument4FindERK7TDesC16R13RPointerArrayI17CXdmNodeAttributeE @ 87 NONAME
+	_ZNK12CXdmDocument4NameEv @ 88 NONAME
+	_ZNK12CXdmDocumenteqERS_ @ 89 NONAME
+	_ZNK13CXdmLogWriter10WriteToLogERK6TDesC8 @ 90 NONAME
+	_ZNK13CXdmLogWriter10WriteToLogERK7TDesC16 @ 91 NONAME
+	_ZNK16CXdmDocumentNode10IsLeafNodeEv @ 92 NONAME
+	_ZNK16CXdmDocumentNode11ElementTypeEv @ 93 NONAME
+	_ZNK16CXdmDocumentNode11IsEmptyNodeEv @ 94 NONAME
+	_ZNK16CXdmDocumentNode12HasAttributeERK7TDesC16 @ 95 NONAME
+	_ZNK16CXdmDocumentNode13ElementDataLCEv @ 96 NONAME
+	_ZNK16CXdmDocumentNode14AttributeCountEv @ 97 NONAME
+	_ZNK16CXdmDocumentNode15LeafNodeContentEv @ 98 NONAME
+	_ZNK16CXdmDocumentNode18EightBitNodeNameLCEv @ 99 NONAME
+	_ZNK16CXdmDocumentNode23EscapeLeafNodeContentLCEv @ 100 NONAME
+	_ZNK16CXdmDocumentNode4FindERK7TDesC16R13RPointerArrayIS_E @ 101 NONAME
+	_ZNK16CXdmDocumentNode4FindERK7TDesC16R13RPointerArrayIS_ERKS3_I15SXdmAttribute16E @ 102 NONAME
+	_ZNK16CXdmDocumentNode4FindERKS_R13RPointerArrayIS_E @ 103 NONAME
+	_ZNK16CXdmDocumentNode5MatchERK7TDesC16RK13RPointerArrayI14SXdmAttribute8E @ 104 NONAME
+	_ZNK16CXdmDocumentNode5MatchERKS_ @ 105 NONAME
+	_ZNK16CXdmDocumentNode6ParentEv @ 106 NONAME
+	_ZNK16CXdmDocumentNode8NextNodeEv @ 107 NONAME
+	_ZNK16CXdmDocumentNode8NodeNameEv @ 108 NONAME
+	_ZNK16CXdmDocumentNode9AttributeERK7TDesC16 @ 109 NONAME
+	_ZNK16CXdmDocumentNode9AttributeEi @ 110 NONAME
+	_ZNK16CXdmDocumentNode9ChileNodeEi @ 111 NONAME
+	_ZNK16CXdmDocumentNode9NodeCountEv @ 112 NONAME
+	_ZNK16CXdmDocumentNodeeqERKS_ @ 113 NONAME
+	_ZNK16CXdmProtocolInfo10SettingsIDEv @ 114 NONAME
+	_ZNK16CXdmProtocolInfo11AccessPointEv @ 115 NONAME
+	_ZNK16CXdmProtocolInfo11CredentialsEv @ 116 NONAME
+	_ZNK16CXdmProtocolInfo11ProtocolUidEv @ 117 NONAME
+	_ZNK16CXdmProtocolInfo14IsCacheEnabledEv @ 118 NONAME
+	_ZNK16CXdmProtocolInfo4RootEv @ 119 NONAME
+	_ZNK16CXdmProtocolInfo8IsSecureEv @ 120 NONAME
+	_ZNK17CXdmNodeAttribute11ElementTypeEv @ 121 NONAME
+	_ZNK17CXdmNodeAttribute14AttributeValueEv @ 122 NONAME
+	_ZNK17CXdmNodeAttribute14EscapedValueLCEv @ 123 NONAME
+	_ZNK17CXdmNodeAttribute15EightBitValueLCEv @ 124 NONAME
+	_ZTI10CXdmEngine @ 125 NONAME ; #<TI>#
+	_ZTI12CXdmDocument @ 126 NONAME ; #<TI>#
+	_ZTI13CXdmDirectory @ 127 NONAME ; #<TI>#
+	_ZTI13CXdmLogWriter @ 128 NONAME ; #<TI>#
+	_ZTI16CXdmDocumentNode @ 129 NONAME ; #<TI>#
+	_ZTI16CXdmProtocolInfo @ 130 NONAME ; #<TI>#
+	_ZTI17CXdmNodeAttribute @ 131 NONAME ; #<TI>#
+	_ZTV10CXdmEngine @ 132 NONAME ; #<VT>#
+	_ZTV12CXdmDocument @ 133 NONAME ; #<VT>#
+	_ZTV13CXdmDirectory @ 134 NONAME ; #<VT>#
+	_ZTV13CXdmLogWriter @ 135 NONAME ; #<VT>#
+	_ZTV16CXdmDocumentNode @ 136 NONAME ; #<VT>#
+	_ZTV16CXdmProtocolInfo @ 137 NONAME ; #<VT>#
+	_ZTV17CXdmNodeAttribute @ 138 NONAME ; #<VT>#
+

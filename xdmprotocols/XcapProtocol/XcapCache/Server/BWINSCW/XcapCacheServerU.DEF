@@ -1,0 +1,4 @@
+EXPORTS
+	?StartThread@CXcapCacheServer@@SAHXZ @ 1 NONAME ; int CXcapCacheServer::StartThread(void)
+	?WriteToLog@CXcapCacheServer@@SAXV?$TRefByValue@$$CBVTDesC8@@@@ZZ @ 2 NONAME ; void CXcapCacheServer::WriteToLog(class TRefByValue<class TDesC8 const >, ...)
+

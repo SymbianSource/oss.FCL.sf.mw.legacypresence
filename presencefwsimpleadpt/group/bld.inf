@@ -1,0 +1,47 @@
+/*
+* Copyright (c) 2007-2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:    Build information file for SIP/Simple Protocol Plugin
+*
+*/
+
+
+
+
+#include <platform_paths.hrh>
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_EXPORTS
+
+// CenRep config files
+../Conf/presencefwsimpleadpt.confml         			MW_LAYER_CONFML(presencefwsimpleadpt.confml)
+../Conf/presencefwsimpleadpt_10282C84.crml	         	MW_LAYER_CRML(presencefwsimpleadpt_10282c84.crml)
+
+
+// backup registry file
+../cenrep/backup_registration.xml   z:/private/10282c84/backup_registration.xml
+
+//ROM SIS stub
+presencefwsimpleadptstub.SIS    /epoc32/data/z/system/install/presencefwsimpleadptstub.sis
+
+// IBYs
+../rom/presencefwsimpleadpt.iby CORE_MW_LAYER_IBY_EXPORT_PATH(presencefwsimpleadpt.iby)
+
+PRJ_MMPFILES
+simpleplugin.mmp
+
+PRJ_TESTMMPFILES
+
+PRJ_TESTEXPORTS

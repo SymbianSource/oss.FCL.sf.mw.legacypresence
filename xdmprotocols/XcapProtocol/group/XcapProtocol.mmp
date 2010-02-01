@@ -1,0 +1,87 @@
+/*
+* Copyright (c) 2005 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: XdmProtocol.dll from XdmProtocol.mmp
+*
+*/
+
+
+
+#include <platform_paths.hrh>
+
+TARGET                          xcapprotocol.dll
+UID                             0x10009D8D 0x1020740F
+CAPABILITY                      CAP_ECOM_PLUGIN
+VENDORID                        VID_DEFAULT
+TARGETTYPE                      PLUGIN
+
+SOURCEPATH                      ../src
+
+START RESOURCE                  1020740F.rss
+
+TARGET                          xcapprotocol.rsc                                                                
+ 
+END
+
+SOURCE                          XcapProtocol.cpp
+SOURCE                          XcapDocument.cpp
+SOURCE                          XcapDirectory.cpp
+SOURCE                          XcapDocumentNode.cpp
+SOURCE                          XcapNodeAttribute.cpp
+
+//Sources common to all protocols
+SOURCEPATH                      ../../src
+SOURCE                          XdmNamespace.cpp
+SOURCE                          XdmShutdownTimer.cpp
+
+//Internal XCAP includes
+USERINCLUDE                     ../XcapUtils/inc
+USERINCLUDE                     ../XcapCache/inc
+USERINCLUDE                     ../XcapAppUsage/inc
+USERINCLUDE                     ../XcapOperations/inc
+USERINCLUDE                     ../XcapHttpTransport/inc
+
+//Common XDM includes
+USERINCLUDE                     ../inc
+USERINCLUDE                     ../../inc
+USERINCLUDE                     ../../XdmXmlParser/inc
+
+MW_LAYER_SYSTEMINCLUDE
+SYSTEMINCLUDE                   /epoc32/include/xml
+SYSTEMINCLUDE                   /epoc32/include/ecom
+SYSTEMINCLUDE                   ../../../inc
+
+LIBRARY                         hal.lib
+LIBRARY                         ecom.lib
+LIBRARY                         efsrv.lib
+LIBRARY                         euser.lib
+LIBRARY                         charconv.lib
+LIBRARY                         xdmengine.lib
+LIBRARY                         xdmxmlparser.lib
+LIBRARY                         xdmsettingsapi.lib
+LIBRARY                         msgconnmanager.lib
+LIBRARY                         xcapcacheclient.lib
+LIBRARY                         xcaphttptransport.lib
+LIBRARY                         xcaputils.lib
+DEBUGLIBRARY                    flogger.lib
+
+
+#if defined( ARMCC )
+DEFFILE ../eabi/ 
+#elif defined ( WINSCW )
+deffile ../bwinscw/ 
+#elif defined (WINS )
+deffile ../bwins/ 
+#endif
+
+

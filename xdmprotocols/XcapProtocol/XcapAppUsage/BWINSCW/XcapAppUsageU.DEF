@@ -1,0 +1,6 @@
+EXPORTS
+	?ImplementationGroupProxy@@YAPBUTImplementationProxy@@AAH@Z @ 1 NONAME ; struct TImplementationProxy const * ImplementationGroupProxy(int &)
+	?NewL@CXcapAppUsage@@QAEPAV1@ABVCXdmEngine@@H@Z @ 2 NONAME ; class CXcapAppUsage * CXcapAppUsage::NewL(class CXdmEngine const &, int)
+	?Validate@CXcapAppUsage@@QAEHAAVCXdmDocument@@H@Z @ 3 NONAME ; int CXcapAppUsage::Validate(class CXdmDocument &, int)
+	?Validate@CXcapAppUsage@@QAEHAAVCXdmDocumentNode@@PAVMXcapUriInterface@@H@Z @ 4 NONAME ; int CXcapAppUsage::Validate(class CXdmDocumentNode &, class MXcapUriInterface *, int)
+

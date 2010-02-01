@@ -1,0 +1,39 @@
+/*
+* Copyright (c) 2007 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:    resource definitions
+*
+*/
+
+
+
+#ifndef SIMPLEPLUGIN_RESOURCE_HRH
+#define SIMPLEPLUGIN_RESOURCE_HRH
+ 
+/**
+ * System wide UID 2:s for ECom plugin dlls.
+ */
+#define SIMPLEPLUGIN_DLL_UID_ECOM_PLUGIN        0x10009D8D
+ 
+/**
+ * SIMPLE protocol dll.
+ */
+#define SIMPLEPLUGIN_DLL_UID_SIMPLE_PROTOCOL    0x10282C84 
+ 
+/**
+ * Resource file compatible defintions for PrFw test protocols.
+ */
+#define SIMPLEPLUGIN_1_IMPLEMENTATION_UID       0x10282C86 
+ 
+#endif // SIMPLEPLUGIN_RESOURCE_HRH
+

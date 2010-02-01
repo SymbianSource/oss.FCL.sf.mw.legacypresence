@@ -1,0 +1,3 @@
+EXPORTS
+	?NewMsgConnManagerL@@YAPAVMMsgConnManager@@H@Z @ 1 NONAME ; class MMsgConnManager * NewMsgConnManagerL(int)
+

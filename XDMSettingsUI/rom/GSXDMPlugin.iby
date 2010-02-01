@@ -1,0 +1,37 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:  GS XDM Plugin UI
+*
+*/
+
+
+#ifndef __GS_XDM_Plugin_IBY__
+#define __GS_XDM_Plugin_IBY__
+
+#include <bldvariant.hrh>
+#ifdef __XDM
+
+//GS plugin in use
+#ifdef RD_GS_RENOVATION
+
+// GS XDM Plugin UI
+ECOM_PLUGIN(GSXDMPlugin.dll,10207428.rsc) // this publishes the DLL and the 
+            // resource file to the correct location
+data=DATAZ_\BITMAP_DIR\GSXDMplugin.mif BITMAP_DIR\GSXDMplugin.mif
+
+#endif //RD_GS_RENOVATION
+
+#endif        //__XDM
+
+#endif //__GS_XDM_Plugin_IBY__

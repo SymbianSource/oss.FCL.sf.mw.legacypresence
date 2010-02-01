@@ -1,0 +1,24 @@
+EXPORTS
+	??1CXcapHttpRequest@@UAE@XZ @ 1 NONAME ; CXcapHttpRequest::~CXcapHttpRequest(void)
+	??1CXcapHttpTransport@@UAE@XZ @ 2 NONAME ; CXcapHttpTransport::~CXcapHttpTransport(void)
+	?CancelRequest@CXcapHttpRequest@@QAEXXZ @ 3 NONAME ; void CXcapHttpRequest::CancelRequest(void)
+	?DeleteL@CXcapHttpTransport@@QAEPAVCXcapHttpReqDelete@@ABVTDesC16@@@Z @ 4 NONAME ; class CXcapHttpReqDelete * CXcapHttpTransport::DeleteL(class TDesC16 const &)
+	?DispatchRequestL@CXcapHttpRequest@@QAEXAAVTRequestStatus@@@Z @ 5 NONAME ; void CXcapHttpRequest::DispatchRequestL(class TRequestStatus &)
+	?GetL@CXcapHttpTransport@@QAEPAVCXcapHttpReqGet@@ABVTDesC16@@@Z @ 6 NONAME ; class CXcapHttpReqGet * CXcapHttpTransport::GetL(class TDesC16 const &)
+	?HeadL@CXcapHttpTransport@@QAEPAVCXcapHttpReqHead@@ABVTDesC16@@@Z @ 7 NONAME ; class CXcapHttpReqHead * CXcapHttpTransport::HeadL(class TDesC16 const &)
+	?HeaderValue@CXcapHttpRequest@@QBE?AVTPtrC8@@W4TStrings@HTTP@@@Z @ 8 NONAME ; class TPtrC8 CXcapHttpRequest::HeaderValue(enum HTTP::TStrings) const
+	?MkcolL@CXcapHttpTransport@@QAEPAVCXcapHttpReqMkcol@@ABVTDesC16@@@Z @ 9 NONAME ; class CXcapHttpReqMkcol * CXcapHttpTransport::MkcolL(class TDesC16 const &)
+	?NewL@CXcapHttpTransport@@SAPAV1@ABVTDesC16@@AAVMMsgConnManager@@ABVTXdmCredentials@@@Z @ 10 NONAME ; class CXcapHttpTransport * CXcapHttpTransport::NewL(class TDesC16 const &, class MMsgConnManager &, class TXdmCredentials const &)
+	?PutL@CXcapHttpTransport@@QAEPAVCXcapHttpReqPut@@ABVTDesC16@@@Z @ 11 NONAME ; class CXcapHttpReqPut * CXcapHttpTransport::PutL(class TDesC16 const &)
+	?ReleaseResponseData@CXcapHttpRequest@@QAEXXZ @ 12 NONAME ; void CXcapHttpRequest::ReleaseResponseData(void)
+	?RequestBody@CXcapHttpContSupplier@@QBE?AVTPtrC8@@XZ @ 13 NONAME ; class TPtrC8 CXcapHttpContSupplier::RequestBody(void) const
+	?RequestUriL@CXcapHttpRequest@@QBE?AVTPtrC8@@XZ @ 14 NONAME ; class TPtrC8 CXcapHttpRequest::RequestUriL(void) const
+	?ResetUriL@CXcapHttpRequest@@QAEXABVTDesC16@@@Z @ 15 NONAME ; void CXcapHttpRequest::ResetUriL(class TDesC16 const &)
+	?ResponseData@CXcapHttpRequest@@QAEPAVTXdmCompletionData@@XZ @ 16 NONAME ; class TXdmCompletionData * CXcapHttpRequest::ResponseData(void)
+	?RootUri@CXcapHttpTransport@@QAE?AVTPtrC8@@XZ @ 17 NONAME ; class TPtrC8 CXcapHttpTransport::RootUri(void)
+	?SetExpiryTimeL@CXcapHttpRequest@@QAEXPAVMXcapHttpRequestTimerCallback@@VTTimeIntervalMicroSeconds32@@@Z @ 18 NONAME ; void CXcapHttpRequest::SetExpiryTimeL(class MXcapHttpRequestTimerCallback *, class TTimeIntervalMicroSeconds32)
+	?SetHeaderL@CXcapHttpRequest@@QAEXABVTDesC8@@0@Z @ 19 NONAME ; void CXcapHttpRequest::SetHeaderL(class TDesC8 const &, class TDesC8 const &)
+	?SetRequestBodyL@CXcapHttpContSupplier@@QAEXABVTDesC8@@@Z @ 20 NONAME ; void CXcapHttpContSupplier::SetRequestBodyL(class TDesC8 const &)
+	?SetRootUriL@CXcapHttpTransport@@QAEXABVTDesC16@@@Z @ 21 NONAME ; void CXcapHttpTransport::SetRootUriL(class TDesC16 const &)
+	?UpdateRequestUriL@CXcapHttpRequest@@QAEXABVTDesC8@@@Z @ 22 NONAME ; void CXcapHttpRequest::UpdateRequestUriL(class TDesC8 const &)
+

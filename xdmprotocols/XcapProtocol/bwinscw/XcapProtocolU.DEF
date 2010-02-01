@@ -1,0 +1,22 @@
+EXPORTS
+        ?ImplementationGroupProxy@@YAPBUTImplementationProxy@@AAH@Z @ 1 NONAME ; struct TImplementationProxy const * ImplementationGroupProxy(int &)
+	??1CXcapDocumentNode@@UAE@XZ @ 2 NONAME ; CXcapDocumentNode::~CXcapDocumentNode(void)
+	??1CXdmNamespace@@UAE@XZ @ 3 NONAME ; CXdmNamespace::~CXdmNamespace(void)
+	?ApplicationUsage@CXcapDocument@@QBEAAVCXcapAppUsage@@XZ @ 4 NONAME ; class CXcapAppUsage & CXcapDocument::ApplicationUsage(void) const
+	?Cache@CXcapProtocol@@QAEPAVRXcapCache@@XZ @ 5 NONAME ; class RXcapCache * CXcapProtocol::Cache(void)
+	?DataLength@CXcapDocument@@QBEHXZ @ 6 NONAME ; int CXcapDocument::DataLength(void) const
+	?ETag@CXcapDocument@@QAEAAVTDesC8@@XZ @ 7 NONAME ; class TDesC8 & CXcapDocument::ETag(void)
+	?IsNetworkAvailable@CXcapProtocol@@QAEHXZ @ 8 NONAME ; int CXcapProtocol::IsNetworkAvailable(void)
+	?NewL@CXdmNamespace@@SAPAV1@ABVTDesC8@@0@Z @ 9 NONAME ; class CXdmNamespace * CXdmNamespace::NewL(class TDesC8 const &, class TDesC8 const &)
+	?Parser@CXcapProtocol@@QAEAAVCXdmXmlParser@@XZ @ 10 NONAME ; class CXdmXmlParser & CXcapProtocol::Parser(void)
+	?Prefix@CXdmNamespace@@QBE?AVTPtrC8@@XZ @ 11 NONAME ; class TPtrC8 CXdmNamespace::Prefix(void) const
+	?Protocol@CXcapDocument@@QBEAAVCXcapProtocol@@XZ @ 12 NONAME ; class CXcapProtocol & CXcapDocument::Protocol(void) const
+	?PublicID@CXcapProtocol@@QAE?AVTPtrC8@@XZ @ 13 NONAME ; class TPtrC8 CXcapProtocol::PublicID(void)
+	?RemoveData@CXcapDocument@@QAEXPAVCXcapDocumentNode@@@Z @ 14 NONAME ; void CXcapDocument::RemoveData(class CXcapDocumentNode *)
+	?ResetSubset@CXcapDocument@@UAEXXZ @ 15 NONAME ; void CXcapDocument::ResetSubset(void)
+	?SetETag@CXcapDocument@@QAEXABVTDesC8@@@Z @ 16 NONAME ; void CXcapDocument::SetETag(class TDesC8 const &)
+	?TempCopyL@CXcapDocument@@QAEPAV1@XZ @ 17 NONAME ; class CXcapDocument * CXcapDocument::TempCopyL(void)
+	?Transport@CXcapProtocol@@QAEAAVCXcapHttpTransport@@XZ @ 18 NONAME ; class CXcapHttpTransport & CXcapProtocol::Transport(void)
+	?Uri@CXdmNamespace@@QBE?AVTPtrC8@@XZ @ 19 NONAME ; class TPtrC8 CXdmNamespace::Uri(void) const
+	
+
