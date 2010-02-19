@@ -254,7 +254,14 @@ void CXdmXmlContentHandler::OnEndElementL( const RTagInfo &aElement,
                 }   
             }
         }
-    else iCurrentNode = iCurrentNode->Parent();
+    else if ( iCurrentNode ) 
+        {
+        iCurrentNode = iCurrentNode->Parent();
+        }
+    else
+        {
+        // For PC-lint note
+        }
     }
     
 // ---------------------------------------------------------

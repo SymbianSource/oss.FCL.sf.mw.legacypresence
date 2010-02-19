@@ -412,9 +412,9 @@ void CXDMPlugin::DynInitMenuPaneL(TInt aResourceId,CEikMenuPane* aMenuPane)
 //
 void CXDMPlugin::HandleResourceChangeManual(TInt aType)
     {
-    if (iMainListContainer)
+    if ( iSettingListContainer )
         iSettingListContainer->HandleResourceChangeManual(aType);    
-    if (iSettingListContainer)
+    if ( iMainListContainer )
         iMainListContainer->HandleResourceChangeManual(aType);
     }
     
@@ -465,6 +465,10 @@ void CXDMPlugin::UpdateMskL()
         {
         cba->SetCommandSetL(R_XDMUI_MAINVIEW_SOFTKEYS_SL);
         cba->MakeCommandVisible( EGSXDMPluginCmdChange, ETrue);
+        if ( iSettingListContainer->IsVisible() )
+            {
+            iCurrentContainer->DrawNow();
+            }
         }
     cba->DrawNow();
     }
