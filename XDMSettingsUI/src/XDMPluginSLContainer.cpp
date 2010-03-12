@@ -55,6 +55,7 @@ const TInt KMaxPostfixLength = 5;
 //
 CXDMPluginSLContainer::CXDMPluginSLContainer(CAknView* aView) : iView(aView)
     {
+    SetComponentsToInheritVisibility( ETrue );
     }
     
 // ---------------------------------------------------------------------------

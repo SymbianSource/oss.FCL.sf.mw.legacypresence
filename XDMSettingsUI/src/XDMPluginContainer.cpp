@@ -47,7 +47,7 @@
 //
 CXDMPluginContainer::CXDMPluginContainer(CAknView* aView) : iView(aView)
     {
-    
+    SetComponentsToInheritVisibility( ETrue );
     }
     
 // ---------------------------------------------------------------------------

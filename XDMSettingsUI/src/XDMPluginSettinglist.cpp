@@ -64,6 +64,7 @@ CXDMPluginSettinglist::CXDMPluginSettinglist(CSettingsData &aData) :
     CAknSettingItemList(),
     iSettingsData(aData)  
     {
+    SetComponentsToInheritVisibility( ETrue );
     }
 
 // -----------------------------------------------------------------------------

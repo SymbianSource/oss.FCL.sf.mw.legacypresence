@@ -394,6 +394,11 @@ void CPresencePluginPublisher::PublishReqCompleteL(
             iPublisher->StopPublishL();
             CompleteXIMPReq( KXIMPErrServicRequestTimeouted );
             }
+        else if( KErrCommsBreak == aStatus )
+            {
+            DP_SDA("PublishReqCompleteL KErrCommsBreak");
+            CompleteXIMPReq( KErrCommsBreak );
+            }
         else
         	{
         	//Set rePublish flag back to false.
