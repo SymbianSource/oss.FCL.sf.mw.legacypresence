@@ -298,13 +298,12 @@ HBufC8* CXcapHttpAuthManager::RequestDigestLC( CXcapHttpRequest& aHttpRequest )
         iTransportMain.WriteToLog( _L8( "CXcapHttpAuthManager::RequestDigestLC()" ) );
     #endif
     HBufC8* ret = NULL;
-    TPtrC8 nonce( iServerNonce->Des() );
     if( iQop == EXcapAuth || iQop == EXcapAuthInt )
         {
         TBuf8<8> nonceCount;
         TBuf8<KXcapHashLength> hashBush;
         nonceCount.AppendFormat( _L8( "%08x" ), iNonceCount );
-        TPtrC8 nonce( iServerNonce->Des() );
+        TPtrC8 nonce( iServerNonce ? iServerNonce->Des() : TPtrC8() );
         TPtrC8 qop( iQop == EXcapAuth ? _L8( "auth" ) : _L8( "auth-int" ) );
         HBufC8* stringToHash = HBufC8::NewLC( nonce.Length() + qop.Length() +
                                               3 * KXcapHashLength + 8 + 5 );
@@ -321,7 +320,7 @@ HBufC8* CXcapHttpAuthManager::RequestDigestLC( CXcapHttpRequest& aHttpRequest )
         desc.Append(':');
         ConstructHA2L( hashBush, aHttpRequest );
         desc.Append( hashBush ); 
-        hashBush.Zero();		
+        hashBush.Zero();
         ret = HBufC8::NewL( KXcapHashLength );
         Hash( *stringToHash, hashBush );
         ret->Des().Copy( hashBush );
@@ -509,16 +508,19 @@ void CXcapHttpAuthManager::ConstructHA1L( TDes8& aResult )
     #ifdef _DEBUG
         iTransportMain.WriteToLog( _L8( "CXcapHttpAuthManager::ConstructHA1L()" ) );
     #endif
+
+    TPtrC8 realm( iRealm ? iRealm->Des() : TPtrC8() );
+
     HBufC8* buffer = HBufC8::NewLC( iUserName.Length() +
-                     iPassword.Length() + iRealm->Des().Length() + 2 ); 
+                     iPassword.Length() + realm.Length() + 2 );
     TPtr8 desc( buffer->Des() );
     desc.Copy( iUserName );
     desc.Append(':');
-    desc.Append( iRealm->Des() );
+    desc.Append( realm );
     desc.Append(':');
     desc.Append( iPassword );
     Hash( *buffer, aResult );
-    CleanupStack::PopAndDestroy();  //buffer	
+    CleanupStack::PopAndDestroy();  //buffer
     }
 
 // ----------------------------------------------------------
