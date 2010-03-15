@@ -16,8 +16,8 @@
 */
 
 
-#include <mvpbkcontactlinkarray.h>
-#include <mvpbkcontactlink.h>
+#include <MVPbkContactLinkArray.h>
+#include <MVPbkContactLink.h>
 #include "presenceplugincontactstateresolve.h"
 #include "presencecontactscontextbase.h"
 #include "presenceplugincontactstatehandler.h"

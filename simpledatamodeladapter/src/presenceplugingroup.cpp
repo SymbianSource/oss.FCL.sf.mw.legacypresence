@@ -25,7 +25,7 @@
 #include <ximpstatus.h>
 #include <ximpidentity.h>
 #include <ximpobjectcollection.h>
-#include <xdmerrors.h>
+#include <XdmErrors.h>
 #include <presentitygroupinfo.h>
 #include <presentitygroupmemberinfo.h>
 #include <utf.h>
@@ -336,6 +336,15 @@ void CPresencePluginGroups::RunL()
         DP_SDA("CPresencePluginGroups::RunL !myStatus");
         // OK response
         CallActualXdmOperationL( myStatus );
+        }
+    else if ( KErrNotFound == myStatus && !iCompleted )
+        {
+        DP_SDA("CPresencePluginGroups::RunL KErrNotFound == myStatus");
+        
+        // DoPerformUnsubscribePresentityPresenceL didn't find watcher
+        // so it did not execute StopSubscribeL from the watcher. Still
+        // presentity group member has to be removed.
+        CallActualXdmOperationL( KErrNone );
         }
     else if ( !myStatus && iCompleted )
         {

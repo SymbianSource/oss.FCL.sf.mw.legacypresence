@@ -18,7 +18,7 @@
 #ifndef __PRESENCESETTINGSUIHELPS_VARIANT_IBY__
 #define __PRESENCESETTINGSUIHELPS_VARIANT_IBY__
 
-#if defined(FF_S60_HELPS_IN_USE) && defined(__PSUIGSPLUGIN_USED)
+#if defined(FF_S60_HELPS_IN_USE)
     data=LOCALISE(DATAZ_\resource\xhtml\%02d\0x10281EF0\contents.zip, RESOURCE_FILES_DIR\xhtml\%02d\0x10281EF0\contents.zip)
     data=LOCALISE(DATAZ_\resource\xhtml\%02d\0x10281EF0\index.xml, RESOURCE_FILES_DIR\xhtml\%02d\0x10281EF0\index.xml)
     data=LOCALISE(DATAZ_\resource\xhtml\%02d\0x10281EF0\keywords.xml, RESOURCE_FILES_DIR\xhtml\%02d\0x10281EF0\keywords.xml)

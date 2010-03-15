@@ -25,12 +25,12 @@
 #include <ximpobjectcollection.h>
 #include <presentitygroupinfo.h>
 #include <presentitygroupmemberinfo.h>
-#include <xdmengine.h>
-#include <xdmdocument.h>
-#include <xdmprotocolinfo.h>
-#include <xdmdocumentnode.h>
-#include <xdmnodeattribute.h>
-#include <xdmerrors.h>
+#include <XdmEngine.h>
+#include <XdmDocument.h>
+#include <XdmProtocolInfo.h>
+#include <XdmDocumentNode.h>
+#include <XdmNodeAttribute.h>
+#include <XdmErrors.h>
 #include <pressettingsapi.h> //for TPresSettingsSet
 #include <XdmSettingsApi.h>
 #include <XdmProtocolUidList.h>

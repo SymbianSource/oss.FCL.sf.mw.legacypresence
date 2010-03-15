@@ -17,7 +17,7 @@
 
 
 #include "presenceplugincontactstate.h"
-#include "PresencePluginContactStateHandler.h"
+#include "presenceplugincontactstatehandler.h"
 
 
 // ======== MEMBER FUNCTIONS ========

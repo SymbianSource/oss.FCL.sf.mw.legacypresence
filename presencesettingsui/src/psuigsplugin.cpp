@@ -21,10 +21,10 @@
 // INCLUDE FILES
 #include <bautils.h>
 #include <gsprivatepluginproviderids.h>
-#include <GSFWViewUIDs.h>
+#include <gsfwviewuids.h>
 #include <psuigspluginrsc.rsg>
 #include <psuigsplugin.mbg>
-#include <GSBaseView.h>
+#include <gsbaseview.h>
 #include <eiktxlbx.h>
 #include <eikmenup.h>
 #include <eiktxlbm.h>

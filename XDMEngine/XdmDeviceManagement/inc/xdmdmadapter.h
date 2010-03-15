@@ -61,6 +61,7 @@ _LIT8( KXdmDmTextPlain,     "text/plain" );
 _LIT8( KXdmDmUriDotSlash,   "./" );
 _LIT8( KXdmDmSeparator,     "/" );
 _LIT8( KXdmDmSipLinkPrefix, "./SIP" );
+_LIT8( KXdmDefaultSettingsName,"DMAdapterIns" );
 _LIT( KXdmDefaultId,        "-1" );
 _LIT( KXdmDmStartBracket,   "(" );
 _LIT( KXdmDmCloseBracket,   ")" );
@@ -70,6 +71,7 @@ _LIT( KXdmDmLogFile,        "XdmDm.txt" );
 
 // CONSTANTS
 const TInt KXdmDmLogBufferMaxSize   = 2000;
+const TInt KXdmMaxUriLength         = 256;
 const TInt KXdmDefaultResultSize    = 255;
 const TInt KXdmDmLevel                = 2;
 const TInt KXdmDmIdTableSize        = 16;

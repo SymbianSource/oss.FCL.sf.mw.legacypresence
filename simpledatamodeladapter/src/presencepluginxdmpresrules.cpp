@@ -15,12 +15,12 @@
 *
 */
 
-#include <xdmengine.h>
-#include <xdmprotocolinfo.h>
-#include <xdmdocument.h>
-#include <xdmdocumentnode.h>
-#include <xdmnodeattribute.h>
-#include <xdmerrors.h>
+#include <XdmEngine.h>
+#include <XdmProtocolInfo.h>
+#include <XdmDocument.h>
+#include <XdmDocumentNode.h>
+#include <XdmNodeAttribute.h>
+#include <XdmErrors.h>
 #include <XdmProtocolUidList.h>
 
 #include "presencepluginxdmpresrules.h"

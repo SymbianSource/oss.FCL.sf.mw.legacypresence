@@ -522,6 +522,14 @@ void CPresencePluginAuthorization::RunL(  )
                 break;
             }
         }
+    else if ( KErrNotFound == myStatus && EStateDoBlock == iAuthState )
+        {
+        // When blocking friend request, watcher was not found but request
+        // has to be blocked anyways.
+        DP_SDA( "CPresencePluginAuthorization::RunL - Block presentity" );
+        BlockPresentityL();
+        iAuthState = EStateBlocked;
+        }
     else
         {
         DP_SDA( "CPresencePluginAuthorization::RunL -error" );

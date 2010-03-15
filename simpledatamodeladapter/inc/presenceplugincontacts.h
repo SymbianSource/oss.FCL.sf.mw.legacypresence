@@ -21,9 +21,9 @@
 
 
 #include <e32base.h>
-#include <mvpbkcontactfindobserver.h>
-#include <mvpbksinglecontactoperationobserver.h>
-#include <mvpbkcontactstorelistobserver.h>
+#include <MVPbkContactFindObserver.h>
+#include <MVPbkSingleContactOperationObserver.h>
+#include <MVPbkContactStoreListObserver.h>
 #include "presencecontactscontextbase.h"
 #include "presencelogger.h"
 

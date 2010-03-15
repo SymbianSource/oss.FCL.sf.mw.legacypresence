@@ -16,24 +16,24 @@
 */
 
 
-#include <vpbkcontactstoreuris.h>
+#include <VPbkContactStoreUris.h>
 #include <spsettings.h>
 #include <spproperty.h>
-#include <cvpbkcontactmanager.h>
-#include <cvpbkcontactstoreuriarray.h>
-#include <tvpbkcontactstoreuriptr.h>
-#include <mvpbkcontactoperationbase.h>
-#include <mvpbkcontactstorelist.h>
-#include <mvpbkcontactlinkarray.h>
-#include <mvpbkcontactlink.h>
-#include <mvpbkstorecontact.h>
-#include <mvpbkcontactfielddata.h>
-#include <mvpbkcontactfieldtextdata.h>
-#include <mvpbkcontactfielduridata.h>
-#include <cvpbkcontactidconverter.h>
-#include <mvpbkstorecontactfieldcollection.h>
-#include <cvpbkfieldtyperefslist.h>
-#include <vpbkeng.rsg>
+#include <CVPbkContactManager.h>
+#include <CVPbkContactStoreUriArray.h>
+#include <TVPbkContactStoreUriPtr.h>
+#include <MVPbkContactOperationBase.h>
+#include <MVPbkContactStoreList.h>
+#include <MVPbkContactLinkArray.h>
+#include <MVPbkContactLink.h>
+#include <MVPbkStoreContact.h>
+#include <MVPbkContactFieldData.h>
+#include <MVPbkContactFieldTextData.h>
+#include <MVPbkContactFieldUriData.h>
+#include <CVPbkContactIdConverter.h>
+#include <MVPbkStoreContactFieldCollection.h>
+#include <CVPbkFieldTypeRefsList.h>
+#include <VPbkEng.rsg>
 
 #include "presenceplugincontacts.h" 
 #include "presencelogger.h"

@@ -23,7 +23,7 @@
 
 #include <aknViewAppUi.h>
 #include <StringLoader.h>
-#include <GSPrivatePluginProviderIds.h>
+#include <gsprivatepluginproviderids.h>
 #include <eikmenub.h>
 #include <aknlists.h>
 #include <aknPopup.h>

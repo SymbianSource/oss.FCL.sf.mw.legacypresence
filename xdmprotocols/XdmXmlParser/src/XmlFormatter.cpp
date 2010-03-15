@@ -23,7 +23,7 @@
 #include <XdmDocumentNode.h>
 #include <XdmNodeAttribute.h>
 
-#include "XdmLogWriter.h"
+#include "xdmlogwriter.h"
 #include "XmlFormatter.h"
 #include "XmlParserDefines.h"
 #include "XmlParserNodePath.h"

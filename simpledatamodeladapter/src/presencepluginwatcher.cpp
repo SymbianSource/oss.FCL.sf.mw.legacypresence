@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -216,17 +216,19 @@ void CPresencePluginWatcher::DoPerformUnsubscribePresentityPresenceL(
         MatchWatcherL( pres8->Des(), EFalse );
     if ( !watcher )
         {
-        DP_SDA("DoUnsubscribePresentityPresenceL error");
-        User::Leave( KErrNotFound ); // Notice: error code
+        DP_SDA("DoUnsubscribePresentityPresenceL watcher not found");
+        aStatus = KRequestPending;
+        TRequestStatus* temp = &aStatus;
+        User::RequestComplete( temp, KErrNotFound );
         }
     else
         {
-      	DP_SDA("DoUnsubscribePresentityPresenceL stop subscripe");
-        watcher->StopSubscribeL( aStatus );      
-        }    
+      	DP_SDA("DoUnsubscribePresentityPresenceL stop subscribe");
+        watcher->StopSubscribeL( aStatus );
+        }
     CleanupStack::PopAndDestroy( pres8 );  // >> pres8
     
-    DP_SDA("CPresencePluginWatcher::DoPerformUnsubscribePresentityPresenceL -end");
+    DP_SDA("CPresencePluginWatcher::DoPerformUnsubscribePresentityPresenceL end");
     }
 
 // ---------------------------------------------------------------------------

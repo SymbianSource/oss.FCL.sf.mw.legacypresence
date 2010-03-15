@@ -22,8 +22,8 @@
 
 _LIT( KContactId, "ContactId" );
 _LIT( KContactTable, "Contacts" );
-_LIT( KStorageExtn, ".db");
-_LIT( KDbPath, "c:\\" );
+_LIT( KStorageExtn, ".db" );
+_LIT( KDbPath, "c:\\MeCo\\" );
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -43,7 +43,7 @@ CPresencePluginLocalstore::CPresencePluginLocalstore()
 //
 void CPresencePluginLocalstore::ConstructL( const TDesC& aServiceName )
     {
-    DP_SDA( "CPresencePluginLocalstore::ConstructL -Start" );
+    DP_SDA( "CPresencePluginLocalstore::ConstructL Start" );
 
     iLocalDBName =
         HBufC::NewL( aServiceName.Length()+ KStorageExtn().Length() );
@@ -54,24 +54,24 @@ void CPresencePluginLocalstore::ConstructL( const TDesC& aServiceName )
     AknTextUtils::StripCharacters( localDBNamePtr, KSpecialChar );
     localDBNamePtr.Append( KStorageExtn() );
 
-    DP_SDA2( "CPresencePluginLocalstore::ConstructL -localDBName: %S" , &localDBNamePtr );
+    DP_SDA2( "CPresencePluginLocalstore::ConstructL - localDBName: %S" , &localDBNamePtr );
 
     User::LeaveIfError( iFs.Connect() );
     if ( DbExists() )
         {
-        DP_SDA( "CPresencePluginLocalstore::ConstructL -DB exists" );
+        DP_SDA( "CPresencePluginLocalstore::ConstructL - DB exists" );
         OpenDbL();
         }
     else
         {
-        DP_SDA( "CPresencePluginLocalstore::ConstructL -DB does not exists LEAVE!" );
+        DP_SDA( "CPresencePluginLocalstore::ConstructL - DB does not exist LEAVE!" );
         User::Leave( KErrNotReady );
         }
 
     User::LeaveIfError( iTable.Open( iDb, KContactTable ) );
     iColset = iDb.ColSetL( KContactTable );
 
-    DP_SDA( "CPresencePluginLocalstore::ConstructL -End" );
+    DP_SDA( "CPresencePluginLocalstore::ConstructL End" );
     }
 
 
@@ -110,7 +110,7 @@ CPresencePluginLocalstore* CPresencePluginLocalstore::NewLC(
 //
 CPresencePluginLocalstore::~CPresencePluginLocalstore()
     {
-    DP_SDA( "CPresencePluginLocalstore::~CPresencePluginLocalstore -Start" );
+    DP_SDA( "CPresencePluginLocalstore::~CPresencePluginLocalstore Start" );
 
     delete iLocalDBName;
     delete iFileStore;
@@ -120,7 +120,7 @@ CPresencePluginLocalstore::~CPresencePluginLocalstore()
     iDb.Close();
     iFs.Close();
 
-    DP_SDA( "CPresencePluginLocalstore::~CPresencePluginLocalstore -End" );
+    DP_SDA( "CPresencePluginLocalstore::~CPresencePluginLocalstore End" );
     }
 
 

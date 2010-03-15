@@ -23,7 +23,7 @@
 
 // INCLUDES
 #include <eikmobs.h>
-#include <GSBaseContainer.h>
+#include <gsbasecontainer.h>
 
 // FORWARD DECLARATIONS
 class CPSUIGSPlugin;
