@@ -505,30 +505,10 @@ void CPSUIGSPlugin::CreateCopyOfExistingSettingsL()
 // 
 void CPSUIGSPlugin::UpdateMSK()
     {
-    if ( !Cba() )
-        {
-        return;
-        }
-    
     TBool showEdit = ( 0 < Container()->iListBox->Model()->NumberOfItems());
     CEikCba* cba = static_cast< CEikCba* >( Cba()->ButtonGroup() );
     cba->MakeCommandVisible( EPSUICmdEdit, showEdit );
     cba->DrawNow();
-    }
-    
-// ---------------------------------------------------------------------------
-// CPSUIGSPlugin::HandleListBoxEventL()
-// ---------------------------------------------------------------------------
-//
-void CPSUIGSPlugin::HandleListBoxEventL(
-	  CEikListBox* /*aListBox*/, TListBoxEvent aListBoxEvent)
-    {
-    // if the Select Key has been pressed
-    if ((aListBoxEvent == MEikListBoxObserver::EEventEnterKeyPressed) ||
-    (aListBoxEvent == MEikListBoxObserver::EEventItemSingleClicked))
-        {
-        HandleListBoxSelectionL();   
-        }
     }
 
 // End of file

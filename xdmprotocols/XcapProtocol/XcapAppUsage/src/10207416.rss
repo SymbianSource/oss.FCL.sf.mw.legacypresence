@@ -126,17 +126,7 @@ RESOURCE REGISTRY_INFO XcapAppUsageInfo
 					display_name = "XCAP OmaPresenceRules Application Usage||Copyright © 2005 Nokia Ltd. All rights reserved.";
 					default_data = "";
 					opaque_data ="";
-					},
-					// PRES-CONTENT STARTS
-				IMPLEMENTATION_INFO
-				    {
-					implementation_uid = 0x20028701;
-					version_no = 1;
-					display_name = "XCAP Pres-Content Application Usage||Copyright © 2008 Nokia Ltd. All rights reserved.";
-					default_data = "";
-					opaque_data ="";
 					}
-					// PRES-CONTENT ENDS
 				};
 			}
 		};

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -195,38 +195,37 @@ void CPresencePluginConnection::ConstructL(
 CPresencePluginConnection::~CPresencePluginConnection()
     {
     DP_SDA("CPresencePluginConnection::~CPresencePluginConnection");
-    
+
     delete iSipPresentity;
     iSipPresentity = NULL;
-    
+
     delete iPluginWinfo;
     iPluginWinfo = NULL;
-    
+
     delete iWatcher;
     iWatcher = NULL;
-    
+
     delete iPublisher;
     iPublisher = NULL;
-    
+
     delete iAuth;
     iAuth = NULL;
-    
+
     delete iGroups;
     iGroups = NULL;
-    
+
     delete iSession;
     iSession = NULL;
     
     delete iImFeatures;
-    
     REComSession::FinalClose();
-    
+
     delete iSubscribedBuddys;
     delete iPresenceData;
-    
+
     delete iETag;
     iETag = NULL;
-    DP_SDA("CPresencePluginConnection::~CPresencePluginConnection end");
+    DP_SDA("CPresencePluginConnection::~CPresencePluginConnection end");          
     }
 
 // ---------------------------------------------------------------------------
@@ -462,43 +461,22 @@ void CPresencePluginConnection::CloseSession(
     TXIMPRequestId aReqId )
     {
     DP_SDA("CPresencePluginConnection::CloseSession begin");
-    
-    TBool completeXimpRequestNow( EFalse );
     iConnectionArray->DecreaseClientCount();
     iXIMPId = aReqId;
-        
-    // Client count can´t be negative. Increase if goes negative.
-    // This happens for example in network lost case.
-    // This method is called then because connection is terminated and
-    // for all clients which have done unbind. But here we cannot tell
-    // if this method is called by clients unbind or connection termination
-    // therefore this workaround needed.
-    if ( iConnectionArray->ClientCount() < 0 )
-        {        
-        completeXimpRequestNow = ETrue;
-        iConnectionArray->IncreaseClientCount();
-        }
     
-    // In case there is no more clients we cannot complete Ximp request
-    // right away. We have to stop publish first, Ximp request completion is
-    // handled in RunL after that is done.
+    //If last client closesSession call
     if( KErrNone == iConnectionArray->ClientCount() && 
         (EActive == iConnectionArray->GetConnectionStatus()) )
-        {       
-        completeXimpRequestNow = EFalse; // request is completed later in RunL
-        iGrantListSubs = EFalse;
-        
-        //Start stopPublish request
-        DeRegister();
-        }
-        
-    if ( !iStopPublishCall )
-       {
-       completeXimpRequestNow = ETrue;
-       }
+    	{
+    	iGrantListSubs = EFalse;
+    	//Start stopPublish request
+    	DeRegister();
+    	}
     
-    if ( completeXimpRequestNow )
+    //Allways complete Ximp request
+    if (  !iStopPublishCall )
         {
+        DP_SDA("stopPublish is not called");
         CompleteReq( iXIMPId, KErrNone );
         }
 
@@ -518,10 +496,10 @@ void CPresencePluginConnection::GetSupportedFeaturesL(
     using namespace NXIMPFeature::Presence;    
     aFeatures.AppendL( KPublish );
     aFeatures.AppendL( KSubscribe );    
-    aFeatures.AppendL( KUnsubscribe );  
-    aFeatures.AppendL( KAddContact );
-    aFeatures.AppendL( KDeleteContact );
-    aFeatures.AppendL( KFetch );
+    aFeatures.AppendL( KUnsubscribe  );  
+    aFeatures.AppendL( KAddContact  );
+    aFeatures.AppendL( KDeleteContact  );
+    aFeatures.AppendL( KFetch  );
     aFeatures.AppendL( KBlock );
     aFeatures.AppendL( KUnBlock );
     
@@ -822,15 +800,10 @@ void CPresencePluginConnection::DeRegister( )
     DP_SDA(" -> CloseSession, delete permanent pres data");
     TRAP_IGNORE( iPresenceData->DeletePresenceVariablesL( ServiceId() ) );
     
-    // Try to stop publish only if we have successfully published
-    if ( iPublisher->Published() )
-        {
-        DP_SDA("CloseSession call stopPublish");
-        TRAP_IGNORE( iPublisher->StopPublishL( iStatus ) );
-        iStopPublishCall = ETrue;
-        SetActive();
-        }
-    
+    DP_SDA("CloseSession call stopPublish");
+    TRAP_IGNORE( iPublisher->StopPublishL( iStatus ) );
+    iStopPublishCall = ETrue;
+    SetActive();
     DP_SDA("CPresencePluginConnection::Deregister Done");
     }
 
@@ -894,19 +867,14 @@ void CPresencePluginConnection::RunL(  )
     TInt status = iStatus.Int();
     DP_SDA2("CPresencePluginConnection::RunL status %d", status );
     
-    if ( iStopPublishCall )
+    if( !status && iStopPublishCall )
         {
         DP_SDA("CPresencePluginConnection::RunL complete");     
-        
-        iStopPublishCall = EFalse;
-        CompleteReq( iXIMPId, status );      
-        
-        DP_SDA("CPresencePluginConnection::RunL --> REMOVE CACHE");
-        iPresenceData->RemoveCacheL();
-        
+        CompleteReq( iXIMPId, KErrNone );
         DP_SDA("CPresencePluginConnection::RunL --> Delete im plugin");
         DeleteImFeaturesPlugin();
         }
+
     }
 
 // ---------------------------------------------------------------------------

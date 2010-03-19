@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -316,17 +316,6 @@ NONSHARABLE_CLASS( CPresencePluginXdmPresRules ): public CActive
         TBool CheckIfOneExistL(
             const TDesC& aRule,
             const TDesC& aUri );
-        
-        /**
-         * Compare uri to attribute without prefix. Returns ETrue if match.
-         *
-         * @since S60 5.0
-         * @param aUri, entity url
-         * @parram aAttribute url attribute
-         * @return TBool
-         */
-        TBool CompareUriWithoutPrefixL( 
-            const TDesC& aUri, const TDesC& aAttribute );
                 
     protected: // from base class CActive
 

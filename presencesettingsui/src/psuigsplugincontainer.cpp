@@ -49,9 +49,6 @@ void CPSUIGSPluginContainer::ConstructL( const TRect& aRect )
     {
     iListBox = new ( ELeave ) CAknSingleStyleListBox();// base needs the iListBox to be prepared 1st
     BaseConstructL( aRect, R_PSUI_MAINVIEW_TITLE, 0 );// last parameter 0, since dynamic listbox
-    
-    iEikMenuBar = new ( ELeave ) CEikMenuBar();
-    iEikMenuBar->ConstructL( this, NULL, R_PSUI_MAINVIEW_MENUBAR );
     }
 
 // ---------------------------------------------------------------------------
@@ -61,7 +58,6 @@ void CPSUIGSPluginContainer::ConstructL( const TRect& aRect )
 //
 CPSUIGSPluginContainer::~CPSUIGSPluginContainer()
     {
-    delete iEikMenuBar;
     }
 
 // ---------------------------------------------------------------------------
@@ -116,8 +112,7 @@ TKeyResponse CPSUIGSPluginContainer::OfferKeyEventL(
     TEventCode aType )
     {
     if ( iView && aType == EEventKey 
-        && aKeyEvent.iCode == EKeyBackspace && 
-        iEikMenuBar->ItemSpecificCommandsEnabled() )
+        && aKeyEvent.iCode == EKeyBackspace )
         {
         iView->DeleteSettingsL();
         return EKeyWasConsumed;

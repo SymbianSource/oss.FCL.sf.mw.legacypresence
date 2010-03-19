@@ -172,7 +172,6 @@ EXPORT_C HBufC8* CXdmXmlParser::FormatToXmlLC( TBool aIsWholeDocument,
                                                const CXdmDocumentNode* aRootNode )
     {
     #ifdef _DEBUG
-        WriteToLog( _L8( "CXdmXmlParser::FormatToXmlLC" ) );
         TInt start = CXdmXmlParser::TimeL();
     #endif
     HBufC8* ret = iXmlFormatter->FormatLC( aIsWholeDocument, aDocument, aRootNode );

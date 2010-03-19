@@ -218,9 +218,6 @@ void CXcapDocument::InstallAppUsageL()
     #endif  
     HBufC8* docName = NULL;
     iAppUsage = CXcapAppUsage::NewL( iXdmEngine, iDocumentType );
-    #ifdef _DEBUG
-        iXcapProtocol.WriteToLog( _L8( "CXcapDocument::InstallAppUsageL() type = %d" ), iDocumentType );
-    #endif  
     TPtrC8 auid = iAppUsage->AUID();
     if( IsGlobalTree( auid ) )
         {
@@ -406,7 +403,7 @@ EXPORT_C void CXcapDocument::ResetSubset()
 // 
 // ----------------------------------------------------
 //
-EXPORT_C TDesC8& CXcapDocument::ETag()
+EXPORT_C TPtrC8 CXcapDocument::ETag() const
     {
     return iETagBuffer;
     }

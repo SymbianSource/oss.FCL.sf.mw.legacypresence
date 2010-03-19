@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -85,15 +85,7 @@ public:
      * @param aSipError SIP error code
      */
     void ProfileStateChanged( 
-        CSIPConnection::TState aState, TInt aSipError );   
-    
-    /**
-     * SIP Profile has updated. 
-     * 
-     * @see MSIPProfileRegistryObserver::EProfileUpdated
-     * @since S60 3.2.3
-     */
-    void ProfileUpdated();
+        CSIPConnection::TState aState, TInt aSipError );             
 
 // from base class MSIPConnectionObserver
 
@@ -120,6 +112,7 @@ public:
     /**
      * A SIP response received from the network.
      * @param aTransaction contains response elements.
+     * The ownership is transferred.
      */
     void IncomingResponse( CSIPClientTransaction& aTransaction );
 
@@ -288,6 +281,7 @@ private:
     /**
      * A SIP response received from the network.
      * @param aTransaction contains response elements.
+     * The ownership is transferred.
      */
     void DoIncomingResponse( CSIPClientTransaction& aTransaction );
     

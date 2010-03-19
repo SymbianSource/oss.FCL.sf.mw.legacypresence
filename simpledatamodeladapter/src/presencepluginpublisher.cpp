@@ -356,6 +356,7 @@ void CPresencePluginPublisher::PublishReqCompleteL(
             TBuf8<KBufSize255> buf;
             buf.Copy( iPublisher->SIPETag() );
             iConnObs.SetETag( buf );
+            iPresenceData->StoreDocumentIdL( iConnObs.ServiceId(), buf );
             }
     	//Do not complete if error republish is true. XIMPFW is not knowing we 
     	//are sending republish.
@@ -374,7 +375,6 @@ void CPresencePluginPublisher::PublishReqCompleteL(
             if( iConnObs.IsStopPublishCalled() )
                 {
                 DP_SDA("PublishReqCompleteL complete closeSession"); 
-                iPresenceData->DeletePresenceVariablesL( iConnObs.ServiceId() );
                 // successfull Online / others: store status to cache
                 StoreOwnStatusToCacheL( );
                 //Complete close session
@@ -388,12 +388,7 @@ void CPresencePluginPublisher::PublishReqCompleteL(
            CreatePublisherL();        
            iSimpleId = iPublisher->StartPublishL( *iDocument, ETrue );
            }
-        else if( EFalse == iRePublish && ( KErrTimedOut == aStatus  ) )
-            {
-            DP_SDA("PublishReqCompleteL KErrTimedOut"); 
-            iPublisher->StopPublishL();
-            CompleteXIMPReq( KXIMPErrServicRequestTimeouted );
-            }
+        
         else
         	{
         	//Set rePublish flag back to false.
@@ -730,30 +725,13 @@ void CPresencePluginPublisher::StopPublishL( TRequestStatus& aStatus )
     
     aStatus = KRequestPending;
     iClientStatus = &aStatus;
-    
-    TInt err1( 0 );
-    TInt err2( 0 );
-    
-    // get stored document id if available
-    HBufC8* oldDocumentId = HBufC8::NewLC( KBufSize255 );
-    TPtr8 oldDocumentIdPtr( oldDocumentId->Des() );
-    TRAP( err1, iPresenceData->ReadDocumentIdL( 
-            iConnObs.ServiceId(), oldDocumentIdPtr ) );
-    
+    	
     if ( iConnObs.GetStopPublishState() && iPublished )
         {
         DP_SDA("CPresencePluginPublisher::StopPublish really Stop");
-        if ( !err1 )
-            {
-            TRAP( err2, iPublisher->StopPublishL( oldDocumentIdPtr ) );
-            }
-        else 
-            {
-            // if stored document id is not available try with this
-            TRAP( err2, iPublisher->StopPublishL( iConnObs.GetETag() ) );
-            }
-        DP_SDA2("StopPublish iPublisher->StopPublishL : error = %d ", err2 );
-        if ( KErrNone != err2 )
+        TRAPD( error, iPublisher->StopPublishL( iConnObs.GetETag() ););
+        DP_SDA2("StopPublish iPublisher->StopPublishL : error = %d ", error );
+        if ( KErrNone != error )
             {            
             if( iPublisher )
                 {
@@ -764,34 +742,23 @@ void CPresencePluginPublisher::StopPublishL( TRequestStatus& aStatus )
                 iPublisher =
                 	TSimpleFactory::NewPublisherL( iConnection, *this ); 
                 DP_SDA("StopPublish really Stop try again 2 ");
-                err2 = KErrGeneral;
-                TRAP( err2, iPublisher->StopPublishL( iConnObs.GetETag() ););
-                DP_SDA2("StopPublishL 2nd try : error = %d ", err2 );
-                if ( KErrNone != err2 )
+                error = KErrGeneral;
+                TRAP( error, iPublisher->StopPublishL( iConnObs.GetETag() ););
+                DP_SDA2("StopPublishL 2nd try : error = %d ", error );
+                if ( KErrNone != error )
                     {
                     DP_SDA("StopPublish TWO TIME Error, last try without tag ");
-                    TRAP( err2, iPublisher->StopPublishL(); );
-                    DP_SDA2("StopPublishL 3rd try : error = %d ", err2 );
+                    TRAP( error, iPublisher->StopPublishL(); );
+                    DP_SDA2("StopPublishL 3rd try : error = %d ", error );
                     }
                 }
             }
         iConnObs.SetStopPublishState( ETrue );
         iPublished = EFalse;
         }
-    CleanupStack::PopAndDestroy( oldDocumentId );
-    
     DP_SDA("CPresencePluginPublisher::StopPublish- end");        
     }
     
-// ---------------------------------------------------------------------------
-// CPresencePluginPublisher::Published()
-// ---------------------------------------------------------------------------
-//
-TBool CPresencePluginPublisher::Published()
-    {
-    return iPublished;
-    }
-
 // ---------------------------------------------------------------------------
 // CPresencePluginPublisher::MakePublishReqL()
 // ---------------------------------------------------------------------------
@@ -800,16 +767,16 @@ void CPresencePluginPublisher::MakePublishReqL( )
     {
     DP_SDA("CPresencePluginPublisher::MakePublishReqL");
     
-        DP_SDA(" -> MakePublishReqL, check for old doc id");       
-        HBufC8* oldDocumentId = HBufC8::NewLC( KBufSize255 );
-        TPtr8 oldDocumentIdPtr( oldDocumentId->Des() );
-        TRAPD( error, iPresenceData->ReadDocumentIdL( 
-            iConnObs.ServiceId(), oldDocumentIdPtr ) );
     if ( !iPublished )
         {
         DP_SDA("CPresencePluginPublisher::MakePublishReqL 1");       
         CreatePublisherL();
         
+        DP_SDA(" -> MakePublishReqL, check for old doc id");       
+        HBufC8* oldDocumentId = HBufC8::NewLC( KBufSize255 );
+        TPtr8 oldDocumentIdPtr( oldDocumentId->Des() );
+        TRAPD( error, iPresenceData->ReadDocumentIdL( 
+            iConnObs.ServiceId(), oldDocumentIdPtr ) );
         DP_SDA2(" -> MakePublishReqL, doc id error: %d", error );
         if ( !error )
             {
@@ -822,28 +789,19 @@ void CPresencePluginPublisher::MakePublishReqL( )
             DP_SDA(" -> MakePublishReqL, publish with new id");       
             iSimpleId = iPublisher->StartPublishL( *iDocument, ETrue );    
             }
+        CleanupStack::PopAndDestroy( oldDocumentId );
         }
     else
         {
         DP_SDA("CPresencePluginPublisher::MakePublishReqL 2");
         CreatePublisherL();
         DP_SDA("CPresencePluginPublisher::MakePublishReqL Continue Publish");
-        if ( !error )
-            {
-            DP_SDA(" -> MakePublishReqL, publish with stored id");
-            iSimpleId = iPublisher->ContinuePublishL( 
-                *iDocument ,ETrue, oldDocumentIdPtr );
-            }
-        else
-            {
-            DP_SDA(" -> MakePublishReqL, stored id not found" );
-            DP_SDA(", publish with old id");
-            iSimpleId = iPublisher->ContinuePublishL( 
-                            *iDocument ,ETrue, iConnObs.GetETag() );
-            }
+        iSimpleId =
+            iPublisher->ContinuePublishL( 
+                *iDocument ,ETrue, iConnObs.GetETag() );
 		DP_SDA("CPresencePluginPublisher::MakePublishReqL modifyed");
         }
-    CleanupStack::PopAndDestroy( oldDocumentId );
+                
     DP_SDA("CPresencePluginPublisher::MakePublishReqL end");     
     } 
 

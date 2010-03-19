@@ -42,7 +42,7 @@ USERINCLUDE                     ../../api
 USERINCLUDE                     ../../inc
 
 // default system include paths for middleware layer modules
-APP_LAYER_SYSTEMINCLUDE
+MW_LAYER_SYSTEMINCLUDE
 
 DEBUGLIBRARY                    flogger.lib
 DEBUGLIBRARY                    efsrv.lib   // file server
@@ -56,5 +56,3 @@ LIBRARY                         sipcodec.lib
 LIBRARY                         bafl.lib  // string pool
 LIBRARY                         centralrepository.lib
 LIBRARY                         presencesettingsapi.lib
-// access to uiservicetabsettings
-LIBRARY         				vimpstsettings.lib

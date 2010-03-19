@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -47,7 +47,6 @@
 #include "presencepluginutility.h"
 #include "presenceplugingroup.h"
 #include "presencepluginvirtualgroup.h"
-#include "presenceplugincontacts.h"
 
 
 // ======== MEMBER FUNCTIONS ========
@@ -61,11 +60,10 @@ CPresencePluginAuthorization::CPresencePluginAuthorization(
     CPresencePluginData* aPresenceData )
     : CActive( CActive::EPriorityStandard ),
     iConnObs(aObs), iSubscribed( EFalse ),
-    iOperation( ENoOperation ), iXdmOk( EFalse ),
-    iComplete( EFalse ), iPresenceData( aPresenceData ),
-    iContactIsStored( ETrue )
+    iOperation( ENoOperation ),
+    iXdmOk( EFalse ), iComplete( EFalse ),iPresenceData( aPresenceData )
     {
-    CActiveScheduler::Add(this);
+    CActiveScheduler::Add(this); 
     }
 
 // ---------------------------------------------------------------------------
@@ -79,23 +77,7 @@ CPresencePluginAuthorization* CPresencePluginAuthorization::NewL(
     DP_SDA("CPresencePluginAuthorization::NewL ");
     CPresencePluginAuthorization* self =
         new( ELeave ) CPresencePluginAuthorization( aObs, aPresenceData );
-    CleanupStack::PushL( self );
-    self->ConstructL();
-    CleanupStack::Pop( self );
     return self;
-    }
-
-// ---------------------------------------------------------------------------
-// CPresencePluginAuthorization::ConstructL()
-// ---------------------------------------------------------------------------
-//
-void CPresencePluginAuthorization::ConstructL()
-    {
-    HBufC* serviceName =
-        iPresenceData->ServiceNameLC( iPresenceData->ServiceId() );
-    iContacts = CPresencePluginContacts::NewL(
-        iPresenceData->ServiceId(), *serviceName, *this );
-    CleanupStack::PopAndDestroy( serviceName );
     }
 
 // ---------------------------------------------------------------------------
@@ -105,7 +87,6 @@ void CPresencePluginAuthorization::ConstructL()
 CPresencePluginAuthorization::~CPresencePluginAuthorization()
     {
     delete iPresIdentity;
-    delete iContacts;
     }
 
 // ---------------------------------------------------------------------------
@@ -466,45 +447,24 @@ void CPresencePluginAuthorization::RunL(  )
             
             case EStateBlocked:
                 {
-                DP_SDA( "CPresencePluginAuthorization::RunL - Blocked" );
                 SetPresentityBlockedToXIMPL();
                 iAuthState = EStateIdle;
                 CompleteXIMPReq( myStatus );
                 }
                 break;
-
-            case EStateIsContactBlockedBuddyRequest:
-                {
-                DP_SDA( "CPresencePluginAuthorization::RunL - Resolve contact type" );
-                // resolve is contact blocked friend request
-                HBufC* withoutPrefix = iPresenceData->RemovePrefixLC( *iPresIdentity );
-                IsBlockedContactFriendRequestL( *withoutPrefix, *this, iStatus );
-                CleanupStack::PopAndDestroy( withoutPrefix );
-                SetActive();
-                iAuthState = EStateDoUnBlock;
-                }
-                break;
                 
             case EStateDoUnBlock:
                 {
-                if ( iContactIsStored )
-                    {
-                    DP_SDA( "CPresencePluginAuthorization::RunL - Grant presence for presentity" );
-                    GrantPresenceForPresentityL();
-                    iAuthState = EStatePresenceGranted;
-                    }
-                else
-                    {
-                    DP_SDA( "CPresencePluginAuthorization::RunL - Complete unblock" );
-                    iAuthState = EStateIdle;
-                    CompleteXIMPReq( myStatus );
-                    }
+                DP_SDA( "CPresencePluginAuthorization::RunL - Grant presence for presentity" );  
+                GrantPresenceForPresentityL();
+                iAuthState = EStatePresenceGranted;
                 }
                 break;
-            
+                
             case EStatePresenceGranted:
                 {
                 DP_SDA( "CPresencePluginAuthorization::RunL -Subscribe presentity presence" );  
+                
                 MXIMPIdentity* identity = iConnObs.ObjectFactory().NewIdentityLC();
                 identity->SetIdentityL( iPresIdentity->Des() ); 
                 iConnObs.WatcherHandlerL()->DoPerformSubscribePresentityPresenceL( *identity, iStatus );
@@ -1266,63 +1226,10 @@ void CPresencePluginAuthorization::UnblockPresentityL()
     CleanupStack::PopAndDestroy( withoutPrefix );
     iDataHost->HandlePresenceBlockCanceledL( identity );
     CleanupStack::Pop();// >> identity
-    iAuthState = EStateIsContactBlockedBuddyRequest;
+    iAuthState = EStateDoUnBlock;
     SetActive();
     
     DP_SDA( "CPresencePluginAuthorization::UnblockPresentityL -Exit" );
-    }
-
-
-// ---------------------------------------------------------------------------
-// CPresencePluginAuthorization::IsBlockedContactFriendRequest()
-// ---------------------------------------------------------------------------
-//
-void CPresencePluginAuthorization::IsBlockedContactFriendRequestL(
-    const TDesC& aPresenceId,
-    MPresencePluginContactsObs& aObserver,
-    TRequestStatus& aStatus )
-    {
-    DP_SDA( "CPresencePluginAuthorization::IsBlockedContactFriendRequest" );
-
-    delete iContacts;
-    iContacts = NULL;
-
-    HBufC* serviceName =
-        iPresenceData->ServiceNameLC( iPresenceData->ServiceId() );
-
-    iContacts = CPresencePluginContacts::NewL(
-        iPresenceData->ServiceId(), *serviceName, aObserver );
-
-    CleanupStack::PopAndDestroy( serviceName );
-
-    iContacts->IsPresenceIdStoredL( aPresenceId, aStatus );
-
-    DP_SDA( "CPresencePluginAuthorization::IsBlockedContactFriendRequest -exit" );
-    }
-
-
-// ---------------------------------------------------------------------------
-// From base class MPresencePluginContactsObs
-// CPresencePluginAuthorization::RequestComplete()
-// ---------------------------------------------------------------------------
-//
-void CPresencePluginAuthorization::RequestComplete( TAny* aResult,
-    TPresenceContactsOperation aOperation, TInt aError )
-    {
-    DP_SDA( "CPresencePluginAuthorization::RequestComplete" );
-    
-    switch( aOperation )
-        {
-        case EOperationIsPresenceStoredToContacts:
-            if ( aResult != NULL && KErrNone == aError  )
-                {
-                iContactIsStored = *static_cast<TBool*>( aResult );
-                }
-            break;
-        default:
-            break;
-        }
-    DP_SDA2( "CPresencePluginAuthorization::RequestComplete - iContactIsStored = %d", iContactIsStored );
     }
 
 // End of file

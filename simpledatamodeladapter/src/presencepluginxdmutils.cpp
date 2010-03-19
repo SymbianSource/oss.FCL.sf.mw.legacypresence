@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -122,8 +122,6 @@ CPresencePluginXdmUtils::~CPresencePluginXdmUtils()
     DP_SDA("CPresencePluginXdmUtils::~CPresencePluginXdmUtils 5");
     delete iEntityUri;
     iEntityUri = NULL;
-
-    iBlockedContacts.ResetAndDestroy();
 
     DP_SDA("CPresencePluginXdmUtils::~CPresencePluginXdmUtils end"); 
     }
@@ -393,11 +391,7 @@ void CPresencePluginXdmUtils::RunL(  )
             DoUpdateXdmListsL( myStatus, origState );
             }
         break;
-
-        case EUpdateBlockedContactPresenceCache:
-            DoUpdateBlockedContactPresenceCacheL( myStatus );
-            break;
-
+         
         default:
             {
             DP_SDA("CPresencePluginXdmUtils::RunL last else");        
@@ -550,7 +544,7 @@ void CPresencePluginXdmUtils::DoGetXdmListsL(
             iXdmOk = ETrue;
             if ( !iPresXdmOk && !iLocalMode && aOrigState == EGetXdmLists )
                 {
-                DP_SDA("CPresencePluginXdmUtils::DoGetXdmLists GetXDM");
+                DP_SDA("CPresencePluginXdmUtils::RunL GetXDM");
                 GetXdmRulesL();
                 }
             else
@@ -782,12 +776,7 @@ TBool CPresencePluginXdmUtils::CheckIfEnityExistL(
                 {
                 CXdmDocumentNode* currNode = nodes[i];
                 attr = ( currNode )->Attribute( KPresenceUri );
-                
-                TBool uriMatch( EFalse );
-                uriMatch = CompareUriWithoutPrefixL( 
-                    aUri, attr->AttributeValue() );
-                
-                if ( attr && uriMatch )
+                if ( attr && !attr->AttributeValue().CompareF( aUri ))
                     {
                     DP_SDA("CheckIfEnityExist entity exists");
                     //Enity is exist
@@ -947,17 +936,11 @@ void CPresencePluginXdmUtils::DoRemoveUserFromListL(
         TInt nodeCount = nodes.Count();
         for ( TInt i = 0; i < nodeCount; i++ )
             {
-            CXdmDocumentNode* currNode = nodes[i];         
+            CXdmDocumentNode* currNode = nodes[i];
             attr = ( currNode )->Attribute( KPresenceUri );
-            
-            TBool uriMatch( EFalse );
-            uriMatch = CompareUriWithoutPrefixL( 
-                aUri, attr->AttributeValue() );
-            
-            if ( attr && uriMatch )
+            if ( attr && !attr->AttributeValue().CompareF( aUri ))
                 {
-                DP_SDA(" DoRemoveUserFromListL Node Found, do delete");	
-            
+                DP_SDA(" DoRemoveUserFromListL Node Found, do delete");		
                 // This is the user we are looking for deletion.
                 //First remove currNode form model
                 iXdmDoc->RemoveFromModelL( currNode );
@@ -1302,11 +1285,6 @@ void CPresencePluginXdmUtils::AddIdentityToVirtualListL( const TDesC&  aList )
 	DP_SDA("CPresencePluginXdmUtils::AddIdentityToVirtualListL ");
 	using namespace NPresencePlugin::NPresence;
 
-	if ( aList.Compare( KPresenceBlockedList ) == NULL )
-	    {
-	    iBlockedContacts.ResetAndDestroy();
-	    }
-
     CXdmDocumentNode* buddylist = DoGetBuddyListL( aList );
 
     // make a collection of MXIMPPresentityGroupMemberInfo
@@ -1335,11 +1313,26 @@ void CPresencePluginXdmUtils::AddIdentityToVirtualListL( const TDesC&  aList )
             else if ( !aList.CompareF( KPresenceBlockedList ) )
                 {
                 DP_SDA("AddIdentityToVirtualListL add to blocked");
+                
+                HBufC* uniBuffer = attr->AttributeValue().AllocLC();
+                DP_SDA("AddIdentityToVirtualListL, identity ok");
+                
+                DP_SDA("AddIdentityToVirtualListL, strip prefix");
                 HBufC* withoutPrefix = 
                     iConnObs.InternalPresenceAuthorization().
-                        PluginData().RemovePrefixLC( attr->AttributeValue() );
-                CleanupStack::Pop( withoutPrefix );
-                iBlockedContacts.AppendL( withoutPrefix );
+                        PluginData().RemovePrefixLC( *uniBuffer );
+                
+                TBuf<20> buf;
+                buf.Copy( KBlockedExtensionValue );
+                
+                iConnObs.InternalPresenceAuthorization().PluginData().
+                    WriteStatusToCacheL( *withoutPrefix, 
+                            MPresenceBuddyInfo2::EUnknownAvailability,
+                            buf,
+                            KNullDesC() );
+                
+                CleanupStack::PopAndDestroy( withoutPrefix );
+                CleanupStack::PopAndDestroy( uniBuffer );
                 }
             }
         }
@@ -1489,25 +1482,10 @@ void CPresencePluginXdmUtils::DoHandlePresUpdateDocumentL( TInt aErrorCode )
             {
             DP_SDA("DoHandlePresUpdateDocumentL EGetXdmRules SEND COMPLETE ");
             // Complete with ok or error the last initial opreration
-
-            // update presence cache if needed before complete client req.
             iPresXdmOk = ETrue;
+            CompleteClientReq( aErrorCode );
+            } 
 
-            if ( iBlockedContacts.Count() > 0 )
-                {
-                iConnObs.InternalPresenceAuthorization().
-                    IsBlockedContactFriendRequestL(
-                         *iBlockedContacts[ iBlockedContacts.Count() - 1 ],
-                         *this, iStatus );
-
-                iXdmState = EUpdateBlockedContactPresenceCache;
-                SetActive();
-                }
-            else
-                {
-                CompleteClientReq( aErrorCode );
-                }
-            }
         }
     else if ( iXdmState == EUpdateXdmRules )
         {
@@ -1574,112 +1552,4 @@ void CPresencePluginXdmUtils::HandlePresUpdateDocumentL(
         }
     }
     
-// ---------------------------------------------------------------------------
-// CPresencePluginXdmUtils::SearchListUnderParentL
-// ---------------------------------------------------------------------------
-//
-TBool CPresencePluginXdmUtils::CompareUriWithoutPrefixL( 
-    const TDesC& aUri, const TDesC& aAttribute )
-    {
-    DP_SDA("CPresencePluginXdmUtils::CompareUriWithoutPrefixL");
-    
-    TBool match( EFalse );
-    
-    RBuf uriWithoutPrefix;
-    CleanupClosePushL( uriWithoutPrefix );
-    uriWithoutPrefix.CreateL( aUri );
-    TInt prefixLocation = uriWithoutPrefix.Locate( ':' );
-                   
-    if ( KErrNotFound != prefixLocation )
-        {
-        uriWithoutPrefix.Delete( 0, ( prefixLocation + 1 ) );
-        }
-        
-     RBuf attributeWithoutprefix;
-     CleanupClosePushL( attributeWithoutprefix );
-     attributeWithoutprefix.CreateL( aAttribute );
-     prefixLocation = attributeWithoutprefix.Locate( ':' );
-                   
-     if ( KErrNotFound != prefixLocation )
-         {
-         attributeWithoutprefix.Delete( 0, ( prefixLocation + 1 ) );
-         }
-                    
-     DP_SDA2("    --> uri without prefix=%S", &uriWithoutPrefix );
-     DP_SDA2("    --> attribute without prefix=%S", &attributeWithoutprefix );                 
-                
-     if ( uriWithoutPrefix.Compare( attributeWithoutprefix ) == 0 )
-         {
-         match = ETrue;
-         }
-                   
-    CleanupStack::PopAndDestroy( &attributeWithoutprefix );
-    CleanupStack::PopAndDestroy( &uriWithoutPrefix );
-    
-    return match;
-    }
-
-
-// ---------------------------------------------------------------------------
-// CPresencePluginXdmUtils::DoUpdateBlockedContactPresenceCacheL()
-// ---------------------------------------------------------------------------
-//
-void CPresencePluginXdmUtils::DoUpdateBlockedContactPresenceCacheL(
-    TInt aMyStatus )
-    {
-    DP_SDA( "CPresencePluginXdmUtils::DoUpdateBlockedContactPresenceCache" );
-
-    const TInt KTextBufferSize = 10;
-    TInt contactsCount = iBlockedContacts.Count();
-
-    if ( contactsCount > 0 )
-        {
-        if ( iPresenceContactsAsyncReqResult )
-            {
-            DP_SDA(" RunL  -write blocked status to cache" );
-            TBuf<KTextBufferSize> buf;
-            buf.Copy( KBlockedExtensionValue );
-            iConnObs.InternalPresenceAuthorization().PluginData().
-                WriteStatusToCacheL( *iBlockedContacts[ contactsCount - 1 ],
-                     MPresenceBuddyInfo2::EUnknownAvailability,
-                     buf,
-                     KNullDesC() );
-           }
-       delete iBlockedContacts[ contactsCount - 1 ];
-       iBlockedContacts.Remove( contactsCount - 1 );
-
-       if ( iBlockedContacts.Count() > 0 )
-           {
-            iConnObs.InternalPresenceAuthorization().
-                IsBlockedContactFriendRequestL(
-                    *iBlockedContacts[ iBlockedContacts.Count() - 1 ],
-                    *this, iStatus );
-
-           iXdmState = EUpdateBlockedContactPresenceCache;
-           SetActive();
-           }
-       else
-           {
-           CompleteClientReq( aMyStatus );
-           }
-        }
-    }
-
-
-// ---------------------------------------------------------------------------
-// From MPresencePluginContactsObs
-// CPresencePluginXdmUtils::RequestComplete
-// ---------------------------------------------------------------------------
-//
-void CPresencePluginXdmUtils::RequestComplete( TAny* aResult,
-    TPresenceContactsOperation /*aOperation*/, TInt aError )
-    {
-    iPresenceContactsAsyncReqResult = EFalse;
-    if ( NULL != aResult && KErrNone == aError )
-        {
-        iPresenceContactsAsyncReqResult =
-            *static_cast<TBool*>( aResult );
-        }
-    }
-
 // End of file

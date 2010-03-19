@@ -212,7 +212,7 @@ void CXDMPlugin::DoActivateL( const TVwsViewId& aPrevViewId,
     iSettingListContainer->MakeVisible(EFalse);    
     iCurrentContainer = iMainListContainer;
     iAppUi->AddToViewStackL( *this, iCurrentContainer );
-    UpdateMskL();
+    UpdateMSK();
     }
 
 // ---------------------------------------------------------------------------
@@ -274,7 +274,7 @@ void CXDMPlugin::HandleCommandL( TInt aCommand )
             break;
         case EGSXDMPluginCmdDelete:
             iMainListContainer->DeleteSetProcedureL();
-            UpdateMskL();
+            UpdateMSK();
             break;
         case EAknCmdHelp:
             HlpLauncher::LaunchHelpApplicationL(iEikonEnv->WsSession(), AppUi()->AppHelpContextL ());
@@ -342,7 +342,7 @@ void CXDMPlugin::LoadSettingsViewL(TXDMSettingsViewType aType, TDesC& aXDMSetNam
     iAppUi->AddToViewStackL( *this, iCurrentContainer );
     iMainListContainer->MakeVisible(EFalse);
     iSettingListContainer->MakeVisible(ETrue);
-    UpdateMskL();
+    UpdateMSK();
     }
 
 // ---------------------------------------------------------------------------
@@ -362,7 +362,7 @@ void CXDMPlugin::LoadMainViewL()
     
     iSettingListContainer->MakeVisible(EFalse);  
     iMainListContainer->MakeVisible(ETrue);
-    UpdateMskL();
+    UpdateMSK();
     }
     
 // ---------------------------------------------------------------------------
@@ -444,16 +444,11 @@ CGulIcon* CXDMPlugin::CreateIconL( const TUid aIconType )
     }
     
 // ---------------------------------------------------------------------------
-// CXDMPlugin::UpdateMskL()
+// CXDMPlugin::UpdateMSK()
 // ---------------------------------------------------------------------------
 //
-void CXDMPlugin::UpdateMskL()
+void CXDMPlugin::UpdateMSK()
     {
-    if ( !Cba() )
-        {
-        return;
-        }
-    
     CEikCba* cba = static_cast< CEikCba* >( Cba()->ButtonGroup() );
     if(iCurrentContainer==iMainListContainer)
         {

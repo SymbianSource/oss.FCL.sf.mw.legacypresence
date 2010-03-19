@@ -24,7 +24,7 @@
 // INCLUDE FILES
 #include <coecntrl.h>
 #include <aknsettingitemlist.h>
-#include <agentdialog.h>
+#include <cmmanagerext.h>
 
 // FORWARD DECLARATIONS
 class CSettingsData;
@@ -86,6 +86,12 @@ class CXDMPluginSettinglist : public CAknSettingItemList
 
     private:
         
+        
+        /**
+         * By default Symbian 2nd phase constructor is private.
+         */
+        void ConstructL();
+        
         /**
         * C++ constructor
         * @param reference to CSettingsData
@@ -118,9 +124,17 @@ class CXDMPluginSettinglist : public CAknSettingItemList
 
     private:
     
-        // Reference to the data owned by container
+        /**
+         *  Reference to the data owned by container
+         */
         CSettingsData& iSettingsData;
         
+        /**
+         * Handle to connection method manager.
+         * Own.
+         */
+        RCmManagerExt iCmManagerExt;
+      
     };
 
 #endif // CXDMPLUGINSETTINGLIST_H

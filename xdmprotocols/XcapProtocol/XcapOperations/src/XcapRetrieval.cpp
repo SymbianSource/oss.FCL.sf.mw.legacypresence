@@ -71,9 +71,6 @@ CXcapRetrieval* CXcapRetrieval::NewL( CXcapDocument& aParentDoc,
 //
 void CXcapRetrieval::ConstructL()
     {
-#ifdef _DEBUG
-    iOperationFactory.WriteToLog( _L8( "-> CXcapRetrieval::ConstructL" ) );  
-#endif
     CXcapHttpReqGet* request = Transport().GetL( iTargetDoc.Name() );
     CleanupStack::PushL( request );
     User::LeaveIfError( iRequestQueue.Append( request ) );
@@ -86,9 +83,6 @@ void CXcapRetrieval::ConstructL()
         User::LeaveIfError( iTargetDoc.ApplicationUsage().Validate(
                             *iDocumentSubset, iUriParser, ETrue ) );
         }
-#ifdef _DEBUG
-    iOperationFactory.WriteToLog( _L8( "<- CXcapRetrieval::ConstructL" ) );  
-#endif
     }
 
 // ---------------------------------------------------------
@@ -108,7 +102,7 @@ void CXcapRetrieval::ExecuteL()
             iOperationFactory.WriteToLog( _L8( " Using ETag \"%S\" - Length: %d" ),
                                                &eTag, eTag.Length() );  
         #endif
-        //iActiveRequest->SetHeaderL( KHttpHeaderIfNoneMatch, eTag );
+        iActiveRequest->SetHeaderL( KHttpHeaderIfNoneMatch, eTag );
         }
     TRAPD( error, iUriParser->ParseL( iActiveRequest->RequestUriL() ) );
     if( error == KErrNone )

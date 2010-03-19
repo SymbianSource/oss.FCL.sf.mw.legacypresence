@@ -84,7 +84,7 @@ class CXDMPlugin : public CGSPluginInterface
         /**
         * Hides MSK if not needed
         */
-        void UpdateMskL();
+        void UpdateMSK();
 
     public: // From CAknView
         
@@ -174,11 +174,7 @@ class CXDMPlugin : public CGSPluginInterface
         CXDMPluginSLContainer* iSettingListContainer;
         
         // Pointer to the current container - not owned.
-        CCoeControl* iCurrentContainer;   
-        
-#ifdef _DEBUG
-    friend class UT_CXDMPluginContainer;
-#endif
+        CCoeControl* iCurrentContainer;     
     };
 
 #endif // GS_XDMPLUGIN_H

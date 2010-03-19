@@ -57,9 +57,6 @@ void TSimpleLogger::Log(TRefByValue<const TDesC> aFmt,...) //lint !e960
     _LIT(KLogFile, "simple.txt");
     // Write to log file
     RFileLogger::Write(KLogDir, KLogFile, EFileLoggingModeAppend, buf);
-    
-    _LIT( KSimplePrefix,  "[simple] ");    
-    buf.Insert( 0, KSimplePrefix );
     RDebug::RawPrint( buf );
 
     }

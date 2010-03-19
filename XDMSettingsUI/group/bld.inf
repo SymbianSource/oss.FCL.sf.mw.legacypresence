@@ -47,9 +47,6 @@ END
 PRJ_MMPFILES
 XDMPlugin.mmp
 
-PRJ_TESTMMPFILES
-//../internal/tsrc/test/group/ut_xdmplugin.mmp
-
   
 #endif //__XDM
 

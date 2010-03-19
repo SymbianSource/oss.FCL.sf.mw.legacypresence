@@ -41,8 +41,6 @@ class CXcapHttpReqGet;
 class CXcapHttpReqPut;
 class CXcapHttpReqDelete;
 class CXcapHttpAuthManager;
-class CXcapHttpReqMkcol;
-class CXcapHttpReqHead;
 
 // CLASS DECLARATION
 class CXcapHttpTransport : public CBase
@@ -72,16 +70,6 @@ class CXcapHttpTransport : public CBase
         * Send one IMPS message.
         */
         IMPORT_C CXcapHttpReqPut* PutL( const TDesC& aUri );
-        
-        /**
-        * Send one IMPS message.
-        */
-        IMPORT_C CXcapHttpReqMkcol* MkcolL( const TDesC& aUri );
-
-        /**
-        * Send one IMPS message.
-        */
-        IMPORT_C CXcapHttpReqHead* HeadL( const TDesC& aUri );
 
         /**
         * Send one IMPS message.

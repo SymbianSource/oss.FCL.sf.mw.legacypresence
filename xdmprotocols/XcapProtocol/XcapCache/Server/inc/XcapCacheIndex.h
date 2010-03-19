@@ -35,8 +35,8 @@ NONSHARABLE_CLASS( CXcapCacheIndex ) : public CBase
     public:             // Constructors and destructor
         
         /**
-        * Returns Cache Index
-        * @return Created Cache Index
+        * Returns the MIME type of the messages
+        * @return TPtrC8 The MIME type of the messages
         */
         static CXcapCacheIndex* NewL();
         
@@ -69,7 +69,7 @@ NONSHARABLE_CLASS( CXcapCacheIndex ) : public CBase
         * Returns the MIME type of the messages
         * @return TPtrC8 The MIME type of the messages
         */
-        void SortEntriesL();
+        void SortEntries();
         
         /**
         * Returns the MIME type of the messages

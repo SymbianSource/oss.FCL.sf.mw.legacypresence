@@ -49,10 +49,10 @@ class CXcapCacheServer : public CServer2
     public:             // Constructors and destructor
         
         /**
-        * Returns KErrNone
-        * @return TInt System wide error code
+        * Returns the MIME type of the messages
+        * @return TPtrC8 The MIME type of the messages
         */
-        IMPORT_C static TInt StartThreadL();
+        IMPORT_C static TInt StartThread();
         
         /**
         * A global logging function for 8 bit data.
@@ -124,37 +124,37 @@ class CXcapCacheServer : public CServer2
         static TInt ConvertDesc( const TDesC8& aNumberDesc );
         
         /**
-        * A function to handle descriptor data.
-        * @return Date in heap descriptor
+        * A global logging function for 8 bit data.
+        * @param aCommand command to be handled
         */
-        static HBufC* DateL();
-                
+        static TBuf<KDateMaxSize> Date();
+        
         /**
-        * A function to handle descriptor data.
-        * @return Time in heap descriptor
+        * A global logging function for 8 bit data.
+        * @param aCommand command to be handled
         */
-        static HBufC* TimeL();
+        static TBuf<KDateMaxSize> Time();
 
         /**
-        * A function to handle descriptor data.
-        * @return Random string heap descriptor
+        * Returns the MIME type of the messages
+        * @return TPtrC8 The MIME type of the messages
         */
-        static HBufC* RandomStringL();
-                
+        static TBuf<KRandStringLength> RandomString();
+        
         /**
-        * A function to handle descriptor data.
-        * @return Date and time heap descriptor
+        * A global logging function for 8 bit data.
+        * @param aCommand command to be handled
         */
-        static HBufC* DateTimeL();
-                
+        static TBuf<KDateTimeMaxSize> DateTime();
+        
         /**
-        * A function to handle descriptor data.
-        * @return Date and time heap descriptor
+        * A global logging function for 8 bit data.
+        * @param aCommand command to be handled
         */
-        static HBufC* DateTimeL( const TTime& aTime );
-                
+        static TBuf<KDateTimeMaxSize> DateTime( const TTime& aTime );
+        
         /**
-        * A function to handle descriptor data.
+        * A global logging function for 8 bit data.
         * @param aCommand command to be handled
         */
         static TPtr8 DescriptorCast( const TDesC8& aConstData );

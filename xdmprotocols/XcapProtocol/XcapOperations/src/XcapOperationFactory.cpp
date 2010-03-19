@@ -61,8 +61,7 @@ void CXcapOperationFactory::ConstructL()
     {
     #ifdef _DEBUG
         iLogWriter = CXdmLogWriter::NewL( KOperationsLogFile );
-        WriteToLog( _L8( "-> CXcapOperationFactory::ConstructL" ) );
-        WriteToLog( _L8( "<- CXcapOperationFactory::ConstructL" ) );
+        WriteToLog( _L8( "CXcapOperationFactory::~CXcapOperationFactory()" ) );
     #endif
     }
             
@@ -74,11 +73,11 @@ void CXcapOperationFactory::ConstructL()
 CXcapOperationFactory::~CXcapOperationFactory()
     {
     #ifdef _DEBUG
-        WriteToLog( _L8( "-> CXcapOperationFactory::~CXcapOperationFactory()" ) );
+        WriteToLog( _L8( "CXcapOperationFactory::~CXcapOperationFactory()" ) );
     #endif
     #ifdef _DEBUG
-        WriteToLog( _L8( "<- CXcapOperationFactory::~CXcapOperationFactory()" ) );
-      #endif
+        WriteToLog( _L8( "  Destructor of the derived class ends" ) );
+    #endif
     delete iLogWriter;
     }
     

@@ -25,9 +25,7 @@
 #include    <bldvariant.hrh>
 #include    <coeccntx.h>
 #include    <eikclb.h>
-#include    <eikmobs.h>
 #include    <akntitle.h>
-#include    <aknview.h>
 
 #include    "XDMPlugin.hrh"
 
@@ -47,9 +45,7 @@ class CMainView;
 /**
 *  CXDMPluginContainer main list container class
 */
-class CXDMPluginContainer : public CCoeControl, 
-                            public MEikListBoxObserver,
-                            public MEikMenuObserver
+class CXDMPluginContainer : public CCoeControl, MEikListBoxObserver
     {
     public: // Constructors and destructor
         
@@ -120,17 +116,6 @@ class CXDMPluginContainer : public CCoeControl,
         * See MEikListBoxObserver
         */
         void HandleListBoxEventL(CEikListBox* aListBox, TListBoxEvent aEventType);
-        
-        /**
-         * From MEikMenuObserver
-         */
-        void SetEmphasis( CCoeControl* /*aMenuControl*/, TBool /*aEmphasis*/ ){};
-      
-        
-        /**
-         * From MEikMenuObserver
-         */
-        void ProcessCommandL( TInt /*aCommandId*/ ){};
         
         /**
         * Finds whether main list is empty
@@ -222,9 +207,8 @@ class CXDMPluginContainer : public CCoeControl,
       
       // Pointer to title pane, not owned
       CAknTitlePane* iTitlePane;
-      
-      // Menubar, owned
-      CEikMenuBar* iEikMenuBar;
+  
+
     };
 
 #endif //GS_XDMPLUGIN_CONTAINER_H   

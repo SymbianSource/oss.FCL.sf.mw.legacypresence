@@ -74,45 +74,14 @@ RESOURCE MENU_PANE r_gs_xdm_settings_main_menu
     {
     items =
         {
-        MENU_ITEM
-            { 
-            command = EGSXDMPluginCmdChange;
-            txt = qtn_xdm_settings_change;
-            flags = EEikMenuItemAction;
-            },
-        MENU_ITEM 
-            { 
-            command = EGSXDMPluginCmdEdit;
-            txt = qtn_xdm_options_edit_set;
-            flags = EEikMenuItemAction;
-            },
-        MENU_ITEM 
-            {
-            command = EGSXDMPluginCmdNewSettings;
-            cascade = r_gs_xdm_new_settings_menu; 
-            txt = qtn_xdm_options_new_set;
-            },
-        MENU_ITEM
-            { 
-            command = EGSXDMPluginCmdDelete;
-            txt = qtn_xdm_options_delete;
-            flags = EEikMenuItemSpecific;
-            },
-        MENU_ITEM 
-            { 
-            command = EAknCmdHelp;
-            txt = qtn_options_help;
-            },   
-        MENU_ITEM 
-            { 
-            command = EGSXDMPluginCmdExitFromSL;
-            txt = qtn_options_exit;
-            },     
-        MENU_ITEM 
-            { 
-            command = EAknCmdExit;
-            txt = qtn_options_exit;
-            }     
+        MENU_ITEM { command = EGSXDMPluginCmdChange; txt = qtn_xdm_settings_change; },
+        MENU_ITEM { command = EGSXDMPluginCmdEdit; txt = qtn_xdm_options_edit_set; },
+        MENU_ITEM { command = EGSXDMPluginCmdNewSettings; 
+                cascade = r_gs_xdm_new_settings_menu; txt = qtn_xdm_options_new_set; },
+        MENU_ITEM { command = EGSXDMPluginCmdDelete; txt = qtn_xdm_options_delete; },
+        MENU_ITEM { command = EAknCmdHelp; txt = qtn_options_help; },   
+        MENU_ITEM { command = EGSXDMPluginCmdExitFromSL; txt = qtn_options_exit; },     
+        MENU_ITEM { command = EAknCmdExit; txt = qtn_options_exit; }     
         };
     }
 
@@ -127,16 +96,8 @@ RESOURCE MENU_PANE r_gs_xdm_new_settings_menu
     {
     items =
         {
-        MENU_ITEM 
-            { 
-            command = EGSXDMPluginCmdNewDefault;
-            txt = qtn_xdm_options_new_sub_default;
-            },
-        MENU_ITEM 
-            { 
-            command = EGSXDMPluginCmdNewExisting;
-            txt = qtn_xdm_options_new_sub_existing;
-            }        
+        MENU_ITEM { command = EGSXDMPluginCmdNewDefault; txt = qtn_xdm_options_new_sub_default; },
+        MENU_ITEM { command = EGSXDMPluginCmdNewExisting; txt = qtn_xdm_options_new_sub_existing; }        
         };
     }
     

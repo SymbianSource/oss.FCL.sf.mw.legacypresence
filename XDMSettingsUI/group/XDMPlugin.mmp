@@ -68,12 +68,9 @@ LIBRARY             commonengine.lib//For RConeResourceLoader
 
 LIBRARY             egul.lib // CGulIcon
 LIBRARY             aknskins.lib // AknsUtils.h
-LIBRARY             apsettingshandlerui.lib  // access point UI
-LIBRARY             commdb.lib
-LIBRARY             apengine.lib  //AP engine
+LIBRARY             cmmanager.lib //Connection Method Manager
 LIBRARY             xdmsettingsapi.lib
 LIBRARY             gsecomplugin.lib //GS Ecom plugin
-LIBRARY             agentdialog.lib // To show access points only in emulator
 
 LIBRARY		        featmgr.lib // Feature Manager
 LIBRARY		        hlplch.lib // HlpLauncher

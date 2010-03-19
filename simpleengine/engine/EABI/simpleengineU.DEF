@@ -29,5 +29,4 @@ EXPORTS
 	_ZN14TSimpleFactory18NewInstantMessageLER17MSimpleConnectionR25MSimpleInstantMsgObserver @ 28 NONAME
 	_ZTI22CSimpleEngineImHandler @ 29 NONAME ; #<TI>#
 	_ZTV22CSimpleEngineImHandler @ 30 NONAME ; #<VT>#
-	_ZN14TSimpleFactory14NewConnectionLER25MSimpleConnectionObserverl @ 31 NONAME
 

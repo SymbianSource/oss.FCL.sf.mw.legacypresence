@@ -22,7 +22,6 @@
 #define PSUIGSPLUGINCONTAINER_H
 
 // INCLUDES
-#include <eikmobs.h>
 #include <GSBaseContainer.h>
 
 // FORWARD DECLARATIONS
@@ -34,8 +33,7 @@ class CPSUIGSPlugin;
 * CPSUIGSPluginContainer container class
 * @since Series60_3.2
 */
-class CPSUIGSPluginContainer : public CGSBaseContainer,
-                               public MEikMenuObserver
+class CPSUIGSPluginContainer : public CGSBaseContainer
     {
     public: // Constructors and destructor
         
@@ -71,17 +69,6 @@ class CPSUIGSPluginContainer : public CGSBaseContainer,
         */ 
         void GetHelpContext( TCoeHelpContext& aContext ) const;
         
-        /**
-         * From MEikMenuObserver
-         */
-        void SetEmphasis( CCoeControl* /*aMenuControl*/, TBool /*aEmphasis*/ ){};
-      
-        
-        /**
-         * From MEikMenuObserver
-         */
-        void ProcessCommandL( TInt /*aCommandId*/ ){};
-        
     private: // New
 
         /**
@@ -104,16 +91,6 @@ class CPSUIGSPluginContainer : public CGSBaseContainer,
     
         // Handle to view        
         CPSUIGSPlugin* iView; // not owned
-        
-        /**
-         * Menubar.
-         * Own.
-         */
-        CEikMenuBar* iEikMenuBar;
-        
-#ifdef _DEBUG
-    friend class UT_CPSUIGSPluginContainer;
-#endif
     };
 
 #endif //PSUIGSPLUGINCONTAINER_H   

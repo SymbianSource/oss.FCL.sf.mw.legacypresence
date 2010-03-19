@@ -13,5 +13,4 @@ EXPORTS
 	?NsPrefixL@TSimpleUtils@@SA?AVTPtrC8@@ABVTDesC8@@@Z @ 12 NONAME ; class TPtrC8 TSimpleUtils::NsPrefixL(class TDesC8 const &)
 	?NsUriL@TSimpleUtils@@SA?AVTPtrC8@@ABVTDesC8@@@Z @ 13 NONAME ; class TPtrC8 TSimpleUtils::NsUriL(class TDesC8 const &)
 	?NewInstantMessageL@TSimpleFactory@@SAPAVMSimpleInstantMessage@@AAVMSimpleConnection@@AAVMSimpleInstantMsgObserver@@@Z @ 14 NONAME ; class MSimpleInstantMessage * TSimpleFactory::NewInstantMessageL(class MSimpleConnection &, class MSimpleInstantMsgObserver &)
-	?NewConnectionL@TSimpleFactory@@SAPAVMSimpleConnection@@AAVMSimpleConnectionObserver@@J@Z @ 15 NONAME ; class MSimpleConnection * TSimpleFactory::NewConnectionL(class MSimpleConnectionObserver &, long)
 

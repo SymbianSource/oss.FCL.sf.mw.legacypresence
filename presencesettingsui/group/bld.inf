@@ -43,7 +43,7 @@ PRJ_MMPFILES
 psuigsplugin.mmp
 
 PRJ_TESTMMPFILES
-//../internal/tsrc/test/group/ut_presencesettingsui.mmp
+// none
 
 PRJ_TESTEXPORTS
 // none

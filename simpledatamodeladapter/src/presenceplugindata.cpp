@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2007-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2007 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -40,7 +40,6 @@
 #include <msimplemeta.h>
 #include <simpleutils.h>
 #include <presencecachewriter2.h>
-#include <presencecachereader2.h>
 #include <presencebuddyinfo.h>
 #include <spsettings.h>
 #include <spentry.h>
@@ -49,11 +48,9 @@
 #include <avabilitytext.h>
 #include <cvimpstsettingsstore.h>
 
-
 #include "presenceplugindata.h"
 #include "presenceplugincommon.h"
 #include "presencepluginvirtualgroup.h"
-#include "presencepluginlanguagecodes.h"
 
 // ---------------------------------------------------------------------------
 // CPresencePluginData::CPresencePluginData
@@ -64,8 +61,7 @@ CPresencePluginData::CPresencePluginData(
 	TInt aServiceId ):
 	iConnObs( aObs ), 
 	iServiceId( aServiceId ),
-	iPresenceCacheWriter( NULL ),
-	iPresenceCacheReader( NULL )
+	iPresenceCacheWriter( NULL )
     {
     }
 
@@ -77,7 +73,6 @@ CPresencePluginData::~CPresencePluginData()
     {
     DP_SDA("CPresencePluginData::~CPresencePluginData");
     delete iPresenceCacheWriter;
-    delete iPresenceCacheReader;
     }
 
 // ---------------------------------------------------------------------------
@@ -103,7 +98,6 @@ void CPresencePluginData::ConstructL()
     {
     DP_SDA("CPresencePluginData::ConstructL");
     iPresenceCacheWriter =  MPresenceCacheWriter2::CreateWriterL();
-    iPresenceCacheReader = MPresenceCacheReader2::CreateReaderL();
     }
 
 // ---------------------------------------------------------------------------
@@ -423,7 +417,7 @@ void CPresencePluginData::NotifyToPrInfoL(
              	        }
              	    
                     //FIND ACTIVITIES ELEMENT
-             	    if ( basicElementFound && !activitiesElementFound &&
+             	    if ( basicElementFound  && 
              	        !elem2->LocalName().CompareF( KPresenceActivities8 ) )
              	        {
              	        DP_SDA("NotifyToPrInfoL activities found outside basic");
@@ -436,17 +430,18 @@ void CPresencePluginData::NotifyToPrInfoL(
 			                DP_SDA("CPresencePluginData::NotifyToPrInfoL 6");
 			                }
              	        }
-                    }
-                
-                if ( basicElementFound && !noteSimpleElem )
-                    {
-                    noteSimpleElem = ResolveNoteElementL( elems2 );
-                    }
-                
+             	    // Check note field    
+             	    if ( basicElementFound  && 
+             	        !elem2->LocalName().CompareF( KPresenceNote8 ) )
+             	        {
+             	        DP_SDA("NotifyToPrInfoL note field found inside tuple");
+			            noteSimpleElem = elem2;
+             	        }             	    
+                    }   
                 DP_SDA("NotifyToPrInfoL ALL DONE"); 
                 CleanupStack::PopAndDestroy( &elems2 );
                 
-                if ( basicElementFound && activitiesElementFound && noteElemFound )
+                if( basicElementFound && activitiesElementFound && noteElemFound )
                     {
                     DP_SDA("NotifyToPrInfoL ALL DONE break out"); 
                     //Just handle first status information from document
@@ -486,7 +481,6 @@ void CPresencePluginData::NotifyToPrInfoL(
     */
     DP_SDA("CPresencePluginData::NotifyToPrInfoL end");        
     }
-
 
 // ---------------------------------------------------------------------------
 // CPresencePluginData::CacheEntriesFromPrInfo
@@ -714,21 +708,19 @@ void CPresencePluginData::SingleUserStatusToXIMPL(
                 }
             }
         
-        field->SetFieldValue( enumField );
+        field->SetFieldValue( enumField );        
         aCollection.AddOrReplaceFieldL( field );
         
-        CleanupStack::Pop( 2 );            // >> field, enumField
+        CleanupStack::Pop( 2 );            // >> field, enumField      
         
         DP_SDA(" CPresencePluginData::SingleUserStatusToXIMPL check for note");
-        
-        // Handle note field if found and buddy is "available".
-        if ( aNoteElement && 
-             NPresenceInfo::EOffline != enumField->Value() &&
-             NPresenceInfo::ENotAvailable != enumField->Value() )
+        // Handle notes field if found
+        if ( aNoteElement )
             {
             DP_SDA(" CPresencePluginData::SingleUserStatusToXIMPL note elems found");
             // consider mapping note text to enum value if value not mapped
-            UserNoteToXIMPL( aPresenceFactory, aNoteElement, aCollection );
+            UserNoteToXIMPL( aPresenceFactory, aNoteElement, 
+                aCollection );
             }
         }
     CleanupStack::PopAndDestroy( nodeContent );
@@ -985,7 +977,7 @@ HBufC8* CPresencePluginData::CreatePresenceUri8LC(
         TInt len = aPresentityUri.Length() + KMyLenSipPrefix;
         buf = buf->ReAllocL( len );
         //update pointer after realloc
-        CleanupStack::Pop( 1 );
+        CleanupStack::Pop( buf );
         CleanupStack::PushL( buf );
         // Since realloc may have changed the location in memory
         // we must also reset ptr
@@ -1388,58 +1380,7 @@ TInt CPresencePluginData::ServiceId()
     {
     return iServiceId;
     }
-
-// ---------------------------------------------------------------------------
-// CPresencePluginData::ServiceNameLC()
-// ---------------------------------------------------------------------------
-//
-HBufC* CPresencePluginData::ServiceNameLC( TInt aServiceId ) const
-    {
-    CSPSettings* spSettings = CSPSettings::NewLC();
-    CSPEntry* entry = CSPEntry::NewLC();
-    HBufC* serviceName = NULL;
     
-    User::LeaveIfError( spSettings->FindEntryL( aServiceId, *entry ) );
-    
-    serviceName = entry->GetServiceName().AllocL();
-    
-    CleanupStack::PopAndDestroy( entry );
-    CleanupStack::PopAndDestroy( spSettings );
-    CleanupStack::PushL( serviceName );
-    return serviceName;
-    }
-
-// ---------------------------------------------------------------------------
-// CPresencePluginData::ResolveCacheXspIdentifierL()
-// ---------------------------------------------------------------------------
-//
-HBufC* CPresencePluginData::ResolveCacheXspIdentifierL(
-    const TDesC& aIdentity ) const
-    {
-    DP_SDA( "CPresencePluginData::ResolveCacheXspIdentifierL" ); 
-    
-    CSPSettings* spSettings = CSPSettings::NewLC();
-    CSPEntry* entry = CSPEntry::NewLC();
-    
-    User::LeaveIfError( spSettings->FindEntryL( iServiceId, *entry ) );
-
-    TInt cacheUriLength = ( entry->GetServiceName().Length() + 
-            aIdentity.Length() + 1 );
-    
-    HBufC* cacheUri = HBufC::NewL( cacheUriLength );
-    TPtr cacheUriPtr( cacheUri->Des() );
-    
-    cacheUriPtr.Append( entry->GetServiceName() );
-    cacheUriPtr.Append( ':' );
-    cacheUriPtr.Append( aIdentity );
-    
-    CleanupStack::PopAndDestroy( entry );
-    CleanupStack::PopAndDestroy( spSettings );
-    
-    DP_SDA2( "CPresencePluginData::ResolveCacheXspIdentifierL returns: %S", cacheUri );
-    return cacheUri;
-    }
-
 // ---------------------------------------------------------------------------
 // CPresencePluginData::WriteBlockItemsToCacheL()
 // ---------------------------------------------------------------------------
@@ -1457,102 +1398,76 @@ void CPresencePluginData::WriteStatusToCacheL(
         &aAvailabilityText );
     DP_SDA2( "CPresencePluginData::WriteStatusToCacheL, statusMessage: %S", 
         &aStatusMessage );
+    
+    CSPSettings* spSettings = CSPSettings::NewL();
+    CleanupStack::PushL( spSettings );
+    // Resolve service name (cache xsp identifier)
+    CSPEntry* entry = CSPEntry::NewLC();
+    spSettings->FindEntryL( ServiceId(), *entry );
 
-    TBool updateCache( ETrue );
+    TInt cacheUriLength = ( entry->GetServiceName().Length() + 
+        aPresentityId.Length() + 1 );
     
-    HBufC* cacheUri = ResolveCacheXspIdentifierL( aPresentityId );
-    CleanupStack::PushL( cacheUri );
+    DP_SDA2(" -> cache uri length: %d", cacheUriLength );    
     
-    DP_SDA(" -> WriteStatusToCacheL - read previous values from cache"); 
+    HBufC* cacheUri = HBufC::NewLC( cacheUriLength );
+    TPtr cacheUriPtr( cacheUri->Des() );
     
-    // Read previous values from cache
-    MPresenceBuddyInfo2* previousPresInfo = 
-        iPresenceCacheReader->PresenceInfoLC( *cacheUri );
+    DP_SDA(" -> WriteStatusToCacheL - form cache entry");
+    cacheUriPtr.Append( entry->GetServiceName() );
+    cacheUriPtr.Append( ':' );
+    cacheUriPtr.Append( aPresentityId );
     
-    if ( previousPresInfo )
-        {
-        DP_SDA(" -> WriteStatusToCacheL - get availability value"); 
-        
-        MPresenceBuddyInfo2::TAvailabilityValues availability = 
-            previousPresInfo->Availability();
-        
-        DP_SDA(" -> WriteStatusToCacheL - get availability text"); 
-        
-        TPtrC availabilityText = previousPresInfo->AvailabilityText();
-        
-        DP_SDA(" -> WriteStatusToCacheL - get status message"); 
-        
-        TPtrC statusMessage = previousPresInfo->StatusMessage();
-        CleanupStack::PopAndDestroy(); //previousPresInfo 
-        
-        DP_SDA2( "CPresencePluginData::WriteStatusToCacheL, OLD STATUS: %d", 
-                availability );
-        DP_SDA2( "CPresencePluginData::WriteStatusToCacheL, OLD AVAILABILITY TEXT: %S", 
-            &availabilityText );
-        DP_SDA2( "CPresencePluginData::WriteStatusToCacheL, OLD STATUS MESSAGE: %S", 
-            &statusMessage );
-        
-        if ( ( aAvailability == availability ) && 
-            ( aAvailabilityText.Compare( availabilityText ) == 0 ) &&
-            ( aStatusMessage.Compare( statusMessage ) == 0 ))
-            {
-            DP_SDA(" -> WriteStatusToCacheL - no need to update cache");    
-            updateCache = EFalse;
-            } 
-        }
-        
-    if ( updateCache )
-        {
-        MPresenceBuddyInfo2* newPresInfo = MPresenceBuddyInfo2::NewLC();
-        newPresInfo->SetIdentityL( *cacheUri );
-        
-        DP_SDA(" -> WriteStatusToCacheL - update cache");
-        
-        TBuf<KBufSize20> buf;
-        TBool handled = EFalse;
-           
-        buf.Copy( KBlockedExtensionValue );
-          
-        if( aAvailabilityText.Compare( buf ) == 0 )
-            {
-            DP_SDA( " -> WriteStatusToCacheL - set Blocked" );
-            newPresInfo->SetAnyFieldL( KExtensionKey, KBlockedExtensionValue );
-            handled = ETrue;
-            }
-           
-        buf.Copy( KPendingRequestExtensionValue );
-           
-        if ( aAvailabilityText.Compare( buf ) == 0 )
-            {
-            DP_SDA( " -> WriteStatusToCacheL - set Pending request" );
-            newPresInfo->SetAnyFieldL( KExtensionKey, KPendingRequestExtensionValue );
-            handled = ETrue;
-            }
-           
-        if ( !handled )
-            {
-            DP_SDA2( " -> WriteStatusToCacheL - set availability text: %S", &aAvailabilityText );
-            newPresInfo->SetAvailabilityL( aAvailability, aAvailabilityText );
-            }
-           
-        if ( aStatusMessage.Length() )
-            {
-            DP_SDA2( " -> WriteStatusToCacheL - set status message: %S", &aStatusMessage ); 
-            newPresInfo->SetStatusMessageL( aStatusMessage );
-            }
+    MPresenceBuddyInfo2* buddyPresInfo = MPresenceBuddyInfo2::NewLC();
+    buddyPresInfo->SetIdentityL( cacheUriPtr );
 
-        DP_SDA( " -> WriteStatusToCacheL - write presence to cache" );    
-        TInt cacheError = iPresenceCacheWriter->WritePresenceL( newPresInfo );
-        DP_SDA2( "CPresencePluginEntityWatcher::WriteStatusToCacheL error: %d", 
-            cacheError );
-           
-        DP_SDA( " -> destroy buddy info" );    
-        CleanupStack::PopAndDestroy(); // newPresInfo            
+    TBuf<20> buf;
+    TBool handled = EFalse;
+    
+    buf.Copy( KBlockedExtensionValue );
+   
+    if( aAvailabilityText.Compare( buf ) == 0 )
+        {
+        DP_SDA( " -> WriteStatusToCacheL - set Blocked" );
+        buddyPresInfo->SetAnyFieldL( KExtensionKey, KBlockedExtensionValue );
+        handled = ETrue;
         }
     
+    buf.Copy( KPendingRequestExtensionValue );
+    
+    if ( aAvailabilityText.Compare( buf ) == 0 )
+        {
+        DP_SDA( " -> WriteStatusToCacheL - set Pending request" );
+        buddyPresInfo->SetAnyFieldL( KExtensionKey, KPendingRequestExtensionValue );
+        handled = ETrue;
+        }
+    
+    if ( !handled )
+        {
+        DP_SDA( " -> WriteStatusToCacheL - set availability text" );
+            buddyPresInfo->SetAvailabilityL( aAvailability, aAvailabilityText );
+        }
+    
+    if ( aStatusMessage.Length() )
+        {
+        DP_SDA( " -> WriteStatusToCacheL - set status message" ); 
+        buddyPresInfo->SetStatusMessageL( aStatusMessage );
+        }
+
+    DP_SDA( " -> WriteStatusToCacheL - write presence to cache" );    
+    TInt cacheError = iPresenceCacheWriter->WritePresenceL( buddyPresInfo );
+    DP_SDA2( "CPresencePluginEntityWatcher::WriteStatusToCacheL error: %d", 
+        cacheError );
+    
+    DP_SDA( " -> destroy buddy info" );    
+    CleanupStack::PopAndDestroy(); // buddyPresInfo
     DP_SDA(" -> destroy uri");    
     CleanupStack::PopAndDestroy( cacheUri );
 
+    DP_SDA(" -> destroy sp entry");        
+    CleanupStack::PopAndDestroy( entry );        
+    DP_SDA(" -> destroy sp");        
+    CleanupStack::PopAndDestroy( spSettings );
     DP_SDA("CPresencePluginData::WriteStatusToCacheL end");
     }     
     
@@ -1567,7 +1482,6 @@ void CPresencePluginData::RemoveCacheL()
     // Resolve service name (cache xsp identifier)
     CSPSettings* spSettings = CSPSettings::NewL();
     CleanupStack::PushL( spSettings );
-    
     CSPEntry* entry = CSPEntry::NewLC();
     DP_SDA2(" -> RemoveCacheL look for service: %d", ServiceId() );
     spSettings->FindEntryL( ServiceId(), *entry );
@@ -1630,7 +1544,6 @@ void CPresencePluginData::DeletePresenceL( const TDesC& aIdentity )
     CleanupStack::PopAndDestroy( spSettings );
     DP_SDA("CPresencePluginData::DeletePresenceL out");
     }    
-
     
 // ---------------------------------------------------------------------------
 // CPresencePluginData::StorePresenceOwnPresenceL()
@@ -1646,7 +1559,7 @@ void CPresencePluginData::StorePresenceOwnPresenceL(
         
     DP_SDA2(" -> SAVE AVAILABILITY VALUE: %d", aAvailability );
     DP_SDA2(" -> SAVE STATUS MESSAGE: %S", &aStatusMessage );
-        
+       
     MVIMPSTSettingsStore* settings = CVIMPSTSettingsStore::NewLC();
     
     DP_SDA("CPresencePluginData::StorePresenceOwnPresenceL 1");
@@ -1676,7 +1589,7 @@ void CPresencePluginData::ReadDocumentIdL(
     TDes8& aDocumentId )
     {  
     DP_SDA("CPresencePluginData::ReadDocumentIdL IN");
-        
+    
     DP_SDA2(" -> aServiceId: %d", aServiceId );
     
     MVIMPSTSettingsStore* settings = CVIMPSTSettingsStore::NewLC();
@@ -1745,80 +1658,5 @@ void CPresencePluginData::DeletePresenceVariablesL( const TInt aServiceId )
     
     DP_SDA("CPresencePluginData::DeletePresenceVariablesL OUT");
     }   
-
-
-// ---------------------------------------------------------------------------
-// CPresencePluginData::ResolveNoteElementL
-// Returns <note> element corresponding current locale or first <note> 
-// element if better match is not found.
-// ---------------------------------------------------------------------------
-//
-MSimpleElement* CPresencePluginData::ResolveNoteElementL( 
-        const RPointerArray<MSimpleElement>& aElements ) const
-    {
-    DP_SDA("CPresencePluginData::ResolveNoteElementL" )
-    
-    MSimpleElement* bestMatch = NULL;
-    MSimpleElement* secondBestMatch = NULL;
-    
-    for ( TInt i = aElements.Count() - 1; i >= 0 && NULL == bestMatch; i-- )
-        {
-        MSimpleElement* element = aElements[i];
         
-        using namespace NPresencePlugin::NPresence;
-        if ( 0 == element->LocalName().CompareF( KPresenceNote8 ) )
-            {
-            if ( IsElementLanguageValidForCurrentLocaleL( *element ) )
-                {
-                DP_SDA("CPresencePluginData::ResolveNoteElementL, BEST MATCH.")
-                bestMatch = element;
-                }
-            else
-                {
-                secondBestMatch = element;
-                }
-            }
-        }
-    
-    return ( bestMatch ? bestMatch : secondBestMatch );
-    }
-
-
-// ---------------------------------------------------------------------------
-// CPresencePluginData::IsElementLanguageValidForCurrentLocaleL
-// ---------------------------------------------------------------------------
-//
-TBool CPresencePluginData::IsElementLanguageValidForCurrentLocaleL( 
-        MSimpleElement& aElement ) const
-    {
-    DP_SDA( "CPresencePluginData::IsElementLanguageValidForCurrentLocaleL" )
-    
-    TBool isLanguageResolved = EFalse;
-    _LIT8( KLanguageAttribute, "xml:lang" );
-    
-    TLanguage language = User::Language();
-    RPointerArray<MSimpleAttribute> attributes;
-    CleanupClosePushL( attributes );
-    aElement.SimpleAttributesL( attributes );
-    for ( TInt i = attributes.Count() - 1; i >= 0 && !isLanguageResolved; i-- )
-        {
-        if ( 0 == KLanguageAttribute().CompareF( attributes[i]->Name() ) )
-            {
-            const TDesC8& attributeValue = attributes[i]->Value();
-            for ( TInt index = 0; index < KLanguageCodeMappingsCount; index++ )
-                {
-                if ( language == KLanguageCodeMappings[index].SymbianLanguageCode() &&
-                     0 == attributeValue.CompareF( 
-                         KLanguageCodeMappings[index].IsoLanguageCode() ) )
-                    {
-                    isLanguageResolved = ETrue;
-                    }
-                }
-            }
-        }
-    CleanupStack::Pop( &attributes );
-    
-    return isLanguageResolved;
-    }
-
 // End of file

@@ -564,11 +564,7 @@ void CPresencePluginXdmPresRules::RemoveOneFromRuleL(
                 {
                 CXdmDocumentNode* currNode = nodes[i];
                 attr = ( currNode )->Attribute( KPresenceId );
-                
-                TBool uriMatch = CompareUriWithoutPrefixL( 
-                    aUri, attr->AttributeValue() );
-                 
-                if ( attr && uriMatch )
+                if ( attr && !attr->AttributeValue().CompareF( aUri ))
                     {
                     DP_SDA("RemoveOneFromRule Remove");
                     //First remove currNode form model
@@ -651,21 +647,21 @@ void CPresencePluginXdmPresRules::RemoveOneFromRuleL(
             ruleNode->Find( KPresenceIdentity, identityNode ) );
             if ( identityNode[0] )    
                 {
-                if ( identityNode[0]->IsEmptyNode() )
-                    {
-                    DP_SDA("DoOneAddUserL rule node empty");
-                    identityNode[0]->SetEmptyNode( EFalse );
-                    }
-                
-                // create new one node inside identity
-                CXdmDocumentNode* newNode =
+                    if ( identityNode[0]->IsEmptyNode() )
+                        {
+                        DP_SDA("DoOneAddUserL rule node empty");
+                        identityNode[0]->SetEmptyNode( ETrue );
+                        }
+                    // create new one node inside identity
+                    CXdmDocumentNode* newNode =
                     identityNode[0]->CreateChileNodeL( KPresenceOne );
-                CXdmNodeAttribute* attributeOneId =
+                    newNode->SetEmptyNode( ETrue );
+                    CXdmNodeAttribute* attributeOneId =
                     newNode->CreateAttributeL( KPresenceId );
-                
-                attributeOneId->SetAttributeValueL( aUri );
-                iPresRulesDoc->AppendL();
-                DP_SDA("DoOneAddUserL added");
+
+                    attributeOneId->SetAttributeValueL( aUri );
+                    iPresRulesDoc->AppendL();
+                    DP_SDA("DoOneAddUserL added");
                 }
             }
         }
@@ -874,12 +870,7 @@ TBool CPresencePluginXdmPresRules::CheckIfOneExistL(
                 {
                 CXdmDocumentNode* currNode = nodes[i];
                 attr = ( currNode )->Attribute( KPresenceId );
-                
-                TBool uriMatch( EFalse );                
-                uriMatch = CompareUriWithoutPrefixL( 
-                    aUri, attr->AttributeValue() );
-                
-                if ( attr && uriMatch )
+                if ( attr && !attr->AttributeValue().CompareF( aUri ))
                     {
                     DP_SDA("CheckIfOneExistL entity exists");
                     //Enity is exist
@@ -1067,7 +1058,7 @@ CXdmDocumentNode* CPresencePluginXdmPresRules::SearchListUnderParentL(
 
     if ( !aParent )
         {
-        DP_SDA("CPresencePluginXdmPresRules::SearchListUnderParentL return NULL");
+        DP_SDA("CPresencePluginXdmUtils::SearchListUnderParentL return NULL");
         return NULL;
         }
 
@@ -1102,54 +1093,8 @@ CXdmDocumentNode* CPresencePluginXdmPresRules::SearchListUnderParentL(
 
     CleanupStack::PopAndDestroy(); // clItem
     CleanupStack::PopAndDestroy(); // clItem2
-    DP_SDA("CPresencePluginXdmPresRules::SearchListUnderParentL return");
+    DP_SDA("CPresencePluginXdmUtils::SearchListUnderParentL return");
     return currNode;
     }
    
-
-// ---------------------------------------------------------------------------
-// CPresencePluginXdmPresRules::SearchListUnderParentL
-// ---------------------------------------------------------------------------
-//
-TBool CPresencePluginXdmPresRules::CompareUriWithoutPrefixL( 
-    const TDesC& aUri, const TDesC& aAttribute )
-    {
-    DP_SDA("CPresencePluginXdmPresRules::CompareUriWithoutPrefixL");
-    
-    TBool match( EFalse );
-    
-    RBuf uriWithoutPrefix;
-    CleanupClosePushL( uriWithoutPrefix );
-    uriWithoutPrefix.CreateL( aUri );
-    TInt prefixLocation = uriWithoutPrefix.Locate( ':' );
-                   
-    if ( KErrNotFound != prefixLocation )
-        {
-        uriWithoutPrefix.Delete( 0, ( prefixLocation + 1 ) );
-        }
-        
-     RBuf attributeWithoutprefix;
-     CleanupClosePushL( attributeWithoutprefix );
-     attributeWithoutprefix.CreateL( aAttribute );
-     prefixLocation = attributeWithoutprefix.Locate( ':' );
-                   
-     if ( KErrNotFound != prefixLocation )
-         {
-         attributeWithoutprefix.Delete( 0, ( prefixLocation + 1 ) );
-         }
-                    
-     DP_SDA2("    --> uri without prefix=%S", &uriWithoutPrefix );
-     DP_SDA2("    --> attribute without prefix=%S", &attributeWithoutprefix );                 
-                
-     if ( uriWithoutPrefix.Compare( attributeWithoutprefix ) == 0 )
-         {
-         match = ETrue;
-         }
-                   
-    CleanupStack::PopAndDestroy( &attributeWithoutprefix );
-    CleanupStack::PopAndDestroy( &uriWithoutPrefix );
-    
-    return match;
-    }
-
 // End of file

@@ -75,34 +75,12 @@ RESOURCE MENU_PANE r_psui_mainview_menupane
     {
     items =
         {
-        MENU_ITEM 
-            { 
-            command = EPSUICmdEdit; 
-            txt = qtn_presence_settings_edit;
-            flags = EEikMenuItemAction;
-            },
-        MENU_ITEM 
-            { 
-            command = EPSUICmdNewSettings;
-            txt = qtn_presence_settings_new;
-            cascade = r_psui_newsettings_menu;
-            },
-        MENU_ITEM 
-            {
-            command = EPSUICmdDelete;
-            txt = qtn_presence_settings_delete;
-            flags = EEikMenuItemSpecific;
-            },
-        MENU_ITEM 
-            { 
-            command = EAknCmdHelp;
-            txt = qtn_options_help;
-            },
-        MENU_ITEM 
-            { 
-            command = EAknCmdExit;
-            txt = qtn_options_exit;
-            }
+        MENU_ITEM { command = EPSUICmdEdit; txt = qtn_presence_settings_edit; },
+        MENU_ITEM { command = EPSUICmdNewSettings; txt = qtn_presence_settings_new;
+            cascade = r_psui_newsettings_menu; },
+        MENU_ITEM { command = EPSUICmdDelete; txt = qtn_presence_settings_delete; },
+        MENU_ITEM { command = EAknCmdHelp; txt = qtn_options_help; },
+        MENU_ITEM { command = EAknCmdExit; txt = qtn_options_exit; }
         };
     }
 
@@ -115,16 +93,8 @@ RESOURCE MENU_PANE r_psui_newsettings_menu
     {
     items =
         {
-        MENU_ITEM 
-            { 
-            command = EPSUICmdNewSettingsDefault;
-            txt = qtn_presence_settings_new_default;
-            },
-        MENU_ITEM 
-            { 
-            command = EPSUICmdNewSettingsExisting;
-            txt = qtn_presence_settings_new_existing;
-            }
+        MENU_ITEM { command = EPSUICmdNewSettingsDefault; txt = qtn_presence_settings_new_default; },
+        MENU_ITEM { command = EPSUICmdNewSettingsExisting; txt = qtn_presence_settings_new_existing; }
         };
     }
 
@@ -214,22 +184,9 @@ RESOURCE MENU_PANE r_psui_settingview_menupane
     {
     items =
         {
-        MENU_ITEM 
-            { 
-            command = EPSUICmdChange;
-            txt = qtn_presence_settings_change;
-            flags = EEikMenuItemAction;
-            },
-        MENU_ITEM
-            {
-            command = EAknCmdHelp;
-            txt = qtn_options_help;
-            },
-        MENU_ITEM
-            {
-            command = EEikCmdExit;
-            txt = qtn_options_exit;
-            }
+        MENU_ITEM { command = EPSUICmdChange; txt = qtn_presence_settings_change; },
+        MENU_ITEM { command = EAknCmdHelp; txt = qtn_options_help; },
+        MENU_ITEM { command = EEikCmdExit; txt = qtn_options_exit; }
         };
     }
 

@@ -163,23 +163,23 @@ TInt CXcapCacheIndex::Compare( const CXcapCacheIndexEntry& aFirst,
 // 
 // ----------------------------------------------------------
 //
-void CXcapCacheIndex::SortEntriesL()
+void CXcapCacheIndex::SortEntries()
     {
     TLinearOrder<CXcapCacheIndexEntry> order( CXcapCacheIndex::Compare );
     iEntryList.Sort( order );
     #ifdef _DEBUG
         TPtrC8 entryDesc;
         TInt count = iEntryList.Count();
-        CXcapCacheServer::WriteToLog( _L8( "CXcapCacheIndex::SortEntriesL()" ) );
+        CXcapCacheServer::WriteToLog( _L8( "CXcapCacheIndex::SortEntries()" ) );
         CXcapCacheServer::WriteToLog( _L8( "------------------------------------------" ) );
         CXcapCacheServer::WriteToLog( _L8( " Sorted list:" ) );
         for( TInt i = 0;i < count;i++ )
             {
-            HBufC* buffer = NULL;
-            buffer = CXcapCacheServer::DateTimeL( iEntryList[i]->LastModified() );
+            TBuf<KDateTimeMaxSize> buffer =
+                CXcapCacheServer::DateTime( iEntryList[i]->LastModified() );
             TBuf8<KDateTimeMaxSize> printBuffer( _L8( "  " ) );
             printBuffer.AppendFormat( _L8( "%d: " ), i );
-            printBuffer.Append( *buffer );
+            printBuffer.Append( buffer );
             CXcapCacheServer::WriteToLog( printBuffer );
             }
         CXcapCacheServer::WriteToLog( _L8( "------------------------------------------" ) );

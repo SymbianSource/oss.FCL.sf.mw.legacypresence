@@ -25,7 +25,6 @@
 #include    <bldvariant.hrh>
 #include    <coeccntx.h>
 #include    <eikclb.h>
-#include    <aknview.h>
 
 #include    "XDMPlugin.hrh"
 

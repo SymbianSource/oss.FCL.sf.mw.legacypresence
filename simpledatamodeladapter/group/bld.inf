@@ -22,15 +22,15 @@ PRJ_PLATFORMS
 DEFAULT
 
 PRJ_EXPORTS
-#ifdef GC_AREA_PARTIAL_INCLUDE_CHANGE_ON
-#else
-#endif
+//#ifdef GC_AREA_PARTIAL_INCLUDE_CHANGE_ON
+//#else
+//#endif
 
-../rom/simpledatamodeladapter.iby CORE_MW_LAYER_IBY_EXPORT_PATH(simpledatamodeladapter.iby)
+//../rom/simpledatamodeladapter.iby CORE_MW_LAYER_IBY_EXPORT_PATH(simpledatamodeladapter.iby)
 
 PRJ_MMPFILES
-presenceplugin.mmp
-#include "../simpleimplugin/group/bld.inf"
+//presenceplugin.mmp
+//#include "../simpleimplugin/group/bld.inf"
 
 PRJ_TESTMMPFILES
 //../internal/tsrc/group/T_SIMPLEDataModelAdapter.mmp

@@ -22,12 +22,9 @@
 #include <XdmDocument.h>
 #include <XdmDocumentNode.h>
 #include <XdmNodeAttribute.h>
-
-#include "XdmLogWriter.h"
 #include "XmlFormatter.h"
 #include "XmlParserDefines.h"
 #include "XmlParserNodePath.h"
-#include "XdmXmlParser.h"
 
 // ----------------------------------------------------------
 // CXmlFormatter::CXmlFormatter
@@ -294,9 +291,6 @@ HBufC8* CXmlFormatter::FormatLC( TBool aIsWholeDocument,
 void CXmlFormatter::FormatNamespaceDeclarationsL( const CXdmDocumentNode& aRootNode,
                                                   const MXdmNamespaceContainer& aContainer )
     {
-#ifdef _DEBUG
-    iParserMain.WriteToLog( _L8( "CXmlFormatter::FormatNamespaceDeclarationsL start" ) );
-#endif
     TPtrC8 name( aRootNode.EightBitNodeNameLC()->Des() );
     TPtrC8 prefix = Prefix( aRootNode );
     iFormatBuffer->InsertL( iFormBufferPos, KStartBracketString );
@@ -322,37 +316,10 @@ void CXmlFormatter::FormatNamespaceDeclarationsL( const CXdmDocumentNode& aRootN
             AppendNamespaceL( uri, prefix );
             }
         }
-
-    // go through possible attributes after namespaces
-    for ( TInt i = 0; i < aRootNode.AttributeCount(); i++ )
-        {
-        iFormatBuffer->InsertL( iFormBufferPos, KSpaceString );
-        iFormBufferPos = iFormBufferPos + KSpaceString().Length();
-
-        CXdmNodeAttribute* attr = aRootNode.Attribute( i );
-        TPtrC8 name( attr->EightBitNodeNameLC()->Des() );
-        iFormatBuffer->InsertL( iFormBufferPos, name );
-        iFormBufferPos = iFormBufferPos + name.Length();
-        CleanupStack::PopAndDestroy();  //EightBitNodeNameLC()
-        iFormatBuffer->InsertL( iFormBufferPos, KEquelsSignString );
-        iFormBufferPos = iFormBufferPos + KEquelsSignString().Length();
-        iFormatBuffer->InsertL( iFormBufferPos, KQuotationSignString );
-        iFormBufferPos = iFormBufferPos + KQuotationSignString().Length();
-        TPtrC8 attrValue( attr->EightBitValueLC()->Des() );
-        iFormatBuffer->InsertL( iFormBufferPos, attrValue );
-        iFormBufferPos = iFormBufferPos + attrValue.Length();
-        CleanupStack::PopAndDestroy();  //EightBitValueLC()
-        iFormatBuffer->InsertL( iFormBufferPos, KQuotationSignString );
-        iFormBufferPos = iFormBufferPos + KQuotationSignString().Length();
-        }
-
     iFormatBuffer->InsertL( iFormBufferPos, KEndBracketString );
     iFormBufferPos = iFormBufferPos + KEndBracketString().Length();
     iFormatBuffer->InsertL( iFormBufferPos, KNewlineString );
     iFormBufferPos = iFormBufferPos + KNewlineString().Length();
-    #ifdef _DEBUG
-        iParserMain.WriteToLog( _L8( "CXmlFormatter::FormatNamespaceDeclarationsL exit" ) );
-    #endif
     }
 
 // ---------------------------------------------------------

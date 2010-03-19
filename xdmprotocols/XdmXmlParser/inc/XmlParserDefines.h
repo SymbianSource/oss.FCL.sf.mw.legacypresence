@@ -34,7 +34,6 @@ _LIT8( KEndBracketString,                               ">" );
 _LIT8( KXmlNamespaceString,                             " xmlns" );
 _LIT8( KPrefixSeparatorString,                          ":" );
 _LIT8( KNewlineString,                                  "\r\n" );
-_LIT8( KSpaceString,                                    " " );
 
 const TInt KStartBracket                                = 60;
 const TInt KEndBracket                                  = 62;

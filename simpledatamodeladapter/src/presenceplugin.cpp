@@ -202,8 +202,6 @@ MXIMPProtocolConnection& CPresencePlugin::AcquireConnectionL(
                 CleanupStack::Pop( connection ); 
                 tmp = connection;
                 connected = ETrue;
-                
-                iConnectionArray[i]->IncreaseClientCount();
                 }
 			else if ( CPresencePluginConnection::EActive == status )
 			    {

@@ -47,10 +47,6 @@
 #include "msimplewinfowatcher.h"
 #include "simpleinstantmessage.h"
 
-#ifdef _DEBUG
-#include "simpledebugutils.h"
-#endif
-
 class MSimpleConnectionObserver;
 class MSimplePublishObserver;
 class MSimpleWatcherObserver;
@@ -95,9 +91,6 @@ EXPORT_C MSimpleFilterDocument* TSimpleFactory::NewFilterDocumentL()
 EXPORT_C MSimpleConnection* TSimpleFactory::NewConnectionL(
     MSimpleConnectionObserver& aObserver)
     {
-    #ifdef _DEBUG
-    TSimpleLogger::Log(_L("TSimpleFactory::NewConnectionL" ) );
-    #endif
     return CSimpleConnection::NewL( aObserver );
     }
 
@@ -141,11 +134,7 @@ EXPORT_C MSimpleContent* TSimpleFactory::NewContentL(
         aContentID, aContentType );    
     }
       
-EXPORT_C MSimpleConnection* TSimpleFactory::NewConnectionL(
-    MSimpleConnectionObserver& aObserver, TInt32 aServiceId )
-    {
-    return CSimpleConnection::NewL( aObserver, aServiceId );
-    }
+
 
 
 

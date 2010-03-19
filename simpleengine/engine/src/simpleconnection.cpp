@@ -65,7 +65,7 @@ CSimpleConnection::~CSimpleConnection()
 // CSimpleConnection::ConstructL
 // ----------------------------------------------------------
 //
-void CSimpleConnection::ConstructL( TInt32 aServiceId )
+void CSimpleConnection::ConstructL()
     {
     // Create CSimpleSipConnection entity in simplesiputils.dll
     iConnection = CSimpleSipConnection::NewL();
@@ -79,10 +79,6 @@ void CSimpleConnection::ConstructL( TInt32 aServiceId )
     CSimpleEngineRequest* req = CSimpleEngineRequest::NewL(
         *this, MSimpleEngineRequest::EListenEvents, iOpId );
     CleanupStack::PushL( req );
-    if ( aServiceId )
-        {
-        iConnection->SetServiceId( aServiceId );
-        }
     iConnection->DispatchReqL( *req );
     iRequestList.AddLast( *req );
     CleanupStack::Pop( req );
@@ -100,24 +96,7 @@ CSimpleConnection* CSimpleConnection::NewL(
 #endif
     CSimpleConnection* self = new (ELeave) CSimpleConnection( aObserver );
     CleanupStack::PushL( self );
-    self->ConstructL( NULL );
-    CleanupStack::Pop( self );
-    return self;
-    }
-
-// ----------------------------------------------------------
-// CSimpleConnection::NewL
-// ----------------------------------------------------------
-//
-CSimpleConnection* CSimpleConnection::NewL(
-    MSimpleConnectionObserver& aObserver, TInt32 aServiceId )
-    {
-#ifdef _DEBUG
-    TSimpleLogger::Log(_L("SimpleConnection: NewL" ));
-#endif
-    CSimpleConnection* self = new (ELeave) CSimpleConnection( aObserver );
-    CleanupStack::PushL( self );
-    self->ConstructL( aServiceId );
+    self->ConstructL();
     CleanupStack::Pop( self );
     return self;
     }

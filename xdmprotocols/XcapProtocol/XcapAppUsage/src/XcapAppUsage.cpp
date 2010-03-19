@@ -41,9 +41,6 @@
 #include "XcapOmaPresRulesUsage.h"
 // Add the header of the new app usage here
 // #include "XcapTestAppUsage.h"
-// PRES-CONTENT STARTS
-#include "XcapC4.h"
-// PRES-CONTENT ENDS
 
 #include <XdmErrors.h>
 #include <XdmProtocolUidList.h>
@@ -57,24 +54,21 @@
 // Map the interface UIDs to implementation factory functions
 const TImplementationProxy ImplementationTable[] = 
 	{
-#ifdef __EABI__  
-	IMPLEMENTATION_PROXY_ENTRY( KXdmCapabilityUsageUid, CXcapCapabilityUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmDirectoryUsageUid,  CXcapDirectoryUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmPocGroupUsageUid,   CXcapPocGroupUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmPocUserAccessUsageUid,  CXcapPocUserAccessUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmSharedXDMUsageUid,  CXcapSharedXDMUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmRlsServicesUsageUid,    CXcapRlsServicesUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmResourceListsUsageUid,  CXcapResourceListsUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmIetfCommonPolicyUsageUid,   CXcapIetfCommonPolicyUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmOmaCommonPolicyUsageUid,    CXcapOmaCommonPolicyUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmIetfPresRulesUsageUid,  CXcapIetfPresRulesUsage::NewL ),
-	IMPLEMENTATION_PROXY_ENTRY( KXdmOmaPresRulesUsageUid,   CXcapOmaPresRulesUsage::NewL ),
+#ifdef __EABI__
+    IMPLEMENTATION_PROXY_ENTRY( KXdmCapabilityUsageUid, CXcapCapabilityUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmDirectoryUsageUid,  CXcapDirectoryUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmPocGroupUsageUid,   CXcapPocGroupUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmPocUserAccessUsageUid,  CXcapPocUserAccessUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmSharedXDMUsageUid,  CXcapSharedXDMUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmRlsServicesUsageUid,    CXcapRlsServicesUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmResourceListsUsageUid,  CXcapResourceListsUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmIetfCommonPolicyUsageUid,   CXcapIetfCommonPolicyUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmOmaCommonPolicyUsageUid,    CXcapOmaCommonPolicyUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmIetfPresRulesUsageUid,  CXcapIetfPresRulesUsage::NewL ),
+    IMPLEMENTATION_PROXY_ENTRY( KXdmOmaPresRulesUsageUid,   CXcapOmaPresRulesUsage::NewL )
     // add new usages here
     // IMPLEMENTATION_PROXY_ENTRY( KXdmTestAppUsageUid,    CXcapTestAppUsage::NewL ),
-// PRES-CONTENT STARTS
-	IMPLEMENTATION_PROXY_ENTRY( KXdmUsageUid, CXcapC4::NewL )
-// PRES-CONTENT ENDS
-#else  
+#else 
     { { KXdmCapabilityUsageUid }, CXcapCapabilityUsage::NewL },
     { { KXdmDirectoryUsageUid }, CXcapDirectoryUsage::NewL },
     { { KXdmPocGroupUsageUid }, CXcapPocGroupUsage::NewL },
@@ -85,12 +79,9 @@ const TImplementationProxy ImplementationTable[] =
     { { KXdmIetfCommonPolicyUsageUid }, CXcapIetfCommonPolicyUsage::NewL },
     { { KXdmOmaCommonPolicyUsageUid }, CXcapOmaCommonPolicyUsage::NewL },
     { { KXdmIetfPresRulesUsageUid }, CXcapIetfPresRulesUsage::NewL },
-    { { KXdmOmaPresRulesUsageUid }, CXcapOmaPresRulesUsage::NewL }, 
+    { { KXdmOmaPresRulesUsageUid }, CXcapOmaPresRulesUsage::NewL }    
     // add new usages here
     // { { KXdmTestAppUsageUid }, CXcapTestAppUsage::NewL }, 
-// PRES-CONTENT STARTS
-    { { KXdmUsageUid }, CXcapC4::NewL }
-// PRES-CONTENT ENDS
 #endif
     };
 
@@ -161,7 +152,6 @@ EXPORT_C CXcapAppUsage* CXcapAppUsage::NewL( const CXdmEngine& aXdmEngine,
         case KXdmOmaCommonPolicyUsageUid:     
         case KXdmIetfPresRulesUsageUid:     
         case KXdmOmaPresRulesUsageUid:
-        case KXdmUsageUid:
             {
             TUid KImplementationUid = { aDocumentType };
             ptr = REComSession::CreateImplementationL( 

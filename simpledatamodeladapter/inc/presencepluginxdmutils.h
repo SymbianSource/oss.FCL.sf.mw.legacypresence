@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -25,7 +25,6 @@
 #include "presenceplugincommon.h"
 #include "mpresrulesasynchandler.h"
 #include "presencelogger.h"
-#include "presenceplugincontactsobs.h"
 
 class CPresencePluginXdmPresRules;
 class TXIMPRequestId;
@@ -46,8 +45,7 @@ class MPresencePluginConnectionObs;
  * @since S60 v3.2
  */
 NONSHARABLE_CLASS( CPresencePluginXdmUtils ) : public CActive,
-    public MPresRulesAsyncHandler,
-    public MPresencePluginContactsObs
+    public MPresRulesAsyncHandler
     {
     public: // Constructor and destructor
 
@@ -85,8 +83,7 @@ NONSHARABLE_CLASS( CPresencePluginXdmUtils ) : public CActive,
             ECreateXdmRules,
             /** Subscripe block list */
             ESubsBlockList,
-            EGetResourceListFromServer,
-            EUpdateBlockedContactPresenceCache
+            EGetResourceListFromServer
             };
 
         /**
@@ -307,14 +304,6 @@ NONSHARABLE_CLASS( CPresencePluginXdmUtils ) : public CActive,
          */
         void DoCancel();
 
-    protected: // from MPresencePluginContactsObs
-
-        /**
-         * Defined in a base class
-         */
-        void RequestComplete( TAny* aResult,
-            TPresenceContactsOperation aOperation, TInt aError );
-
     private:
     
         /**
@@ -517,26 +506,6 @@ NONSHARABLE_CLASS( CPresencePluginXdmUtils ) : public CActive,
          */
         void UpdateFromServerL();
         
-        /**
-         * Compare uri to attribute without prefix. Returns ETrue if match.
-         *
-         * @since S60 5.0
-         * @param aUri, entity url
-         * @parram aAttribute url attribute
-         * @return TBool
-         */
-        TBool CompareUriWithoutPrefixL( 
-            const TDesC& aUri, const TDesC& aAttribute );
-        
-        /**
-         * Update blocked contact status to Presence Cache
-         *
-         * @since S60 5.0
-         * @param aMyStatus, error status
-         */
-        void DoUpdateBlockedContactPresenceCacheL(
-            TInt aMyStatus );
-
     private: // Data
 
         /**
@@ -635,17 +604,6 @@ NONSHARABLE_CLASS( CPresencePluginXdmUtils ) : public CActive,
          */
         TBool iLocalMode;
         
-        /**
-         * Request results.
-         * Is contact blocked request
-         */
-        TBool iPresenceContactsAsyncReqResult;
-
-        /*
-         * Initial blocked contact list
-         */
-        RPointerArray<HBufC> iBlockedContacts;
-
         SIMPLE_UNIT_TEST( T_CPresencePluginGroups )
         SIMPLE_UNIT_TEST( T_CPresencePluginWatcher )
         SIMPLE_UNIT_TEST( T_CPresencePluginAuthorization )

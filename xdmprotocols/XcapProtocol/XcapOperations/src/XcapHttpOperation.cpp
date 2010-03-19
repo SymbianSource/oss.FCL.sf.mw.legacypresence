@@ -54,9 +54,6 @@ CXcapHttpOperation::CXcapHttpOperation( const CXdmDocument& aTargetDoc,
 //
 void CXcapHttpOperation::BaseConstructL()
     {
-    #ifdef _DEBUG
-        iOperationFactory.WriteToLog( _L8( "-> CXcapHttpOperation::BaseConstructL" ) ); 
-    #endif
     iXmlParser = &iTargetDoc.Protocol().Parser();
     iUriParser = CXcapUriParser::NewL( iTargetDoc, iOperationFactory );
     #ifdef _DEBUG
@@ -64,9 +61,6 @@ void CXcapHttpOperation::BaseConstructL()
         iOperationFactory.WriteToLog( _L8( " Content-Type: %S" ), &contType ); 
     #endif
     CActiveScheduler::Add( this );
-    #ifdef _DEBUG
-        iOperationFactory.WriteToLog( _L8( "<- CXcapHttpOperation::BaseConstructL" ) ); 
-    #endif
     }
 
 // ---------------------------------------------------------

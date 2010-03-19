@@ -317,17 +317,13 @@ void CXcapCacheIndexEntry::CreateFromHeaderL( const TCacheEntryInfo* aHeader )
 HBufC8* CXcapCacheIndexEntry::HourStringLC()
     {
     HBufC8* hourString = NULL;
-    HBufC* date = CXcapCacheServer::DateL();
-    HBufC* time = CXcapCacheServer::TimeL();
-    hourString = HBufC8::NewLC( date->Length() + time->Length() + 1 );
+    TPtrC date( CXcapCacheServer::Date() );
+    TPtrC time( CXcapCacheServer::Time() );
+    hourString = HBufC8::NewLC( date.Length() + time.Length() + 1 );
     TPtr8 pointer( hourString->Des() );
-    pointer.Copy( *date );
+    pointer.Copy( date );
     pointer.Append( KPageFileSeparator );
-    pointer.Append( *time );
-    delete date;
-    date = NULL;
-    delete time;
-    time = NULL;
+    pointer.Append( time );
     return hourString;
     }
 
@@ -340,15 +336,13 @@ HBufC8* CXcapCacheIndexEntry::StoreXmlFileLC( const TDesC8& aXmlData )
     {
     RFile file;
     HBufC* nameBuf = NULL;
-    HBufC* randomString = NULL;
     TPtrC randomName( _L( "" ) );
     TInt error = KErrAlreadyExists;
     //It is extremely unlikely that the random string generator
     //creates two exact same patterns, but let's check for it, anyway.
     while( error == KErrAlreadyExists )
         {
-        randomString = CXcapCacheServer::RandomStringL();
-        randomName.Set( *randomString );
+        randomName.Set( CXcapCacheServer::RandomString() );
         nameBuf = HBufC::NewLC( KCacheServerRoot().Length() + randomName.Length() );
         nameBuf->Des().Copy( KCacheServerRoot );
         nameBuf->Des().Append( randomName );

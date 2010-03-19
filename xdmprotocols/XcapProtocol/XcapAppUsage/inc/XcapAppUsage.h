@@ -473,17 +473,7 @@ inline CXcapAppUsage* CXcapAppUsage::NewL( const CXdmEngine& aXdmEngine,
                    ( TAny* )&params ) );
             }
             break;
-// PRES-CONTENT STARTS
-      case EXdmPresContent:
-            {
-            TUid KDefaultImplementationUid = { 0x20028701 };
-            TRAPD( error, ptr = REComSession::CreateImplementationL( 
-                KDefaultImplementationUid,
-                _FOFF( CXcapAppUsage, iDestructorKey ),
-               ( TAny* )&params ) );
-            }
-            break;
-// PRES-CONTENT ENDS
+     
         default:
             User::Leave( KErrNotSupported );
         }

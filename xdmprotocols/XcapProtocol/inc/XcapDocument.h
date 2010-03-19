@@ -113,7 +113,7 @@ class CXcapDocument : public CXdmDocument
         * @param TInt Default Access Point ID
         * @return CXdmDocOperation*
         */     
-        IMPORT_C TDesC8& ETag();
+        IMPORT_C TPtrC8 ETag() const;
         
         /**
         * Symbian OS default constructor.

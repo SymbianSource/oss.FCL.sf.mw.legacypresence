@@ -37,9 +37,6 @@ SOURCE                  XcapHttpHeaderModel.cpp
 SOURCE                  XcapHttpAuthManager.cpp
 SOURCE                  XcapHttpContSupplier.cpp
 SOURCE                  XcapHttpRequestTimer.cpp
-// SONERA SOLUTION
-SOURCE                  XcapHttpReqHead.cpp
-SOURCE                  XcapHttpReqMkcol.cpp
 
 //Internal
 USERINCLUDE             ../inc

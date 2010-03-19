@@ -81,7 +81,7 @@ void CPresencePluginSession::ConstructL( const MXIMPServiceInfo& aService )
     iServiceId = aService.IapId();
     
     //Create connection
-    iConnection = TSimpleFactory::NewConnectionL( *this, aService.IapId() );
+    iConnection = TSimpleFactory::NewConnectionL( *this );
     
     //Check here is xdm settings ok
     CheckXDMSettingsL( aService.IapId() );
@@ -446,7 +446,7 @@ TInt& CPresencePluginSession::ServiceId()
     }
 
 // ---------------------------------------------------------------------------
-// CPresencePluginSession::DoCancel()
+// CPresencePluginPublisher::DoCancel()
 // ---------------------------------------------------------------------------
 //
 void CPresencePluginSession::DoCancel(  )
@@ -490,7 +490,7 @@ void CPresencePluginSession::RunL(  )
 //
 TInt CPresencePluginSession::RunError( TInt /*aError*/ )
     {
-    DP_SDA("CPresencePluginSession::RunError"); 
+    DP_SDA("CPresencePluginPublisher::RunError"); 
     return KErrNone;
     }
 

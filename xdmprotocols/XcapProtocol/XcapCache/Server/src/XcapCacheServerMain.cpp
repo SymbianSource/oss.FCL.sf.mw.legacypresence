@@ -59,7 +59,7 @@ GLDEF_C TInt E32Main()
     #endif
 	if( cleanup )
 		{
-		TRAP( error, CXcapCacheServer::StartThreadL() );
+		TRAP( error, CXcapCacheServer::StartThread() );
 		delete cleanup;
 		}
 	__UHEAP_MARKEND; 

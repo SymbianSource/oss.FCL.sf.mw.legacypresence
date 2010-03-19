@@ -27,7 +27,6 @@
 // FORWARD DECLARATIONS
 
 // CLASS DECLARATION
-class CPSUIGSPluginModel;
 
 /**
 * CPSUISipXdmSettingItem setting class

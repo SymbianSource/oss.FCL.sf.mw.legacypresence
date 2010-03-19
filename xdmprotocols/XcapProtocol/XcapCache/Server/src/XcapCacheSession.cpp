@@ -175,7 +175,7 @@ void CXcapCacheSession::DispatchMessageL( const RMessage2& aMessage )
                 #ifdef _DEBUG
                     CXcapCacheServer::WriteToLog( _L8( " Cache too large: %d bytes" ), size );
                 #endif
-                iCacheIndex.SortEntriesL();
+                iCacheIndex.SortEntries();
                 const TInt compression( iCacheServer->MaxCacheSize() * KDefaultCompression );
                 //NOTE: Index & pagefile are always there -> 3
                 TBool ready = EFalse;

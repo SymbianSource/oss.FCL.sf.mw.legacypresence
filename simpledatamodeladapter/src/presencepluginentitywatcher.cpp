@@ -395,13 +395,7 @@ void CPresencePluginEntityWatcher::SetTerminatedToXIMPL(
         MXIMPIdentity* identity2 = iConnObs.ObjectFactory().NewIdentityLC();    
         
         HBufC* withoutPrefix = iPresenceData->RemovePrefixLC( aIdentity );
-        identity2->SetIdentityL( *withoutPrefix );
-        
-        DP_SDA("SetTerminatedToXIMPL, write offline status to cache");
-        iPresenceData->WriteStatusToCacheL( *withoutPrefix,
-            MPresenceBuddyInfo2::ENotAvailable,
-            KNullDesC(),
-            KNullDesC() );
+        identity2->SetIdentityL( *withoutPrefix );   
         
         // XIMP Host API callback 
         watcherHost.HandleSubscribedPresentityPresenceL( identity2, prInfo );

@@ -172,55 +172,51 @@ TInt CXcapCacheServer::ConvertDesc( const TDesC8& aNumberDesc )
     }
 
 // ---------------------------------------------------------
-// CXcapCacheServer::DateL
+// CXcapCacheServer::Date
 // 
 // ---------------------------------------------------------
 //
-HBufC* CXcapCacheServer::DateL()
+TBuf<KDateMaxSize> CXcapCacheServer::Date()
     {
     TTime time;
     TBuf<KDateMaxSize> dateBuffer;
     dateBuffer.SetLength( 0 );
-    time.HomeTime();
+	time.HomeTime();
     time.FormatL( dateBuffer, KCacheDateFormat );
-    HBufC* heapDate = dateBuffer.AllocL();
-    return heapDate;
+    return dateBuffer;
     }
 
 // ---------------------------------------------------------
-// CXcapCacheServer::DateTimeL
+// CXcapCacheServer::DateTime
 // 
 // ---------------------------------------------------------
 //
-HBufC* CXcapCacheServer::DateTimeL()
+TBuf<KDateTimeMaxSize> CXcapCacheServer::DateTime()
     {
     TTime time;
     TBuf<KDateMaxSize> dateBuffer;
-    time.HomeTime();
+	time.HomeTime();
     time.FormatL( dateBuffer, KDateFormatFileName );
     TBuf<KDateMaxSize> timeBuffer;
-    time.HomeTime();
-    time.FormatL( timeBuffer, KTimeFormatFileName );
+	time.HomeTime();
+	time.FormatL( timeBuffer, KTimeFormatFileName );
     TBuf<KDateTimeMaxSize> buffer;
     buffer.SetLength( 0 );
     buffer.Copy( dateBuffer );
     buffer.Append( timeBuffer );
-    HBufC* ret = HBufC::NewL( buffer.Length() );
-    ret->Des().Copy( buffer );
-    return ret;
+    return buffer;
     }
 
 // ---------------------------------------------------------
-// CXcapCacheServer::DateTimeL
+// CXcapCacheServer::DateTime
 // 
 // ---------------------------------------------------------
 //
-HBufC* CXcapCacheServer::DateTimeL( const TTime& aTime )
+TBuf<KDateTimeMaxSize> CXcapCacheServer::DateTime( const TTime& aTime )
     {
     TBuf<KDateTimeMaxSize> dateTimeBuffer;
     aTime.FormatL( dateTimeBuffer, KDateTimeFormat );
-    HBufC* heapDateTime = dateTimeBuffer.AllocL();
-    return heapDateTime;
+    return dateTimeBuffer;
     }
     
 // ----------------------------------------------------------
@@ -262,11 +258,11 @@ TInt CXcapCacheServer::CacheSize( TInt& aEntryCount )
     }
 
 // ---------------------------------------------------------
-// CXcapCacheServer::RandomStringL
+// CXcapCacheServer::RandomString
 // 
 // ---------------------------------------------------------
 //
-HBufC* CXcapCacheServer::RandomStringL()
+TBuf<KRandStringLength> CXcapCacheServer::RandomString()
     {
     const TInt charCount( sizeof( KRandomStringCharArray ) / sizeof( TInt ) );
     TBuf<KRandStringLength> buffer;
@@ -276,24 +272,22 @@ HBufC* CXcapCacheServer::RandomStringL()
         TInt index = Math::Random() % charCount;
         buffer.Append( ( TChar )KRandomStringCharArray[index] );
         }
-    HBufC* randomHeapBuffer = buffer.AllocL();
-    return randomHeapBuffer;
+    return buffer;
     }
 
 // ---------------------------------------------------------
-// CXcapCacheServer::TimeL
+// CXcapCacheServer::Time
 // 
 // ---------------------------------------------------------
 //
-HBufC* CXcapCacheServer::TimeL()
+TBuf<KDateMaxSize> CXcapCacheServer::Time()
     {
     TTime time;
     TBuf<KDateMaxSize> timeBuffer;
-    timeBuffer.SetLength( 0 );
-    time.HomeTime();
-    time.FormatL( timeBuffer, KCacheTimeFormat );
-    HBufC* heapTime = timeBuffer.AllocL();
-    return heapTime;
+	timeBuffer.SetLength( 0 );
+	time.HomeTime();
+	time.FormatL( timeBuffer, KCacheTimeFormat );
+    return timeBuffer;
     }
 
 // ---------------------------------------------------------
@@ -340,16 +334,16 @@ CXcapCacheIndexAdmin* CXcapCacheServer::IndexAdmin()
     }
 
 // ----------------------------------------------------
-// CXcapCacheServer::StartThreadL
+// CXcapCacheServer::StartThread
 // 
 // ----------------------------------------------------
 //
-EXPORT_C TInt CXcapCacheServer::StartThreadL()
+EXPORT_C TInt CXcapCacheServer::StartThread()
     {
-    User::LeaveIfError( User::RenameThread( KXcapCacheServerName ) );
-    CActiveScheduler* scheduler = new ( ELeave ) CActiveScheduler;
-    CleanupStack::PushL( scheduler );
-    CActiveScheduler::Install( scheduler );
+	User::LeaveIfError( User::RenameThread( KXcapCacheServerName ) );
+	CActiveScheduler* scheduler = new ( ELeave ) CActiveScheduler;
+	CleanupStack::PushL( scheduler );
+	CActiveScheduler::Install( scheduler );
     User::LeaveIfError( FsSession.Connect() );
     CleanupClosePushL( FsSession );
     CXcapCacheServer::NewLC();
@@ -358,15 +352,15 @@ EXPORT_C TInt CXcapCacheServer::StartThreadL()
     CacheIndexAdmin = CXcapCacheIndexAdmin::NewL();
     CleanupStack::PushL( CacheIndexAdmin );
     RProcess::Rendezvous( KErrNone );
-    #ifdef _DEBUG
-        CXcapCacheServer::WriteToLog( _L8( "XcapCacheServer fully running" ) );
+	#ifdef _DEBUG
+	    CXcapCacheServer::WriteToLog( _L8( "XcapCacheServer fully running" ) );
+	#endif
+	CActiveScheduler::Start();
+	#ifdef _DEBUG
+	    CXcapCacheServer::WriteToLog( _L8( "XcapCacheServer closing..." ) );
     #endif
-    CActiveScheduler::Start();
-    #ifdef _DEBUG
-        CXcapCacheServer::WriteToLog( _L8( "XcapCacheServer closing..." ) );
-    #endif
-    CleanupStack::PopAndDestroy( 5 );  //CacheIndexAdmin, CacheIndex, server, FsSession, scheduler
-    return KErrNone;
+	CleanupStack::PopAndDestroy( 5 );  //CacheIndexAdmin, CacheIndex, server, FsSession, scheduler
+	return KErrNone;
     }
 
 // ----------------------------------------------------

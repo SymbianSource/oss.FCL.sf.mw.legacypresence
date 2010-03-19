@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -36,7 +36,6 @@
 #include <siprefresh.h>
 #include <sipmessageelements.h>
 #include <sipsubscribedialogassoc.h>
-#include <sipregistrationcontext.h>
 
 // sip codec api
 #include <sipfromheader.h>
@@ -51,8 +50,6 @@
 #include <sipsubscriptionstateheader.h>
 #include <sipsupportedheader.h>
 #include <sipacceptheader.h>
-
-#include <cvimpstsettingsstore.h>
 
 // own simple
 #include "simplesipconnection.h"
@@ -82,6 +79,10 @@ _LIT8 ( KSimpleTimeout, "timeout" );
 _LIT8 ( KSimpleGiveup, "giveup" );
 _LIT8 ( KSimpleNoresource, "Noresource" );
 _LIT8 ( KSipPrefix, "sip:" );
+
+// UID given for CSIP class. SIP Utils listens to new SIP requests 
+// (when receiving IM) outside SIP dialogs.
+const TUid KSimpleSIPUtilsUID = { 0x10281EEC };
 
 // ================= MEMBER FUNCTIONS =======================
 //
@@ -113,7 +114,6 @@ EXPORT_C CSimpleSipConnection::~CSimpleSipConnection()
     delete iConnectionObserver;
     delete iSip;
     DeleteRequests();
-    DeleteRequests( CSimpleRequest::EReqReceiveIM );
     SIPStrings::Close();
     }
 
@@ -140,8 +140,11 @@ void CSimpleSipConnection::ConstructL()
     TSimpleLogger::Log(
         _L("SipConnection: ConstructL 20-01-07 this=%d" ), (TInt)this );
 #endif
-    
+    // initialize members
+    iSip = CSIP::NewL( KSimpleSIPUtilsUID, *this );
     iConnectionObserver = CSimpleSipConnectionObserver::NewL( *this);
+    iProfileObserver = 
+        CSimpleSipProfileObserver::NewL( iSip, *iConnectionObserver);
     SIPStrings::OpenL();
     // read static cenrep settings
     iSettings.ReadCentRepSettings();
@@ -442,27 +445,42 @@ void CSimpleSipConnection::SendInstantMessageL( MSimpleEngineRequest& aReq )
         temp->Des().Copy( KSipPrefix() );
         temp->Des().Append( aReq.Recipient() );
         User::LeaveIfError( parser.Parse( *temp ));
-        CUri8* uri = CUri8::NewL( parser );
+        CUri8* uri = CUri8::NewLC( parser );  // CS: 3
         
         // Start to fill header, Remote URI
         CSIPRequestElements* elems = CSIPRequestElements::NewL( uri );
+        CleanupStack::Pop( uri ); // ownership given to elems  // CS: 2
         CleanupStack::PushL( elems );  // CS: 3
-        
+
         TUriParser8 parser3;
         User::LeaveIfError( parser3.Parse( iProfileObserver->
             GiveUserAorL() ));
-        uri = CUri8::NewL( parser3 );
+        uri = CUri8::NewLC( parser3 );  // CS: 4
+        
         CSIPAddress* sipAddress = CSIPAddress::NewL( uri );
+        CleanupStack::Pop( uri ); // ownership given to sipAddress  // CS: 3
+        CleanupStack::PushL( sipAddress );  // CS: 4
         
         // From Header
         CSIPFromHeader* fromH = CSIPFromHeader::NewL( sipAddress );
-        elems->SetFromHeaderL( fromH ); // fromH, ownership given to elems
+        CleanupStack::Pop( sipAddress ); // ownership given to FromH  // CS: 3
+        CleanupStack::PushL( fromH );  // CS: 4
+        elems->SetFromHeaderL( fromH );
+        // fromH, ownership given to elems
+        CleanupStack::Pop( fromH );  // CS: 3
         
-        uri = CUri8::NewL( parser );
+        uri = CUri8::NewLC( parser );  // CS: 4
+        
         CSIPAddress* addr = CSIPAddress::NewL( uri );
+        CleanupStack::Pop( uri );  // CS: 3
+        CleanupStack::PushL( addr );  // CS: 4
+        
         // To Header
         CSIPToHeader* toHeader = CSIPToHeader::NewL( addr );
+        CleanupStack::Pop( addr );  // CS: 3
+        CleanupStack::PushL( toHeader );  // CS: 4   
         elems->SetToHeaderL( toHeader );
+        CleanupStack::Pop( toHeader );  // CS: 3
         
         CSIPMessageElements& mesElems = elems->MessageElements();
         
@@ -480,30 +498,29 @@ void CSimpleSipConnection::SendInstantMessageL( MSimpleEngineRequest& aReq )
             
             mesElems.SetUserHeadersL( headers );
             // headers ownership given to mesElems
-            CleanupStack::Pop( &headers ); // CS: 3
+            CleanupStack::Pop( &headers ); // CS: 3            
             }
         
         // Set content type and content
-        HBufC8* buffer = aContent.AllocLC(); // CS: 4
-        CSIPContentTypeHeader* contTypeH = CSIPContentTypeHeader::NewL(
-            KSimpleMediaType, KSimpleMediaSubType );
-        CleanupStack::Pop( buffer ); // CS: 3
+        CSIPContentTypeHeader* contTypeH = CSIPContentTypeHeader::NewLC(
+            KSimpleMediaType, KSimpleMediaSubType );  // CS: 4
+        HBufC8* buffer = aContent.AllocLC();  // CS: 5
         mesElems.SetContentL( buffer, contTypeH );
         // buffer ownership given to mesElems
+        CleanupStack::Pop( buffer );  // CS: 4
         // contTypeH ownership given to mesElems
+        CleanupStack::Pop( contTypeH );  // CS: 3
         
         // Set method
         elems->SetMethodL( SIPStrings::StringF( SipStrConsts::EMessage ) );
         
-        CleanupStack::Pop( elems ); // CS: 2
         // Send the request transaction
-        // elems, ownership given
         CSIPClientTransaction* sipTrans = iSipConnection->SendRequestL( elems,
             *regContext );
         
         // Save SIP client transaction
         request->SetTransaction( sipTrans );
-        
+        CleanupStack::Pop( elems ); // elems, ownership given  // CS: 2
         CleanupStack::PopAndDestroy( temp ); // CS: 1
         
         // Start refresh timer, it's used for garbage collection too.
@@ -1075,15 +1092,6 @@ void CSimpleSipConnection::StopSubscribeL(
             KSimpleMultiType, KSimpleMultipartSubType );
         User::LeaveIfError( headers.Append( acceH ));
         ++popCount;
-
-        // add supported header with value eventlist
-        RPointerArray<CSIPSupportedHeader> suppHs =
-            CSIPSupportedHeader::DecodeL( KSimpleEventlist);
-        for( TInt count=0; count < suppHs.Count(); count++ )
-            {
-            User::LeaveIfError( headers.Append( suppHs[count] ));
-            }
-        suppHs.Close();
         }
     if ( r->Match( CSimpleRequest::EReqSubscribeWinfo ))
         {
@@ -1263,49 +1271,6 @@ TInt CSimpleSipConnection::HandleReceivedMessage( const TDesC8& aFrom,
     }
 
 // ----------------------------------------------------------
-// CSimpleSipConnection::ConnectionChanged
-// ----------------------------------------------------------
-//
-void CSimpleSipConnection::ConnectionChanged() 
-    {
-#ifdef _DEBUG
-    TSimpleLogger::Log(_L("SipConnection: ConnectionChanged"));
-    if( iSipConnection )
-        {
-        TSimpleLogger::Log(_L("SipConnection: ConnectionChanged : old conn state %d (internal:%d)"), iSipConnection->State(), iSipState );
-        TSimpleLogger::Log(_L("SipConnection: ConnectionChanged : old IAP %d"),  iSipConnection->IapId() );
-        }
-#endif
-
-    iCurrentNbrSubs = 0;
-    CSIPConnection* conn = NULL;
-    TRAPD( err, conn = iProfileObserver->GiveConnectionL() );
-    if( !err )
-        {
-        delete iSipConnection;
-        iSipConnection = conn;
-#ifdef _DEBUG
-        TSimpleLogger::Log(_L("SipConnection: ConnectionChanged : new conn state %d"), iSipConnection->State() );
-        TSimpleLogger::Log(_L("SipConnection: ConnectionChanged : new IAP %d"),  iSipConnection->IapId() );
-#endif
-        }
-#ifdef _DEBUG
-    else
-        {
-        TSimpleLogger::Log(_L("SipConnection: ConnectionChanged : Get SIP connection error %d"), err );        
-        }
-#endif
-    
-    if( iSipConnection )
-        {
-        if( iSipState != iSipConnection->State() )
-            {
-            iConnectionObserver->ConnectionStateChanged( iSipConnection->State() );
-            }
-        }
-    }
-
-// ----------------------------------------------------------
 // CSimpleSipConnection::StartToCheckExpiryL
 // ----------------------------------------------------------
 //
@@ -1406,40 +1371,7 @@ void CSimpleSipConnection::DeleteRequests()
         {
         CSimpleRequest* req = rIter;
         rIter++; //lint !e1757
-        
-        // open request EReqReceiveIM should not be deleted
-        // will be deleted only when im message received
-        // or destructor is called.
-        if ( !req->Match( CSimpleRequest::EReqReceiveIM ) )
-            {
-            req->Destroy();
-            }
-        }
-    }
-
-// -----------------------------------------------------------------------------
-// CSimpleSipConnection::DeleteRequests
-// -----------------------------------------------------------------------------
-void CSimpleSipConnection::DeleteRequests( 
-    CSimpleRequest::TSimpleSipReqType aRequestType )
-    {
-#ifdef _DEBUG
-    TSimpleLogger::Log(_L("SipConnection: DeleteRequests type=%d" ),
-        aRequestType );
-#endif
-    // Delete buffered transaction requests match to the aRequestType
-    TDblQueIter<CSimpleRequest> rIter( iRequestList );
-    rIter.SetToFirst();
-
-    while ( rIter )
-        {
-        CSimpleRequest* req = rIter;
-        rIter++; //lint !e1757
-        
-        if ( req->Match( aRequestType ) )
-            {
-            req->Destroy();
-            }
+        req->Destroy();
         }
     }
 
@@ -1746,8 +1678,6 @@ void CSimpleSipConnection::HandlePublishRespL(
             HBufC8* hValue = header->ToTextValueL();
             // hValue ownership is transferred
             aReq->SetETag( hValue );
-            // store etag to vimpstsettingstore
-            StoreETagL( *hValue );
             ETagReceived = ETrue;
             }
         else if ( header->Name() == SIPStrings::StringF( SipStrConsts::EExpiresHeader))
@@ -1767,12 +1697,6 @@ void CSimpleSipConnection::HandlePublishRespL(
         {
         // Remove old ETag if nore received or if the expires header was 0 in our request.
         aReq->SetETag( NULL );
-        //TPtrC8 nullETag = nullETag.Alloc( KNullDesC8 ); 
-        TBufC8<1> nullETag( KNullDesC8 );
-        HBufC8* buf;
-        buf = nullETag.Alloc();
-        StoreETagL( *buf );
-        delete buf;
         }
     // PopAndDestroy calls extensionName.Close()
     CleanupStack::PopAndDestroy( &extensionName );
@@ -2148,19 +2072,7 @@ void CSimpleSipConnection::RegisterAnyL( MSimpleEngineRequest& aReq )
 #endif
 
     iSettings.ReadOTASettingsL( aReq.Aux() );
-    
-    TInt32 uniqueId = iSettings.SipProfileId();
-    TUid uniqueUid;
-    uniqueUid.iUid = uniqueId;
-        
-    if ( !iSip && !iProfileObserver )
-        {        
-        iSip = CSIP::NewL( uniqueUid, *this );
-        
-        iProfileObserver = CSimpleSipProfileObserver::NewL( 
-            iSip, *iConnectionObserver);        
-        }
-    
+
     iProfileObserver->RegisterGivenProfileL( iSettings.SipProfileId() );
     SetSipState( ESimpleSipIdle );
     TRAPD( err, iSipConnection = iProfileObserver->GiveConnectionL() );
@@ -2665,38 +2577,5 @@ void CSimpleSipConnection::DoHandleReceivedMessageL( const TDesC8& aFrom,
     TSimpleLogger::Log( _L(
         "CSimpleSipConnection::DoHandleReceivedMessageL - End" ) );
 #endif
-    }
-
-// -----------------------------------------------------------------------------
-// CSimpleRequest::SetServiceId
-// -----------------------------------------------------------------------------
-EXPORT_C void CSimpleSipConnection::SetServiceId( TInt32 aServiceId )
-    {
-#ifdef _DEBUG
-    TSimpleLogger::Log( _L(
-               "CSimpleSipConnection::SetServiceId old serviceId = %d, new serviceId = %d" ),
-                   iServiceId, aServiceId );
-#endif
-    iServiceId = aServiceId;
-    }
-
-// -----------------------------------------------------------------------------
-// CSimpleRequest::StoreETag
-// -----------------------------------------------------------------------------
-void CSimpleSipConnection::StoreETagL( HBufC8& aETag )
-    {
-#ifdef _DEBUG
-    TBuf<255> printDocumentId;
-        printDocumentId.Copy( aETag );
-    TSimpleLogger::Log(_L("CSimpleSipConnection: StoreETag ETag = %S, serviceId = %d" ),
-        &printDocumentId, iServiceId );
-#endif
-    MVIMPSTSettingsStore* settings = CVIMPSTSettingsStore::NewLC();
-    
-    // Store ETag to uiservicetabsettings
-    User::LeaveIfError( settings->SetL( 
-        iServiceId, EServicePresenceSessionIdentifier, aETag ) );
-    
-    CleanupStack::PopAndDestroy(); //settings   
     }
 

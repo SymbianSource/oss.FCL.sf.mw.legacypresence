@@ -102,9 +102,6 @@ void CXDMPluginContainer::ConstructL( const TRect& aRect )
     SetRect( aRect );
     ActivateL();
     
-    iEikMenuBar = new ( ELeave ) CEikMenuBar();
-    iEikMenuBar->ConstructL( this, NULL, R_GS_XDM_SETTINGS_MAIN_MENUBAR );
-    
     #ifdef _DEBUG           
     RDebug::Print( _L( "[CXDMPluginContainer] Construct done" ) );
 	#endif
@@ -123,8 +120,6 @@ CXDMPluginContainer::~CXDMPluginContainer()
         {
          delete iMainList;
         }
-    
-    delete iEikMenuBar;
     }
 
 // ---------------------------------------------------------------------------
@@ -203,19 +198,16 @@ TKeyResponse CXDMPluginContainer::OfferKeyEventL( const TKeyEvent& aKeyEvent,
     if (iMainList)
         {
         // if cancel key is pressed and list is not empty, invoke deletion
-        if ((aKeyEvent.iCode == EKeyBackspace ) && (aType == EEventKey) &&
-            iEikMenuBar->ItemSpecificCommandsEnabled() )
+        if ((aKeyEvent.iCode == EKeyBackspace ) && (aType == EEventKey) )
             {
             if(!IsListEmpty())
                 DeleteSetProcedureL();
             CXDMPlugin* iTempView = static_cast<CXDMPlugin*> (iView);
-            iTempView->UpdateMskL();
+            iTempView->UpdateMSK();
             return EKeyWasConsumed;
             }
         else
-            {
             return iMainList->OfferKeyEventL (aKeyEvent, aType);
-            }        
         }
     return EKeyWasNotConsumed;
     }
@@ -228,7 +220,7 @@ void CXDMPluginContainer::HandleListBoxEventL(CEikListBox* /*aListBox*/, TListBo
     {
     // if the Select Key has been pressed
     if ((aListBoxEvent == MEikListBoxObserver::EEventEnterKeyPressed) ||
-    (aListBoxEvent == MEikListBoxObserver::EEventItemSingleClicked))
+    (aListBoxEvent == MEikListBoxObserver::EEventItemDoubleClicked))
         {
         EditCurrentItemL();           
         }

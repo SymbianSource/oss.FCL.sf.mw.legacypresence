@@ -26,8 +26,6 @@
 #include "XdmCredentials.h"
 #include "XcapHttpReqGet.h"
 #include "XcapHttpReqPut.h"
-#include "XcapHttpReqMkcol.h"
-#include "XcapHttpReqHead.h"
 #include "XcapHttpRequest.h"
 #include "XcapHttpReqDelete.h"
 #include "XcapHttpTransport.h"
@@ -154,44 +152,6 @@ EXPORT_C CXcapHttpReqPut* CXcapHttpTransport::PutL( const TDesC& aRequestUri )
     }
 
 // ----------------------------------------------------
-// CXcapHttpTransport::Mkcol
-// 
-// ----------------------------------------------------
-//
-EXPORT_C CXcapHttpReqMkcol* CXcapHttpTransport::MkcolL( const TDesC& aRequestUri )
-    {
-    #ifdef _DEBUG
-        WriteToLog( _L8( "CXcapHttpTransport::MkcolRequestL()" ) );
-    #endif
-    if( !iSessionClosed )
-        return CXcapHttpReqMkcol::NewL( aRequestUri, iHttpSession, *iAuthManager, *this );
-    else
-        {
-        User::Leave( KErrNotReady );
-        return NULL;
-        }    
-    }
-
-// ----------------------------------------------------
-// CXcapHttpTransport::Head
-// 
-// ----------------------------------------------------
-//
-EXPORT_C CXcapHttpReqHead* CXcapHttpTransport::HeadL( const TDesC& aRequestUri )
-    {
-    #ifdef _DEBUG
-        WriteToLog( _L8( "CXcapHttpTransport::HeadRequestL()" ) );
-    #endif
-    if( !iSessionClosed )
-        return CXcapHttpReqHead::NewL( aRequestUri, iHttpSession, *iAuthManager, *this );
-    else
-        {
-        User::Leave( KErrNotReady );
-        return NULL;
-        }    
-    }
-
-// ----------------------------------------------------
 // CXcapHttpTransport::DeleteL
 // 
 // ----------------------------------------------------
@@ -244,7 +204,7 @@ void CXcapHttpTransport::InitialiseSessionL()
                            THTTPHdrVal( stringPool.StringF( HTTP::EHttp11, RHTTPSession::GetTable() ) ) );
     connInfo.SetPropertyL( stringPool.StringF( HTTP::ESecureDialog, RHTTPSession::GetTable() ),
                            THTTPHdrVal( stringPool.StringF( HTTP::EDialogPrompt, RHTTPSession::GetTable() ) ) );
-    //CHttpDeflateFilter::InstallFilterL( iHttpSession );
+    CHttpDeflateFilter::InstallFilterL( iHttpSession );
     iSessionClosed = EFalse;
     #ifdef _DEBUG
         WriteToLog( _L8( "InitialiseSessionL() ends." ) );

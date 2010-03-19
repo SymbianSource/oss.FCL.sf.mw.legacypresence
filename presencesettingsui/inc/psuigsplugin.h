@@ -22,7 +22,6 @@
 #define PSUIGSPLUGIN_H
 
 //  INCLUDES
-#include <eikmobs.h>
 #include <ConeResLoader.h>
 #include <gsbaseview.h>
 
@@ -40,8 +39,7 @@ class CPSUIGSPluginModel;
 */
 class CPSUIGSPlugin : 
     public CGSBaseView,
-    public MCoeViewDeactivationObserver,
-    public MEikListBoxObserver
+    public MCoeViewDeactivationObserver
     {
     
     public: // Constructors and destructor
@@ -128,12 +126,6 @@ class CPSUIGSPlugin :
         void HandleViewDeactivation ( 
             const TVwsViewId& aViewIdToBeDeactivated,
             const TVwsViewId& aNewlyActivatedViewId );
-            
-        /**
-        * From MEikListBoxObserver
-        * See base class.
-        */
-        void HandleListBoxEventL(CEikListBox* aListBox, TListBoxEvent aEventType);
         
     public: // New
 
@@ -215,11 +207,6 @@ class CPSUIGSPlugin :
         TBool iClosing;
         // Previous view
         TVwsViewId iPSUIGSPrevViewId; 
-        
-#ifdef _DEBUG
-    friend class UT_CPSUIGSPlugin;
-    friend class UT_CPSUIGSPluginContainer;
-#endif
     };
 
 #endif // PSUIGSPLUGIN_H

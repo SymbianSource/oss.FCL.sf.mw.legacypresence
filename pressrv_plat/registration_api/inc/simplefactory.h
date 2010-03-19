@@ -162,15 +162,6 @@ public:
     IMPORT_C static MSimpleContent* NewContentL( 
         const TDesC8& aContentID, const TDesC8& aContentType );    
 
-    /**
-     * Create new simple engine Connection entity.
-     * @since S60 3.2
-     * @param aObserver client callback observer
-     * @param aServiceId serviceId of current service
-     * @return MSimpleConnection, ownership is transferred.
-     */
-    IMPORT_C static MSimpleConnection* NewConnectionL(
-        MSimpleConnectionObserver& aObserver, TInt32 aServiceId );
     };
 
 #endif

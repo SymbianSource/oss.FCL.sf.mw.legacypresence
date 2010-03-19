@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -50,14 +50,6 @@ SOURCE          presencepluginwatcherinfo.cpp
 SOURCE          presencepluginvirtualgroup.cpp
 SOURCE          presenceconnectioninfo.cpp
 SOURCE          presencepluginutility.cpp
-SOURCE          presenceplugincontacts.cpp
-SOURCE          presenceplugincontactstatehandler.cpp
-SOURCE          presenceplugincontactstate.cpp
-SOURCE          presenceplugincontactstateopen.cpp
-SOURCE          presenceplugincontactstateresolve.cpp
-SOURCE          presenceplugincontactstatesearch.cpp
-SOURCE          presenceplugincontactstateend.cpp
-SOURCE          presensepluginlocalstore.cpp
 
 USERINCLUDE     .
 USERINCLUDE     ../inc
@@ -78,10 +70,6 @@ LIBRARY         xdmengine.lib
 LIBRARY         xdmsettingsapi.lib
 LIBRARY         presencesettingsapi.lib
 
-LIBRARY         efsrv.lib
-LIBRARY         edbms.lib 
-LIBRARY         avkon.lib
-
 //presence cache
 LIBRARY         presencecacheclient2.lib
 LIBRARY         presencecacheutils.lib
@@ -91,8 +79,4 @@ LIBRARY         serviceprovidersettings.lib
 
 // access to uiservicetabsettings
 LIBRARY         vimpstsettings.lib
-
-// access to Virtual Phonebook contact database
-LIBRARY         vpbkeng.lib
-
 // End of file

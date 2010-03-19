@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -38,7 +38,6 @@ class MPersonPresenceInfo;
 class MPresenceInfoField;
 class MSimpleElement;
 class MPresenceCacheWriter2;
-class MPresenceCacheReader2;
 
 /**
  * CPresencePluginData
@@ -278,15 +277,6 @@ NONSHARABLE_CLASS( CPresencePluginData ): public CBase
         TInt ServiceId();            
         
         /**
-         * Resolve service name
-         * 
-         * @since   S60 5.0
-         * @param   aServiceId Service Id.
-         * @return  resolved service name, ownership returned to caller
-         */
-        HBufC* ServiceNameLC( TInt aServiceId ) const;
-        
-        /**
          * Writes status to presence cache
          *
          * @since S60 5.0
@@ -332,6 +322,19 @@ NONSHARABLE_CLASS( CPresencePluginData ): public CBase
             const TUint aServiceId, 
             NPresenceInfo::TAvailabilityValues aAvailability,
             const TDesC& aStatusMessage );
+
+        /**
+         * Stores own presence document id to permanent storage.
+         *
+         * @since S60 5.0
+         * @param aServiceId, service id
+         * @param aAvailability, availability enumeration
+         * @param aDocumentId, document id
+         * @return None
+         */                                            
+        void StoreDocumentIdL(
+            const TUint aServiceId, 
+            const TDesC8& aDocumentId );
             
         /**
          * Reads document id from permanent storage.
@@ -398,41 +401,7 @@ NONSHARABLE_CLASS( CPresencePluginData ): public CBase
             MSimpleElement* aActivitiesElement,
             MSimpleElement* aNoteElement,
             MPresenceInfoFieldCollection& aCollection );
-        
-        /**
-         * Returns <note> element or NULL if no <note> is found in the given 
-         * element list. <note> element which matches best current locale is 
-         * returned.
-         * 
-         * @since   S60 5.1
-         * @param   aElements   Element array.
-         * @return  Best matching <note> or NULL.
-         */
-        MSimpleElement* ResolveNoteElementL( 
-            const RPointerArray<MSimpleElement>& aElements ) const;
-        
-        /**
-         * Checks if element has language attribute compatible with the 
-         * current locale.
-         *
-         * @since   S60 5.1
-         * @param   aElement    Simple element containing language attribute.
-         * @return  ETrue if compatible language attribute is found, 
-         *          EFalse otherwise.
-         */ 
-        TBool IsElementLanguageValidForCurrentLocaleL( 
-            MSimpleElement& aElement ) const;
-        
-        /**
-         * Resolve cache used identifier
-         * 
-         * @since   S60 5.0
-         * @param   aIdentity presence id without prefix
-         * @return  resolved cache identifier, ownership returned to caller
-         */
-        HBufC* ResolveCacheXspIdentifierL( const TDesC& aIdentity ) const;
-        
-        
+
     private: // data
 
         /**
@@ -456,13 +425,7 @@ NONSHARABLE_CLASS( CPresencePluginData ): public CBase
          * Writes service status to presence cache.
          * Own.
          */        
-        MPresenceCacheWriter2* iPresenceCacheWriter;
-              
-        /**
-         * Reads service status from presence cache.
-         * Own.
-         */        
-        MPresenceCacheReader2* iPresenceCacheReader;  
+        MPresenceCacheWriter2* iPresenceCacheWriter;          
         
         SIMPLE_UNIT_TEST( T_CPresencePluginData )
     };

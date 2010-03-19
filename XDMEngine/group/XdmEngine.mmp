@@ -38,8 +38,7 @@ SOURCE                          XdmDocumentNode.cpp
 SOURCE                          XdmNodeAttribute.cpp
 
 USERINCLUDE                     ../inc
-USERINCLUDE                     ../../pressrv_dom/xdm_api/inc
-//USERINCLUDE                     ../XdmSettingsApi/inc
+USERINCLUDE                     ../XdmSettingsApi/inc
 
 MW_LAYER_SYSTEMINCLUDE
 SYSTEMINCLUDE                   /epoc32/include/ecom

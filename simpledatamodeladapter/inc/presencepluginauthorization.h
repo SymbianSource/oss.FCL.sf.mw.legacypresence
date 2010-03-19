@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -23,7 +23,6 @@
 #include <ximpbase.h>
 #include <protocolpresenceauthorization.h>
 #include "mpresencepluginconnectionobs.h"
-#include "presenceplugincontactsobs.h"
 #include "presencelogger.h"
 
 class TXIMPRequestId;
@@ -32,7 +31,6 @@ class MPresenceInfoFilter;
 class MProtocolPresenceAuthorizationDataHost;
 class MSimpleWinfo;
 class CPresencePluginData;
-class CPresencePluginContacts;
 
 /**
  * CPresencePluginAuthorization
@@ -42,10 +40,8 @@ class CPresencePluginContacts;
  * @lib presenceplugin.dll
  * @since S60 v3.2
  */
-NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
-    public CActive,
-    public MProtocolPresenceAuthorization,
-    public MPresencePluginContactsObs
+NONSHARABLE_CLASS( CPresencePluginAuthorization ) : public CActive,
+    public MProtocolPresenceAuthorization
     {
     public: // Constructor and destructor
 
@@ -75,7 +71,6 @@ NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
             EStateIdle,
             EStateBlocked,
             EStateDoBlock,
-            EStateIsContactBlockedBuddyRequest,
             EStateDoUnBlock,
             EStatePresenceGranted,
             EStateRemovePresentityFromGranted,
@@ -184,20 +179,7 @@ NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
          void DoPerformCancelPresenceBlockFromPresentityL(
             const MXIMPIdentity& aPresentityId,
             TRequestStatus& aClientStatus );
-
-         /**
-          * Resolve is blocked contact a blocked friend request
-          *
-          * @since S60 5.0
-          * @param aPresenceId, identity to be resolved
-          * @param aObserver, Returns results
-          * @param aStatus, client status
-          */
-         void IsBlockedContactFriendRequestL(
-             const TDesC& aPresenceId,
-             MPresencePluginContactsObs& aObserver,
-             TRequestStatus& aStatus );
-
+           
     private:
 
         /**
@@ -207,8 +189,6 @@ NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
         CPresencePluginAuthorization(
             MPresencePluginConnectionObs& aObs,
             CPresencePluginData* aPresenceData );
-        
-        void ConstructL();
 
     public:	 // from base class MXIMPBase
 
@@ -348,20 +328,6 @@ NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
             const MXIMPIdentity& aPresentityId,
             TXIMPRequestId aReqId );
 
-    public: // MPresencePluginContactsObs
-	
-        /**
-         * Request Complete 
-         *
-         * @param aResult Result data returned, ownership changed to client.
-         *                In operation EOperationIsPresenceStoredToContacts
-         *                return type is TBool*.
-         * @param aOperation Operation type
-         * @param aError Completion error code
-         */
-        void RequestComplete( TAny* aResult,
-                TPresenceContactsOperation aOperation,  TInt aError );
-    
     protected: // from base class CActive
 
         /**
@@ -626,7 +592,7 @@ NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
          * Presence Data
          * Not Own
          */
-        CPresencePluginData* iPresenceData;
+        CPresencePluginData* iPresenceData;       
         
         /**
          * client statutus.
@@ -639,17 +605,6 @@ NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
          * Own.
          */
         TPluginAuthState iAuthState;
-        
-        /*
-         * Virtual phone book contact database operations
-         * Own.
-         */
-        CPresencePluginContacts* iContacts;
-        
-        /*
-         * Data Returned by CPresencePluginContacts
-        */
-        TBool iContactIsStored;
         
         SIMPLE_UNIT_TEST( T_CPresencePluginAuthorization )
         SIMPLE_UNIT_TEST( T_CPresencePluginXdmUtils )

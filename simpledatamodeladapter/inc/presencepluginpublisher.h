@@ -132,15 +132,6 @@ NONSHARABLE_CLASS( CPresencePluginPublisher ): public CActive,
          * @return none
          */
         void StopPublishL( TRequestStatus& aStatus ); 
-        
-        /**
-         * Published()
-         *
-         * @since S60 3.2 
-         * @param none
-         * @return none
-         */
-        TBool Published();
 
     public:  // from MSimpleETagObserver
 

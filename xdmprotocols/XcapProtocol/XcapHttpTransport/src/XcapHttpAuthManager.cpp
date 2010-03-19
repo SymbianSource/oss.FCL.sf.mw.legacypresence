@@ -223,13 +223,11 @@ TBool CXcapHttpAuthManager::ConsumeAuthInfoParamL( TAuthInfoParam aName, const T
     switch( aName )
         {                                              
         case ENfoNextnonce:
-            {
             SetNextNonceL( value );
             #ifdef _DEBUG
                 TPtrC8 nonce( iServerNonce->Des() );
                 iTransportMain.WriteToLog( _L8( "  -> Nonce set to %S" ), &nonce );
             #endif
-            }
             break;
         case ENfoRspauth:
             /* TODO */

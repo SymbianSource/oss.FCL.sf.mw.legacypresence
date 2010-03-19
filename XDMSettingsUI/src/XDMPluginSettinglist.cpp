@@ -22,9 +22,8 @@
 #include "XDMExternalInterface.h"
 
 #include <barsread.h>
-#include <ApSettingsHandlerUI.h>
-#include <ApUtils.h>
-#include <commdb.h>
+#include <cmconnectionmethodext.h>
+#include <cmapplicationsettingsui.h>
 #include <avkon.loc>
 #include <StringLoader.h>
 #include <akntitle.h>
@@ -53,7 +52,17 @@ CXDMPluginSettinglist *CXDMPluginSettinglist::NewLC(CSettingsData &aData)
     {
     CXDMPluginSettinglist* self = new (ELeave) CXDMPluginSettinglist(aData);
     CleanupStack::PushL(self);
+    self->ConstructL();
     return self;
+    }
+
+// -----------------------------------------------------------------------------
+// CXDMPluginSettinglist::ConstructL()
+// -----------------------------------------------------------------------------
+// 
+void CXDMPluginSettinglist::ConstructL()
+    {
+    iCmManagerExt.OpenL();
     }
 
 // -----------------------------------------------------------------------------
@@ -72,7 +81,7 @@ CXDMPluginSettinglist::CXDMPluginSettinglist(CSettingsData &aData) :
 // 
 CXDMPluginSettinglist::~CXDMPluginSettinglist()
   {
-  // no specific destruction code required - no owned data
+  iCmManagerExt.Close();
   }
 
 // -----------------------------------------------------------------------------
@@ -234,35 +243,21 @@ CAknSettingItem * CXDMPluginSettinglist::CreateSettingItemL (TInt aIdentifier)
 // 
 void CXDMPluginSettinglist::EditAccessPointL()
     {
-    // After dialog server for access point selection (RGenConAgentDialogServer)
-    // has deprecated wins emulator mode needs a different technique to show
-    // emulator-lan access point.
-    
-    CCommsDatabase* commsDb = CCommsDatabase::NewL( EDatabaseTypeIAP );
-    CleanupStack::PushL(commsDb);
-    CApUtils* aPUtils = CApUtils::NewLC( *commsDb );
+    TCmSettingSelection selectionUid;
+    CCmApplicationSettingsUi* settingsUi =  CCmApplicationSettingsUi::NewLC();
+    // All Connection Methods will be listed if bearerFilter array has no element.
+    TBearerFilterArray bearerFilter;
+    CleanupClosePushL( bearerFilter );
+    settingsUi->RunApplicationSettingsL( selectionUid ,
+                                         CMManager::EShowConnectionMethods,
+                                         bearerFilter );
+    CleanupStack::PopAndDestroy( &bearerFilter );    
+    CleanupStack::PopAndDestroy( settingsUi );
 
-    CApSettingsHandler *apUi = CApSettingsHandler::NewLC(
-                                                        ETrue, 
-                                                        EApSettingsSelListIsPopUp,
-                                                        EApSettingsSelMenuSelectNormal,
-                                                        KEApIspTypeAll,
-                                                        EApBearerTypeAllBearers,
-                                                        KEApSortNameAscending,
-                                                        EIPv4 | EIPv6
-                                                        );
-    TUint32 id;
-    
-    TRAP_IGNORE(id = aPUtils->WapIdFromIapIdL(iSettingsData.iAccessPoint));
-    
-    //err can also be in case this is new set, iSettingsData.iAccessPoint = -1
-    //so ignoring the error
-    
-    if ( apUi->RunSettingsL( id, id ) == KApUiEventSelected)
+    if ( selectionUid.iResult == CMManager::EConnectionMethod )
         {
-    iSettingsData.iAccessPoint = aPUtils->IapIdFromWapIdL(id);
+        iSettingsData.iAccessPoint = selectionUid.iId;
         }
-    CleanupStack::PopAndDestroy(3, commsDb); //commsDb, aPUtils, apUi
     }
 
 // -----------------------------------------------------------------------------
@@ -271,20 +266,37 @@ void CXDMPluginSettinglist::EditAccessPointL()
 // 
 void CXDMPluginSettinglist::GetAccessPointNameL(TInt32 aAP, TDes& aAccessPoint)
     {
-#if defined __WINS__ && defined _DEBUG // handled differently in wins+debug
-    if (aAP != KErrNotFound) // if access point is defined take a general name
-        StringLoader::Load ( aAccessPoint, R_STR_XDM_AP_NAME_FOR_DEBUG_ONLY);    
-#else
-    CCommsDatabase* commsDb = CCommsDatabase::NewL( EDatabaseTypeIAP );
-    CleanupStack::PushL(commsDb);
-    CApUtils* aPUtils = CApUtils::NewLC( *commsDb );
-    TInt err(KErrNone);
-    // to remove id bug
-    TRAP(err, aAP = aPUtils->WapIdFromIapIdL(aAP)); 
-    TRAP(err, aPUtils->NameL(aAP, aAccessPoint));
-    // dont do anything if name not found or if some error occur
-    CleanupStack::PopAndDestroy(2); // commsDb, aPUtils
-#endif 
+    #ifdef _DEBUG
+    RDebug::Print( _L( "CXDMPluginSettinglist::GetAccessPointNameL - IN" ) );
+    #endif
+    if ( aAP > KErrNotFound )
+        {
+        RCmConnectionMethodExt connMethod = iCmManagerExt.ConnectionMethodL( aAP );
+        CleanupClosePushL( connMethod );
+        
+        HBufC* connName = connMethod.GetStringAttributeL( CMManager::ECmName );
+        CleanupStack::PushL( connName );
+        
+        if ( KMaxAccessPointNameLength >= connName->Des().Length() )
+            {
+            aAccessPoint.Copy( connName->Des() );
+            }
+        else
+            {
+            aAccessPoint.Copy( connName->Des().Left( KMaxAccessPointNameLength ) );
+            }
+        
+        CleanupStack::PopAndDestroy( connName );
+        CleanupStack::PopAndDestroy( &connMethod );
+        #ifdef _DEBUG  
+        RDebug::Print( _L( "CXDMPluginSettinglist::GetAccessPointNameL - Name: %S"),
+                                &aAccessPoint );
+        #endif
+        }
+    #ifdef _DEBUG
+    RDebug::Print( _L( "CXDMPluginSettinglist::GetAccessPointNameL - OUT id: %d:" ),
+                                aAP );
+    #endif
     }
 
 // -----------------------------------------------------------------------------

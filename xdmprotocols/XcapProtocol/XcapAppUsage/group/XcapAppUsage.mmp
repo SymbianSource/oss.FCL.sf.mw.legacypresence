@@ -74,10 +74,6 @@ SOURCE                                  XcapOmaPresRulesUsage.cpp
 // SOURCEPATH                              ../XcapTestAppUsage/src
 // SOURCE                                  XcapTestAppUsage.cpp
 
-// PRES-CONTENT STARTS
-SOURCEPATH                              ../XcapC4/src
-SOURCE                                  XcapC4.cpp
-// PRES-CONTENT ENDS
 USERINCLUDE                             ../inc
 USERINCLUDE                             ../../inc
 USERINCLUDE                             ../XcapCapabilityUsage/inc
@@ -91,18 +87,14 @@ USERINCLUDE                             ../XCapCommonPolicyCapsUsage/inc
 USERINCLUDE                             ../XcapPresenceRulesUsage/inc
 // USERINCLUDE                             ../XcapTestAppUsage/inc
 
-USERINCLUDE                             ../../../../inc
-// PRES-CONTENT STARTS
-USERINCLUDE                             ../XcapC4/inc
-// PRES-CONTENT ENDS
 MW_LAYER_SYSTEMINCLUDE
 SYSTEMINCLUDE                           /epoc32/include/ecom
 SYSTEMINCLUDE                           ../../../../inc
 
 LIBRARY                                 ecom.lib
 LIBRARY                                 euser.lib
-LIBRARY                                 XdmEngine.lib
-LIBRARY                                 centralrepository.lib
+LIBRARY                                 xdmengine.lib
+
 
 DEBUGLIBRARY                            efsrv.lib
 DEBUGLIBRARY                            flogger.lib
