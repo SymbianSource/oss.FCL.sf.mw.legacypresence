@@ -97,12 +97,11 @@ void CXdmDocument::EmptyOperationQueue()
     #ifdef _DEBUG
         iXdmEngine.WriteToLog( _L8( "CXdmDocument::EmptyOperationQueue()" ) );
     #endif
-    MXdmOperation* operation = NULL;
-    TInt count = iChangeRequests.Count();
-    for( TInt i = 0;i < count;i++ )
+    
+    while (iChangeRequests.Count())
         {
-        operation = iChangeRequests[i];
-        iChangeRequests.Remove( i );    
+        MXdmOperation* operation = iChangeRequests[0];
+        iChangeRequests.Remove( 0 );    
         operation->Destroy();
         operation = NULL;
         }

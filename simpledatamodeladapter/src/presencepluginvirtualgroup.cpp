@@ -102,7 +102,9 @@ void CPresencePluginVirtualGroup::GetVirtualEntitiesL(
         for ( TInt i=0; i < count; i++ )
             {
             MXIMPIdentity* member = myFactory.NewIdentityLC(); 
-            member->SetIdentityL( (*iVirtualMember)[i] );
+            HBufC* withoutPrefix = iPresenceData->RemovePrefixLC( (*iVirtualMember)[i] );
+            member->SetIdentityL( *withoutPrefix );
+            CleanupStack::PopAndDestroy( withoutPrefix );
             // create here MXIMPPresentityGroupMemberInfo
             MPresentityGroupMemberInfo* info = 
                 iConnObs.PresenceObjectFactoryOwn().

@@ -908,11 +908,11 @@ void CXcapDocument::DequeueAll()
     #ifdef _DEBUG
         iXcapProtocol.WriteToLog( _L8( "CXcapDocument::DequeueAll()" ) );
     #endif
-    TInt count = iChangeRequests.Count();
-    for( TInt i = 0;i < count;i++ )
+    
+    while (iChangeRequests.Count() )
     	{
-    	MXdmOperation* request = iChangeRequests[i];
-    	iChangeRequests.Remove( i );
+    	MXdmOperation* request = iChangeRequests[0];
+    	iChangeRequests.Remove( 0 );
     	request->Destroy();
     	request = NULL;
     	} 
