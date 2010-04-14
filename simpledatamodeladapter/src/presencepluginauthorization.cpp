@@ -509,8 +509,22 @@ void CPresencePluginAuthorization::RunL(  )
                 identity->SetIdentityL( iPresIdentity->Des() ); 
                 iConnObs.WatcherHandlerL()->DoPerformSubscribePresentityPresenceL( *identity, iStatus );
                 CleanupStack::PopAndDestroy( ); //identity 
-                iAuthState = EStateIdle;
+                iAuthState = EStateSubscribe;
                 SetActive();
+                }
+                break;
+                
+            case EStateSubscribe:
+                {
+                DP_SDA( "CPresencePluginAuthorization::RunL -UnBlock completed" ); 
+                HBufC* withoutPrefix = iPresenceData->RemovePrefixLC( *iPresIdentity );
+                iPresenceData->WriteStatusToCacheL( *withoutPrefix, 
+                    MPresenceBuddyInfo2::ENotAvailable,
+                    KInvisibleState(),
+                    KNullDesC() );
+                CleanupStack::PopAndDestroy( withoutPrefix );
+                iAuthState = EStateIdle;
+                CompleteXIMPReq( myStatus );
                 }
                 break;
                 

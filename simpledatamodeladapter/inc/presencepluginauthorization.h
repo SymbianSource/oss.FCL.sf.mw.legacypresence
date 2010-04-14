@@ -79,7 +79,8 @@ NONSHARABLE_CLASS( CPresencePluginAuthorization ) :
             EStateDoUnBlock,
             EStatePresenceGranted,
             EStateRemovePresentityFromGranted,
-            EStateAcceptBuddyRequest
+            EStateAcceptBuddyRequest,
+            EStateSubscribe
             };
         
         /**

@@ -36,6 +36,7 @@
 #include    <AknQueryDialog.h>
 #include    <aknnotewrappers.h>
 #include    <aknnotedialog.h>
+#include    <escapeutils.h>
 
 #include    "XDMPluginSLContainer.h"
 #include    "XDMPluginSettinglist.h"
@@ -234,8 +235,31 @@ void CXDMPluginSLContainer::PrepareXDMSetForEditingL(TDesC& aXDMSetName)
         {
         iData->iAccessPoint = -1;
         }
-
-    iData->iUserID = xDMSet->Property(EXdmPropAuthName);
+    
+    TBuf<KMaxUserIDLength> username = xDMSet->Property( EXdmPropAuthName );
+    
+    // to show special chars in UI correctly
+    _LIT( KProcent, "%" );
+    if ( username.Find( KProcent ) != KErrNotFound )
+        {
+        // convert to 8 bit
+        HBufC8* tmp = HBufC8::NewLC( username.Length() );
+        tmp->Des().Copy( username );
+        
+        // Decode encoded username
+        HBufC8* decodedUsername = EscapeUtils::EscapeDecodeL( *tmp );
+        CleanupStack::PopAndDestroy( tmp );
+        CleanupStack::PushL( decodedUsername );
+        
+        // convert to unicode
+        HBufC* userName16 =
+             EscapeUtils::ConvertToUnicodeFromUtf8L( decodedUsername->Des() );
+        CleanupStack::PopAndDestroy( decodedUsername );        
+        username = userName16->Des();
+        delete userName16;
+        }
+    
+    iData->iUserID = username;
     iData->iPassword = xDMSet->Property(EXdmPropAuthSecret);
     
     CleanupStack::PopAndDestroy(1); //xDMSet

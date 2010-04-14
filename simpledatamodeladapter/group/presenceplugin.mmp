@@ -94,5 +94,6 @@ LIBRARY         vimpstsettings.lib
 
 // access to Virtual Phonebook contact database
 LIBRARY         vpbkeng.lib
+LIBRARY     inetprotutil.lib 
 
 // End of file

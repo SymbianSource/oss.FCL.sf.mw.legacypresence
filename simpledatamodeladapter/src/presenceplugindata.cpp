@@ -48,7 +48,7 @@
 #include <spdefinitions.h>
 #include <avabilitytext.h>
 #include <cvimpstsettingsstore.h>
-
+#include <escapeutils.h>
 
 #include "presenceplugindata.h"
 #include "presenceplugincommon.h"
@@ -1460,7 +1460,22 @@ void CPresencePluginData::WriteStatusToCacheL(
 
     TBool updateCache( ETrue );
     
-    HBufC* cacheUri = ResolveCacheXspIdentifierL( aPresentityId );
+    // Decode encoded username (spaces to %20).
+    HBufC* decodedUsername = EscapeUtils::EscapeDecodeL( aPresentityId );
+    CleanupStack::PushL( decodedUsername );
+    
+    // convert to 8 bit version
+    HBufC8* tmp = HBufC8::NewLC( decodedUsername->Length() );
+    tmp->Des().Copy( *decodedUsername );
+    
+    // convert to unicode
+    HBufC* userName16 =
+            EscapeUtils::ConvertToUnicodeFromUtf8L( tmp->Des() );
+    
+    HBufC* cacheUri = ResolveCacheXspIdentifierL( userName16->Des() );
+    CleanupStack::PopAndDestroy( tmp );
+    CleanupStack::PopAndDestroy( decodedUsername );
+    delete userName16;
     CleanupStack::PushL( cacheUri );
     
     DP_SDA(" -> WriteStatusToCacheL - read previous values from cache"); 

@@ -77,6 +77,7 @@ LIBRARY             agentdialog.lib // To show access points only in emulator
 
 LIBRARY		        featmgr.lib // Feature Manager
 LIBRARY		        hlplch.lib // HlpLauncher
+LIBRARY             inetprotutil.lib // conversions
 
 // This is optional - used only by Codewarrior for convenience.
 DOCUMENT            10207428.rss

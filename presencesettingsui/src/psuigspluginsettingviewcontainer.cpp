@@ -32,6 +32,8 @@
 #include "psuigsplugin.h"
 #include "psuigspluginids.hrh"
 #include <csxhelp/pre.hlp.hrh>
+#include <AknTextSettingPage.h>
+
 
 // ========================= MEMBER FUNCTIONS ================================
 
@@ -111,10 +113,14 @@ CAknSettingItem* CPSUIGSPluginSettingViewContainer::CreateSettingItemL(
         case EPSUIMaxSubscriptionsId:
             settingItem = new (ELeave) CPSUIIntegerSettingItem(
                 aSettingId, settingSet.iMaxSubscriptions );
+            settingItem->SetSettingPageFlags(
+                    CAknIntegerSettingPage::EEmptyValueAllowed);// Empty input allowed      
             break;
         case EPSUIMaxContactsInListId:
             settingItem = new (ELeave) CPSUIIntegerSettingItem( 
                 aSettingId, settingSet.iMaxContactsInList );
+            settingItem->SetSettingPageFlags(
+                    CAknIntegerSettingPage::EEmptyValueAllowed);// Empty input allowed      
             break;
         case EPSUIDomainSyntaxId:
             settingItem = new (ELeave) CAknTextSettingItem( 
@@ -140,6 +146,8 @@ void CPSUIGSPluginSettingViewContainer::EditItemL(
 
     // update setting to setting-object
     (*SettingItemArray())[aIndex]->StoreL();
+    (*SettingItemArray())[aIndex]->UpdateListBoxTextL();
+    ListBox()->DrawNow();
     
     if ( EPSUIServerNameId == aIndex )
         {

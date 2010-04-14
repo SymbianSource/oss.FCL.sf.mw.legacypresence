@@ -16,7 +16,7 @@
 */
 
 
-#include <aknutils.h>
+#include <AknUtils.h>
 #include "presencepluginlocalstore.h"
 #include "presencelogger.h"
 
