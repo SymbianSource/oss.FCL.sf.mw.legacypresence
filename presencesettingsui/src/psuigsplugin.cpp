@@ -20,11 +20,8 @@
 
 // INCLUDE FILES
 #include <bautils.h>
-#include <gsprivatepluginproviderids.h>
-#include <GSFWViewUIDs.h>
 #include <psuigspluginrsc.rsg>
 #include <psuigsplugin.mbg>
-#include <GSBaseView.h>
 #include <eiktxlbx.h>
 #include <eikmenup.h>
 #include <eiktxlbm.h>
@@ -44,11 +41,9 @@
 #include "psuigspluginsettingview.h"
 
 // CONSTANTS
-_LIT( KPSUIGSPluginResourceFileName, "z:\\resource\\psuigspluginrsc.rsc" );
 
 #ifdef __SCALABLE_ICONS
 // bitmap
-_LIT( KPSUIGSPluginIconFileName, "\\resource\\apps\\psuigsplugin.mif");
 #else //__SCALABLE_ICONS
 // svg file
 _LIT( KPSUIGSPluginIconFileName, "\\resource\\apps\\psuigsplugin.mbm");
@@ -85,13 +80,6 @@ CPSUIGSPlugin::~CPSUIGSPlugin()
 //
 void CPSUIGSPlugin::ConstructL()
     {
-    // preparing resources for use
-    TFileName fileName( KPSUIGSPluginResourceFileName );
-    BaflUtils::NearestLanguageFile( iCoeEnv->FsSession(), fileName );
-    iResourceLoader.OpenL( fileName );
-    // base construct (base needs the resources to be loaded 1st)
-    BaseConstructL( R_PSUI_MAIN_VIEW );
-    FeatureManager::InitializeLibL();
     }
 
 // ---------------------------------------------------------------------------
@@ -119,23 +107,13 @@ TUid CPSUIGSPlugin::Id() const
     }
    
 // ---------------------------------------------------------------------------
-// CPSUIGSPlugin::NewContainerL()
-// See header for details.
-// ---------------------------------------------------------------------------
-//  
-void CPSUIGSPlugin::NewContainerL()
-    {
-    iContainer = new ( ELeave ) CPSUIGSPluginContainer( this );
-    }
-
-// ---------------------------------------------------------------------------
 // CPSUIGSPlugin::DoActivateL()
 // See header for details.
 // ---------------------------------------------------------------------------
 //  
 void CPSUIGSPlugin::DoActivateL( const TVwsViewId& aPrevViewId,
-                                  TUid aCustomMessageId,
-                                  const TDesC8& aCustomMessage )
+                                  TUid /*aCustomMessageId*/,
+                                  const TDesC8& /*aCustomMessage*/ )
     {
     if ( KPreSettingViewId != aPrevViewId.iViewUid )
         {        
@@ -145,18 +123,15 @@ void CPSUIGSPlugin::DoActivateL( const TVwsViewId& aPrevViewId,
     // model & observer constructed only when needed
     if ( !iPSModel )
         {
-        iPSModel = CPSUIGSPluginModel::NewL();
-        iAppUi->AddViewDeactivationObserverL( this );        
+        iPSModel = CPSUIGSPluginModel::NewL();   
         }
 
     const TInt id = iPSModel->SettingsId();
     if ( id )
         {// readjust the focus
-        SetCurrentItem( iPSModel->SettingsIDArray().Find( id ));
         }
 
     iClosing = EFalse;
-    CGSBaseView::DoActivateL( aPrevViewId, aCustomMessageId, aCustomMessage );
     UpdateMSK();
     }
 
@@ -167,13 +142,10 @@ void CPSUIGSPlugin::DoActivateL( const TVwsViewId& aPrevViewId,
 //
 void CPSUIGSPlugin::DoDeactivate()
     {
-    CGSBaseView::DoDeactivate();
     if ( iClosing )
         {// PSUI plugin is going to be closed so it is safe to free some memory
         delete iPSModel;
         iPSModel = NULL;
-        delete iSettingView;
-        iSettingView = NULL;        
         }    
     }
 
@@ -190,7 +162,6 @@ void CPSUIGSPlugin::HandleViewDeactivation(
         iPSUIGSPrevViewId.iViewUid == aNewlyActivatedViewId.iViewUid )
         {
         iClosing = ETrue;
-        iAppUi->RemoveViewDeactivationObserver( this );
         }
     }
 
@@ -206,12 +177,10 @@ void CPSUIGSPlugin::HandleCommandL( TInt aCommand )
         case EAknSoftkeyBack:
             {
             RemoveSettingView();
-            iAppUi->ActivateLocalViewL( iPSUIGSPrevViewId.iViewUid );
             break;
             }
         case EPSUICmdEdit:
             {
-            HandleListBoxSelectionL();
             break;
             }
         case EPSUICmdDelete:
@@ -233,14 +202,11 @@ void CPSUIGSPlugin::HandleCommandL( TInt aCommand )
             {
             if( FeatureManager::FeatureSupported( KFeatureIdHelp ) )
                 {
-                HlpLauncher::LaunchHelpApplicationL(
-                    iEikonEnv->WsSession(), iAppUi->AppHelpContextL() );
                 }
             break;
             }                       
         default:
             {
-            iAppUi->HandleCommandL( aCommand );
             break;
             }
         }
@@ -251,30 +217,9 @@ void CPSUIGSPlugin::HandleCommandL( TInt aCommand )
 // See header for details.
 // ---------------------------------------------------------------------------
 //
-TInt CPSUIGSPlugin::SettingCountAndIndex( TInt& aIndex )
+TInt CPSUIGSPlugin::SettingCountAndIndex( TInt& /*aIndex*/ )
     {
-    CEikTextListBox* listbox = Container()->iListBox;// not owned
-    TInt count = listbox->Model()->NumberOfItems();
-    aIndex = count ? listbox->CurrentItemIndex() : KErrNotFound;
-        
-    return count;        
-    }
-
-// ---------------------------------------------------------------------------
-// CPSUIGSPlugin::HandleListBoxSelectionL()
-// See header for details.
-// ---------------------------------------------------------------------------
-//
-void CPSUIGSPlugin::HandleListBoxSelectionL()
-    {
-    TInt index = KErrNotFound;
-    if ( SettingCountAndIndex( index ))
-        {
-        iPSModel->EditSettingsL( index );
-
-        ConstructSettingViewL();    
-        iAppUi->ActivateLocalViewL( KPreSettingViewId );
-        }
+    return KErrNone;        
     }
 
 // ---------------------------------------------------------------------------
@@ -291,10 +236,6 @@ void CPSUIGSPlugin::DeleteSettingsL()
         if ( AcceptDeletionL( count, index ))
             {
             iPSModel->DeleteSettingsL( index, ETrue );
-            CEikTextListBox* listbox = Container()->iListBox;// not owned
-            AknListBoxUtils::HandleItemRemovalAndPositionHighlightL(
-                listbox, index, ETrue );
-            listbox->DrawNow();
             UpdateMSK();    
             }
         }
@@ -308,18 +249,15 @@ void CPSUIGSPlugin::DeleteSettingsL()
 TBool CPSUIGSPlugin::AcceptDeletionL( TInt aCount, TInt aIndex )
     {
     HBufC* currentName = iPSModel->SettingNameLC( aIndex );
-    HBufC* string = NULL;
     if ( aCount == 1 )
         {
-        string = StringLoader::LoadLC( R_QTN_PRESENCE_SETTINGS_DELETE_LAST, *currentName );
         }
     else
         {
-        string = StringLoader::LoadLC( R_QTN_QUERY_COMMON_CONF_DELETE, *currentName );
         }
 
     CAknQueryDialog* query = CAknQueryDialog::NewL( CAknQueryDialog::EConfirmationTone );        
-    TInt ok = query->ExecuteLD( R_PSUI_CONF_QUERY,  *string );
+    TInt ok = KErrNone;
     
     CleanupStack::PopAndDestroy( 2, currentName );//currentName, string       
         
@@ -327,77 +265,12 @@ TBool CPSUIGSPlugin::AcceptDeletionL( TInt aCount, TInt aIndex )
     }
 
 // ---------------------------------------------------------------------------
-// CPSUIGSPlugin::GetCaptionL()
-// See header for details.
-// ---------------------------------------------------------------------------
-//
-void CPSUIGSPlugin::GetCaptionL( TDes& aCaption ) const
-    {
-    StringLoader::Load( aCaption, R_QTN_SET_FOLDER_PRESENCE );
-    }
-
-// ---------------------------------------------------------------------------
-// CPSUIGSPlugin::PluginProviderCategory()
-// See header for details.
-// ---------------------------------------------------------------------------
-//
-TInt CPSUIGSPlugin::PluginProviderCategory() const
-    {
-    return KGSPluginProviderInternal;
-    }
-
-// ---------------------------------------------------------------------------
-// CPSUIGSPlugin::CreateIconL()
-// See header for details.
-// ---------------------------------------------------------------------------
-//
-CGulIcon* CPSUIGSPlugin::CreateIconL( const TUid aIconType )
-    {
-    CGulIcon* icon = NULL;
-    if( aIconType == KGSIconTypeLbxItem )
-        {
-        icon = AknsUtils::CreateGulIconL(
-            AknsUtils::SkinInstance(), 
-            KAknsIIDQgnPropSetConnPresence,
-            KPSUIGSPluginIconFileName,
-            EMbmPsuigspluginQgn_prop_set_conn_presence,
-            EMbmPsuigspluginQgn_prop_set_conn_presence_mask );
-        }
-     else
-        {
-        icon = CGSPluginInterface::CreateIconL( aIconType );
-        }
-    
-    return icon;
-    }
-
-// ---------------------------------------------------------------------------
 // CPSUIGSPlugin::DynInitMenuPaneL()
 // See header for details.
 // ---------------------------------------------------------------------------
 //
-void CPSUIGSPlugin::DynInitMenuPaneL( TInt aResourceId, CEikMenuPane *aMenuPane )
+void CPSUIGSPlugin::DynInitMenuPaneL( TInt /*aResourceId*/, CEikMenuPane */*aMenuPane*/ )
     {
-    // remove some of the items if no settings available
-    const TInt count = Container()->iListBox->Model()->NumberOfItems();
-    if ( aResourceId == R_PSUI_MAINVIEW_MENUPANE && 
-        0 == count )
-        {
-        aMenuPane->DeleteMenuItem( EPSUICmdEdit );
-        aMenuPane->DeleteMenuItem( EPSUICmdDelete );
-        }
-    if ( aResourceId == R_PSUI_NEWSETTINGS_MENU && 
-        0 == count )
-        {
-        aMenuPane->DeleteMenuItem( EPSUICmdNewSettingsExisting );
-        }
-    
-    // help-item handling
-    if ( aResourceId == R_PSUI_MAINVIEW_MENUPANE && 
-        !FeatureManager::FeatureSupported( KFeatureIdHelp ) )
-        {
-        aMenuPane->DeleteMenuItem( EAknCmdHelp );
-        }
     }
 
 // ---------------------------------------------------------------------------
@@ -418,14 +291,6 @@ CPSUIGSPluginModel* CPSUIGSPlugin::PSModel()
 //    
 void CPSUIGSPlugin::ConstructSettingViewL()
     {
-    if ( !iSettingView )
-        {// no view yet, construct it
-        CAknView* view = CPSUIGSPluginSettingView::NewL( this );
-        CleanupStack::PushL( view );
-        iAppUi->AddViewL( view );
-        CleanupStack::Pop( view );
-        iSettingView = view;
-        }
     }
     
 // ---------------------------------------------------------------------------
@@ -435,12 +300,6 @@ void CPSUIGSPlugin::ConstructSettingViewL()
 //    
 void CPSUIGSPlugin::RemoveSettingView()
     {
-    // Remove view from iAppUi -> View is deleted by iAppUi automatically.
-    if ( iSettingView )
-        {
-        iAppUi->RemoveView( KPreSettingViewId );
-        iSettingView = NULL;
-        }
     }
     
 // ---------------------------------------------------------------------------
@@ -452,7 +311,6 @@ void CPSUIGSPlugin::CreateNewDefaultSettingsL()
     {
     iPSModel->CreateDefaultSettingsL();
     ConstructSettingViewL();
-    iAppUi->ActivateLocalViewL( KPreSettingViewId );
     }
 
 // ---------------------------------------------------------------------------
@@ -470,9 +328,6 @@ void CPSUIGSPlugin::CreateCopyOfExistingSettingsL()
         CAknPopupList::NewL( list, R_AVKON_SOFTKEYS_OK_CANCEL );
     CleanupStack::PushL( popupList );    
     
-    HBufC* title = StringLoader::LoadLC( R_QTN_PRESENCE_PROPMT_USE_EXIST );
-    popupList->SetTitleL( *title );
-    CleanupStack::PopAndDestroy( title );
 
     list->ConstructL( popupList, CEikListBox::ELeftDownInViewRect );
     list->CreateScrollBarFrameL( ETrue );
@@ -492,7 +347,6 @@ void CPSUIGSPlugin::CreateCopyOfExistingSettingsL()
         {
         iPSModel->DuplicateExistingSettingsL( list->CurrentItemIndex() );
         ConstructSettingViewL();
-        iAppUi->ActivateLocalViewL( KPreSettingViewId );        
         }
     
     CleanupStack::PopAndDestroy( list );
@@ -505,10 +359,6 @@ void CPSUIGSPlugin::CreateCopyOfExistingSettingsL()
 // 
 void CPSUIGSPlugin::UpdateMSK()
     {
-    TBool showEdit = ( 0 < Container()->iListBox->Model()->NumberOfItems());
-    CEikCba* cba = static_cast< CEikCba* >( Cba()->ButtonGroup() );
-    cba->MakeCommandVisible( EPSUICmdEdit, showEdit );
-    cba->DrawNow();
     }
 
 // End of file

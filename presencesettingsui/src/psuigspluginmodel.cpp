@@ -353,9 +353,7 @@ HBufC* CPSUIGSPluginModel::CreateSettingNameLC( HBufC* aOriginalName )
     const TInt KPSUIFormattingExtraLength = 6;
     
     // prepare
-    HBufC* settingName = aOriginalName ? 
-        aOriginalName : 
-        StringLoader::LoadL( R_QTN_PRESENCE_NAME_DEFAULT );
+    HBufC* settingName = aOriginalName; 
 
     if ( settingName->Length() + KPSUIFormattingExtraLength > KPresSetNameMaxLength )
         {//if there is no room for duplicate-numbering, let user take care of that when saving settings
@@ -388,7 +386,6 @@ HBufC* CPSUIGSPluginModel::CreateSettingNameLC( HBufC* aOriginalName )
                 }
             else
                 {// aOriginalName not given
-                tempSetName = StringLoader::LoadLC( R_QTN_PRESENCE_NAME_DEFAULT_NUMBER );
                 }
             }
         StringLoader::Format( ptr, *tempSetName, -1, index );

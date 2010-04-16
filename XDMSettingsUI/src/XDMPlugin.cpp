@@ -23,7 +23,6 @@
 
 #include <aknViewAppUi.h>
 #include <StringLoader.h>
-#include <GSPrivatePluginProviderIds.h>
 #include <eikmenub.h>
 #include <aknlists.h>
 #include <aknPopup.h>
@@ -42,11 +41,9 @@
 
 
 // Constants
-_LIT( KGSXDMPluginResourceFileName, "z:\\resource\\XDMPluginRsc.rsc" );
 
 #ifdef __SCALABLE_ICONS
 // bitmap
-_LIT( KGSXDMPluginIconFileName, "\\resource\\apps\\GSXDMplugin.mif");
 #else //__SCALABLE_ICONS
 // svg file
 _LIT( KGSXDMPluginIconFileName, "\\resource\\apps\\GSXDMplugin.mbm");
@@ -62,7 +59,7 @@ _LIT( KGSXDMPluginIconFileName, "\\resource\\apps\\GSXDMplugin.mbm");
 // ---------------------------------------------------------------------------
 //
 CXDMPlugin::CXDMPlugin( )
-    : iAppUi( CAknView::AppUi() ), iResources( *CCoeEnv::Static() )
+    : iResources( *CCoeEnv::Static() )
     {
     
     }
@@ -76,9 +73,6 @@ CXDMPlugin::~CXDMPlugin()
     {
     if (iCurrentContainer)
         {
-        if(iAppUi)
-        iAppUi->RemoveFromViewStack( *this, iCurrentContainer );
-        iCurrentContainer = NULL;
         }
 
     if( iMainListContainer )
@@ -111,14 +105,7 @@ void CXDMPlugin::ConstructL()
     #ifdef _DEBUG
     RDebug::Print(_L("[CXDMPlugin] ConstructL()" ));
     RDebug::Print( _L( "[CXDMPlugin] Loading resource from :" ) );
-    RDebug::Print( KGSXDMPluginResourceFileName );
     #endif
-    
-    TFileName fileName( KGSXDMPluginResourceFileName );
-    BaflUtils::NearestLanguageFile( iCoeEnv->FsSession(), fileName );
-    iResources.OpenL( fileName );
-    BaseConstructL( R_GS_XDM_MAIN_VIEW );
-        
     }
 
 // ---------------------------------------------------------------------------
@@ -151,12 +138,10 @@ void CXDMPlugin::HandleViewRectChange()
     {
     if ( iMainListContainer->IsVisible() )
         {
-        iMainListContainer->SetRect( ClientRect() );
         }
         
     if ( iSettingListContainer->IsVisible() )
         {
-        iSettingListContainer->SetRect( ClientRect() );
         }
     }
 
@@ -171,7 +156,6 @@ void CXDMPlugin::DoActivateL( const TVwsViewId& aPrevViewId,
     iPrevViewId = aPrevViewId;
     if (iCurrentContainer)
         {
-        iAppUi->RemoveFromViewStack( *this, iCurrentContainer );
         iCurrentContainer = NULL;
         }
         
@@ -188,30 +172,9 @@ void CXDMPlugin::DoActivateL( const TVwsViewId& aPrevViewId,
         iSettingListContainer = NULL;
         }
 
-    iMainListContainer = new( ELeave ) CXDMPluginContainer(this);
-    iMainListContainer->SetMopParent(this);
-    TRAPD( error, iMainListContainer->ConstructL( ClientRect() ) );
-    if (error)
-        {
-        delete iMainListContainer;
-        iMainListContainer = NULL;
-        User::Leave( error );
-        }
-        
-    iSettingListContainer = new( ELeave ) CXDMPluginSLContainer(this);
-    iSettingListContainer->SetMopParent(this);
-    TRAPD( error1, iSettingListContainer->ConstructL( ClientRect()));
-    if (error1)
-        {
-        delete iSettingListContainer;
-        iSettingListContainer = NULL;
-        User::Leave( error1 );
-        }
-
     // switching control
     iSettingListContainer->MakeVisible(EFalse);    
     iCurrentContainer = iMainListContainer;
-    iAppUi->AddToViewStackL( *this, iCurrentContainer );
     UpdateMSK();
     }
 
@@ -225,8 +188,6 @@ void CXDMPlugin::DoDeactivate()
     TInt err;
     if (iCurrentContainer == iSettingListContainer)
         TRAP(err, iSettingListContainer->SaveSettingsIfPossibleL());
-    if (iCurrentContainer)
-        iAppUi->RemoveFromViewStack( *this, iCurrentContainer );
     iCurrentContainer = NULL;
 
     if( iMainListContainer )
@@ -277,7 +238,6 @@ void CXDMPlugin::HandleCommandL( TInt aCommand )
             UpdateMSK();
             break;
         case EAknCmdHelp:
-            HlpLauncher::LaunchHelpApplicationL(iEikonEnv->WsSession(), AppUi()->AppHelpContextL ());
             break;
         case EGSXDMPluginCmdExitFromSL:
             if (iCurrentContainer == iSettingListContainer)
@@ -296,24 +256,6 @@ void CXDMPlugin::HandleCommandL( TInt aCommand )
             iAppUi->HandleCommandL( aCommand );
             break;
         }
-    }
-
-// ---------------------------------------------------------------------------
-// CXDMPlugin::GetCaptionL()
-// ---------------------------------------------------------------------------
-//
-void CXDMPlugin::GetCaptionL( TDes& aCaption ) const
-    {
-    StringLoader::Load( aCaption, R_STR_XDM_SETTINGS );
-    }
-
-// ---------------------------------------------------------------------------
-// CXDMPlugin::PluginProviderCategory()
-// ---------------------------------------------------------------------------
-//
-TInt CXDMPlugin::PluginProviderCategory() const
-    {
-    return KGSPluginProviderInternal;
     }
 
 // ---------------------------------------------------------------------------
@@ -336,10 +278,7 @@ void CXDMPlugin::LoadSettingsViewL(TXDMSettingsViewType aType, TDesC& aXDMSetNam
         default:
             break;
         }
-    if (iCurrentContainer)
-        iAppUi->RemoveFromViewStack( *this, iCurrentContainer );
     iCurrentContainer = iSettingListContainer;
-    iAppUi->AddToViewStackL( *this, iCurrentContainer );
     iMainListContainer->MakeVisible(EFalse);
     iSettingListContainer->MakeVisible(ETrue);
     UpdateMSK();
@@ -353,10 +292,7 @@ void CXDMPlugin::LoadMainViewL()
     {
     TInt err(KErrNone);
     TRAP(err,iMainListContainer->LoadSettingsListArrayL()); // update main container
-    if (iCurrentContainer)
-        iAppUi->RemoveFromViewStack( *this, iCurrentContainer );
     iCurrentContainer = iMainListContainer;
-    iAppUi->AddToViewStackL( *this, iCurrentContainer );
     
     iMainListContainer->SetFocusIfExist(iSettingListContainer->GetCurrentSetName());
     
@@ -412,36 +348,12 @@ void CXDMPlugin::DynInitMenuPaneL(TInt aResourceId,CEikMenuPane* aMenuPane)
 //
 void CXDMPlugin::HandleResourceChangeManual(TInt aType)
     {
-    if (iMainListContainer)
+    if ( iSettingListContainer )
         iSettingListContainer->HandleResourceChangeManual(aType);    
-    if (iSettingListContainer)
+    if ( iMainListContainer )
         iMainListContainer->HandleResourceChangeManual(aType);
     }
     
-// ---------------------------------------------------------------------------
-// CXDMPlugin::CreateIconL
-// ---------------------------------------------------------------------------
-//
-CGulIcon* CXDMPlugin::CreateIconL( const TUid aIconType )
-    {
-    CGulIcon* icon;
-       
-    if( aIconType == KGSIconTypeLbxItem )
-        {
-        icon = AknsUtils::CreateGulIconL(
-        AknsUtils::SkinInstance(), 
-        KAknsIIDQgnPropSetConnXdm, 
-        KGSXDMPluginIconFileName,
-        EMbmGsxdmpluginQgn_prop_set_conn_xdm,
-        EMbmGsxdmpluginQgn_prop_set_conn_xdm_mask);
-        }
-     else
-        {
-        icon = CGSPluginInterface::CreateIconL( aIconType );
-        }
-
-    return icon;
-    }
     
 // ---------------------------------------------------------------------------
 // CXDMPlugin::UpdateMSK()
@@ -449,19 +361,6 @@ CGulIcon* CXDMPlugin::CreateIconL( const TUid aIconType )
 //
 void CXDMPlugin::UpdateMSK()
     {
-    CEikCba* cba = static_cast< CEikCba* >( Cba()->ButtonGroup() );
-    if(iCurrentContainer==iMainListContainer)
-        {
-        TBool showEdit = !(iMainListContainer->IsListEmpty());
-        cba->SetCommandSetL(R_XDMUI_MAINVIEW_SOFTKEYS);
-        cba->MakeCommandVisible( EGSXDMPluginCmdEdit, showEdit );
-        }
-    else if(iCurrentContainer==iSettingListContainer)
-        {
-        cba->SetCommandSetL(R_XDMUI_MAINVIEW_SOFTKEYS_SL);
-        cba->MakeCommandVisible( EGSXDMPluginCmdChange, ETrue);
-        }
-    cba->DrawNow();
     }
     
 // End of file

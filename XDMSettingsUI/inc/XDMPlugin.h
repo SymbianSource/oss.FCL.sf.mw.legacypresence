@@ -25,7 +25,6 @@
 #include <aknview.h>
 #include <eikclb.h>
 #include <ConeResLoader.h>
-#include <gsplugininterface.h>
 
 #include "XDMPlugin.hrh"
 
@@ -48,7 +47,7 @@ class CSettingsData;
 *
 * This is XDM GS plugin.
 */
-class CXDMPlugin : public CGSPluginInterface
+class CXDMPlugin
     {
     
     public: // Constructors and destructor
@@ -135,24 +134,6 @@ class CXDMPlugin : public CGSPluginInterface
         * See base classes
         */
         void DynInitMenuPaneL(TInt aResourceId,CEikMenuPane* aMenuPane);
-        
-    public: // From CGSPluginInterface
-    
-        /**
-        * See CGSPluginInterface
-        */
-        void GetCaptionL( TDes& aCaption ) const;
-
-        /**
-        * See CGSPluginInterface
-        */
-        TInt PluginProviderCategory() const;
-        
-        /**
-        * @see CGSPluginInterface
-        */
-        CGulIcon* CreateIconL( const TUid aIconType );
-        
         
     protected: //Data        
         

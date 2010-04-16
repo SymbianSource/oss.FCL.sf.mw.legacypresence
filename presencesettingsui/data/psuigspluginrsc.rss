@@ -31,7 +31,6 @@ NAME    UIPS // 4 letter ID
 #include    <eikon.rh>
 #include    <eikon.rsg>
 #include    <avkon.loc>
-#include    <gscommon.rh> // Common GS resource structures
 #include    <data_caging_paths_strings.hrh>
 #include    <psuigsplugin.loc>
 #include    "psuigsplugin.hrh"

@@ -714,8 +714,6 @@ void CXDMPluginSLContainer::HandleResourceChange( TInt aType )
     if ( aType == KAknsMessageSkinChange ||
          aType == KEikDynamicLayoutVariantSwitch )
         {
-        CXDMPlugin* iTempView = static_cast<CXDMPlugin*> (iView);    
-        iTempView->HandleResourceChangeManual(aType);      
         }
     }
 

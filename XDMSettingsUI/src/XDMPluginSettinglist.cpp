@@ -23,7 +23,6 @@
 
 #include <barsread.h>
 #include <cmconnectionmethodext.h>
-#include <cmapplicationsettingsui.h>
 #include <avkon.loc>
 #include <StringLoader.h>
 #include <akntitle.h>
@@ -243,21 +242,6 @@ CAknSettingItem * CXDMPluginSettinglist::CreateSettingItemL (TInt aIdentifier)
 // 
 void CXDMPluginSettinglist::EditAccessPointL()
     {
-    TCmSettingSelection selectionUid;
-    CCmApplicationSettingsUi* settingsUi =  CCmApplicationSettingsUi::NewLC();
-    // All Connection Methods will be listed if bearerFilter array has no element.
-    TBearerFilterArray bearerFilter;
-    CleanupClosePushL( bearerFilter );
-    settingsUi->RunApplicationSettingsL( selectionUid ,
-                                         CMManager::EShowConnectionMethods,
-                                         bearerFilter );
-    CleanupStack::PopAndDestroy( &bearerFilter );    
-    CleanupStack::PopAndDestroy( settingsUi );
-
-    if ( selectionUid.iResult == CMManager::EConnectionMethod )
-        {
-        iSettingsData.iAccessPoint = selectionUid.iId;
-        }
     }
 
 // -----------------------------------------------------------------------------

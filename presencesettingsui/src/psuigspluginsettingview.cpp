@@ -71,7 +71,6 @@ CPSUIGSPluginSettingView::~CPSUIGSPluginSettingView()
 void CPSUIGSPluginSettingView::ConstructL()
     {
     // base construct
-    BaseConstructL( R_PSUI_SETTING_VIEW );
     iAppUi = AppUi();
     }
 
@@ -225,15 +224,6 @@ void CPSUIGSPluginSettingView::HandleBackKeyL()
     if ( !psModel->AllCompulsoryFieldsFilled())
         {// empty compulsory fields found
         okToSave = EFalse;
-        HBufC* string = StringLoader::LoadLC( 
-            R_QTN_PRESENCE_SETTINGS_NOT_FILLED );
-        CAknQueryDialog* query = CAknQueryDialog::NewL( 
-            CAknQueryDialog::EConfirmationTone );        
-        if ( !query->ExecuteLD( R_PSUI_CONF_QUERY,  *string ))
-            {
-            okToGoBack = EFalse;
-            }
-        CleanupStack::PopAndDestroy( string );// string         
         }
         
     // same name checking        
@@ -294,15 +284,6 @@ void CPSUIGSPluginSettingView::HandleMenuExitL()
 TBool CPSUIGSPluginSettingView::HandleDuplicatePSNamesL()
     {
     TBool found = iMainView->PSModel()->IsItDuplicatePSName();
-    if ( found )
-        {
-        HBufC* fullText = StringLoader::LoadLC( 
-            R_QTN_PRESENCE_SETTINGS_NAME_EXISTS, 
-            iMainView->PSModel()->SettingsSet().iSetName );
-        CAknInformationNote* note = new ( ELeave ) CAknInformationNote( ETrue ); //wait-flag on
-        note->ExecuteLD( *fullText );
-        CleanupStack::PopAndDestroy( fullText );
-        }
     return found;
     }
 

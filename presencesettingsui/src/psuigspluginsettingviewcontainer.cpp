@@ -55,7 +55,6 @@ void CPSUIGSPluginSettingViewContainer::ConstructL( const TRect& aRect )
     {
     UpdateTitleL();
     CreateWindowL();
-    ConstructFromResourceL( R_PSUI_SETTING_ITEMS );
     SetRect( aRect );
     ActivateL();
     }

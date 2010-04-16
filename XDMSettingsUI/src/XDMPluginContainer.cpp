@@ -165,8 +165,6 @@ void CXDMPluginContainer::EditCurrentItemL()
     TPtrC16 xDMSetNameClipped;
     xDMSetName.Set(iSettingListArray->MdcaPoint(iMainList->CurrentItemIndex()));
     xDMSetNameClipped.Set(xDMSetName.Mid(1)); // remove '/t' from the begining
-        CXDMPlugin* iTempView = static_cast<CXDMPlugin*> (iView);    
-    iTempView->LoadSettingsViewL(EEditExisting, xDMSetNameClipped);      
     }
     
 // ---------------------------------------------------------------------------
@@ -202,8 +200,6 @@ TKeyResponse CXDMPluginContainer::OfferKeyEventL( const TKeyEvent& aKeyEvent,
             {
             if(!IsListEmpty())
                 DeleteSetProcedureL();
-            CXDMPlugin* iTempView = static_cast<CXDMPlugin*> (iView);
-            iTempView->UpdateMSK();
             return EKeyWasConsumed;
             }
         else
@@ -246,7 +242,6 @@ void CXDMPluginContainer::SetupListL()
 void CXDMPluginContainer::LoadSettingsListArrayL()
     {
     iTitlePane->SetTextL(iTitle);
-    _LIT (KStringHeader, "\t%S");
     TBuf <KMaxSettingSetNameLength+2> myString; // maximum name + \t
     RArray<TInt> settingIds;
     CleanupClosePushL(settingIds);
@@ -262,9 +257,6 @@ void CXDMPluginContainer::LoadSettingsListArrayL()
     iSettingListArray->Reset();
     for (TInt i = 0; i< xdmSetListCount; i++)
         {
-        myString.Format(KStringHeader, &(xdmSetList->MdcaPoint(i)));
-        AknTextUtils::LanguageSpecificNumberConversion(myString);
-        iSettingListArray->AppendL (myString);
         }
     iSettingListArray->Sort(ECmpCollated);
     CleanupStack::PopAndDestroy(2); //xdmSetList,settingIds
@@ -397,8 +389,6 @@ void CXDMPluginContainer::HandleResourceChange( TInt aType )
     if ( aType == KAknsMessageSkinChange ||
          aType == KEikDynamicLayoutVariantSwitch )
         {
-        CXDMPlugin* iTempView = static_cast<CXDMPlugin*> (iView);    
-        iTempView->HandleResourceChangeManual(aType);      
         }
     CCoeControl::HandleResourceChange( aType );
     }

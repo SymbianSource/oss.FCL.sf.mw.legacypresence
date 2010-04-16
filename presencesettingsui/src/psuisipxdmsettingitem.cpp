@@ -175,19 +175,8 @@ void CPSUISipXdmSettingItem::EditXdmItemL()
 // See header for details.
 // ---------------------------------------------------------------------------
 //
-void CPSUISipXdmSettingItem::LaunchSettingDlgL( TInt& aIndex, CDesCArray* aArray )
+void CPSUISipXdmSettingItem::LaunchSettingDlgL( TInt& /*aIndex*/, CDesCArray* /*aArray*/ )
     {
-    CAknRadioButtonSettingPage* dlg = new (ELeave ) CAknRadioButtonSettingPage(
-        R_RADIOBUTTON_SETTING_PAGE, 
-        aIndex, 
-        aArray );
-    CleanupStack::PushL( dlg );
-    dlg->SetSettingTextL( SettingName() );
-    SetSettingPage( dlg );
-    SettingPage()->SetSettingPageObserver( this );
-    CleanupStack::Pop( dlg );  // dlg
-    SettingPage()->ExecuteLD( CAknSettingPage::EUpdateWhenAccepted );
-    SetSettingPage( 0 ); // dlg deleted
     }
 
 // End of File

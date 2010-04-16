@@ -22,7 +22,6 @@
 #define PSUIGSPLUGINCONTAINER_H
 
 // INCLUDES
-#include <GSBaseContainer.h>
 
 // FORWARD DECLARATIONS
 class CPSUIGSPlugin;
@@ -33,7 +32,7 @@ class CPSUIGSPlugin;
 * CPSUIGSPluginContainer container class
 * @since Series60_3.2
 */
-class CPSUIGSPluginContainer : public CGSBaseContainer
+class CPSUIGSPluginContainer
     {
     public: // Constructors and destructor
         
@@ -47,21 +46,7 @@ class CPSUIGSPluginContainer : public CGSBaseContainer
         */
         ~CPSUIGSPluginContainer();
     
-    private: // Functions from base classes
-        
-        /**
-        * From CGSBaseContainer
-        * See base class.        
-        */    
-        void ConstructListBoxL( TInt aResLbxId );
-
-        /**
-        * From CGSBaseContainer
-        * See base class.        
-        */    
-        TKeyResponse OfferKeyEventL( 
-            const TKeyEvent& aKeyEvent,
-            TEventCode aType );        
+    private: // Functions from base classes 
 
         /**
         * From CCoeControl

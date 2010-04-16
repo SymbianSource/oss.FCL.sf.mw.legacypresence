@@ -23,13 +23,14 @@
 
 //  INCLUDES
 #include <ConeResLoader.h>
-#include <gsbaseview.h>
+#include <coeview.h>
 
 // FORWARD DECLARATIONS
 class CPSUIGSPluginContainer;
 class CPSUIGSPluginModel;
 
 // CLASS DECLARATION
+class CEikMenuPane;
 
 /**
 * Header of CPSUIGSPlugin which implements the CGSPluginInterface.
@@ -37,8 +38,7 @@ class CPSUIGSPluginModel;
 * @lib PSUIGSPlugin.lib
 * @since Series60_3.2
 */
-class CPSUIGSPlugin : 
-    public CGSBaseView,
+class CPSUIGSPlugin :
     public MCoeViewDeactivationObserver
     {
     
@@ -82,36 +82,6 @@ class CPSUIGSPlugin :
         */
         void HandleCommandL( TInt aCommand );
         
-        /**
-        * From CGSBaseView
-        * See base class.
-        */        
-        void NewContainerL();
-       
-        /**
-        * From CGSBaseView
-        * See base class.
-        */   
-        void HandleListBoxSelectionL();
-       
-        /**
-         * From CGSPluginInterface
-         * See base class.
-         */
-        void GetCaptionL( TDes& aCaption ) const;
-        
-        /**
-        * From CGSPluginInterface
-        * See base class.
-        */
-        TInt PluginProviderCategory() const;
-
-        /**
-        * From CGSPluginInterface
-        * See base class.
-        */
-        CGulIcon* CreateIconL( const TUid aIconType );
-
         /**
         * From MEikMenuObserver
         * See base class.
@@ -201,8 +171,7 @@ class CPSUIGSPlugin :
         
         // Presence UI model
         CPSUIGSPluginModel* iPSModel;
-        // Presence Setting view
-        CAknView* iSettingView;
+
         // Indicates when PSUIGSPlugin's views are closed
         TBool iClosing;
         // Previous view
