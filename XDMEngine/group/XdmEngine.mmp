@@ -50,6 +50,7 @@ LIBRARY                         euser.lib
 LIBRARY                         charconv.lib
 LIBRARY                         flogger.lib
 LIBRARY                         xdmsettingsapi.lib
+LIBRARY                         inetprotutil.lib
 
 
 #if defined( ARMCC )

@@ -1607,11 +1607,10 @@ CSIPClientTransaction* CSimpleSipConnection::DoPublishL(
     // get request uri from a request
     TUriParser8 parser;
     User::LeaveIfError( parser.Parse( aRemoteURI ));
-    CUri8* uri = CUri8::NewLC( parser );
+    CUri8* uri = CUri8::NewL( parser );
 
     // Start to fill headres,  Remote URI
-    CSIPRequestElements* elems = CSIPRequestElements::NewL(uri);
-    CleanupStack::Pop( uri); // ownership given to elems
+    CSIPRequestElements* elems = CSIPRequestElements::NewL( uri );
     CleanupStack::PushL( elems );
     // To header not needed when remote uri set
 

@@ -29,6 +29,7 @@
 #include <ximpobjectcollection.h>
 #include <ximpobjectfactory.h>
 #include <presenceobjectfactory.h>
+#include <escapeutils.h>
 
 #include "presencepluginvirtualgroup.h"
 #include "mpresencepluginconnectionobs.h"
@@ -139,11 +140,16 @@ void CPresencePluginWatcher::DoPerformSubscribePresentityPresenceL(
     pres8 =
         CnvUtfConverter::ConvertFromUnicodeToUtf8L( iPresIdentity->Des() );
     CleanupStack::PushL( pres8 ); // << pres8
-        
+    
+    // remove escapes
+    HBufC8* encodedUsername = EscapeUtils::EscapeEncodeL( *pres8, EscapeUtils::EEscapeNormal );
+    CleanupStack::PopAndDestroy( pres8 );
+    CleanupStack::PushL( encodedUsername );
+    
     CPresencePluginEntityWatcher* watcher =
-        MatchWatcherL( pres8->Des(), ETrue );      
-    watcher->StartSubscribeL( pres8->Des(), aStatus );
-    CleanupStack::PopAndDestroy( pres8 );  // >> pres8
+        MatchWatcherL( encodedUsername->Des(), ETrue );      
+    watcher->StartSubscribeL( encodedUsername->Des(), aStatus );
+    CleanupStack::PopAndDestroy( encodedUsername );
     }
 
 // ---------------------------------------------------------------------------

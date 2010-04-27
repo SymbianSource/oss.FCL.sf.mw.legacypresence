@@ -19,6 +19,8 @@
 
 
 // INCLUDE FILES
+#include <escapeutils.h>
+
 #include "XdmEngine.h"
 #include "XdmNodeFactory.h"
 #include "XdmNodeAttribute.h"
@@ -142,14 +144,19 @@ EXPORT_C void CXdmNodeAttribute::SetAttributeValueL( const TDesC& aAttributeValu
 //
 EXPORT_C void CXdmNodeAttribute::SetAttributeValueL( const TDesC8& aAttributeValue )
     {
+    // change to UNICODE from UTF8 format
+    HBufC* unicode = EscapeUtils::ConvertToUnicodeFromUtf8L( aAttributeValue );
+    CleanupStack::PushL( unicode );
+    
     #ifdef _DEBUG
         iXdmEngine.WriteToLog( _L8( "CXdmNodeAttribute::SetAttributeValueL() - Value: %S" ),
-                                &aAttributeValue );
+                                unicode );
     #endif
     delete iAttributeValue;
     iAttributeValue = NULL;
-    iAttributeValue = HBufC::NewL( aAttributeValue.Length() );
-    iAttributeValue->Des().Copy( aAttributeValue );
+    iAttributeValue = HBufC::NewL( unicode->Length() );
+    iAttributeValue->Des().Copy( *unicode );
+    CleanupStack::PopAndDestroy( unicode );
     }
 
 
