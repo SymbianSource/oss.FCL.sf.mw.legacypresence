@@ -68,7 +68,7 @@ LIBRARY             commonengine.lib//For RConeResourceLoader
 
 LIBRARY             egul.lib // CGulIcon
 LIBRARY             aknskins.lib // AknsUtils.h
-LIBRARY             cmmanager.lib //Connection Method Manager
+
 LIBRARY             xdmsettingsapi.lib
 LIBRARY             gsecomplugin.lib //GS Ecom plugin
 

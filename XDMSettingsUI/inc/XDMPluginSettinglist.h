@@ -24,7 +24,6 @@
 // INCLUDE FILES
 #include <coecntrl.h>
 #include <aknsettingitemlist.h>
-#include <cmmanagerext.h>
 
 // FORWARD DECLARATIONS
 class CSettingsData;
@@ -129,12 +128,6 @@ class CXDMPluginSettinglist : public CAknSettingItemList
          */
         CSettingsData& iSettingsData;
         
-        /**
-         * Handle to connection method manager.
-         * Own.
-         */
-        RCmManagerExt iCmManagerExt;
-      
     };
 
 #endif // CXDMPLUGINSETTINGLIST_H

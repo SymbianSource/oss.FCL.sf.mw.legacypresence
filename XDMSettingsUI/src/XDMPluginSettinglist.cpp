@@ -22,7 +22,6 @@
 #include "XDMExternalInterface.h"
 
 #include <barsread.h>
-#include <cmconnectionmethodext.h>
 #include <avkon.loc>
 #include <StringLoader.h>
 #include <akntitle.h>
@@ -61,7 +60,6 @@ CXDMPluginSettinglist *CXDMPluginSettinglist::NewLC(CSettingsData &aData)
 // 
 void CXDMPluginSettinglist::ConstructL()
     {
-    iCmManagerExt.OpenL();
     }
 
 // -----------------------------------------------------------------------------
@@ -80,7 +78,6 @@ CXDMPluginSettinglist::CXDMPluginSettinglist(CSettingsData &aData) :
 // 
 CXDMPluginSettinglist::~CXDMPluginSettinglist()
   {
-  iCmManagerExt.Close();
   }
 
 // -----------------------------------------------------------------------------
@@ -255,26 +252,14 @@ void CXDMPluginSettinglist::GetAccessPointNameL(TInt32 aAP, TDes& aAccessPoint)
     #endif
     if ( aAP > KErrNotFound )
         {
-        RCmConnectionMethodExt connMethod = iCmManagerExt.ConnectionMethodL( aAP );
-        CleanupClosePushL( connMethod );
-        
-        HBufC* connName = connMethod.GetStringAttributeL( CMManager::ECmName );
-        CleanupStack::PushL( connName );
-        
-        if ( KMaxAccessPointNameLength >= connName->Des().Length() )
-            {
-            aAccessPoint.Copy( connName->Des() );
-            }
-        else
-            {
-            aAccessPoint.Copy( connName->Des().Left( KMaxAccessPointNameLength ) );
-            }
-        
-        CleanupStack::PopAndDestroy( connName );
-        CleanupStack::PopAndDestroy( &connMethod );
+        /**
+         * RCmConnectionMethodExt, RCmManagerExt ect... was removed due to 
+         * Extended Connection Settings API deprecation.
+         * Clients should use Connection Settings (public) API instead
+         */
+        aAccessPoint.Copy( KNullDesC );
         #ifdef _DEBUG  
-        RDebug::Print( _L( "CXDMPluginSettinglist::GetAccessPointNameL - Name: %S"),
-                                &aAccessPoint );
+        RDebug::Print( _L( "CXDMPluginSettinglist::GetAccessPointNameL - Name: KNullDesC" ) );
         #endif
         }
     #ifdef _DEBUG
