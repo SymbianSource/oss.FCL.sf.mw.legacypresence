@@ -800,14 +800,14 @@ void CPresencePluginData::NotifyListToPrInfoL(
         {
         MPresenceInfo* info =
             aPresenceFactory.NewPresenceInfoLC();//<< info
-        aEntities.Append( info );
+        aEntities.AppendL( info );
         // aEntities may contain entries even this method leaves
         CleanupStack::Pop();// >> info
 
         NotifyToPrInfoL( aFactory, aPresenceFactory, *docs[i], *info );
         // Add SIp identity to active users list
         MXIMPIdentity* active = aFactory.NewIdentityLC();// << active
-        aActives.Append( active );
+        aActives.AppendL( active );
         CleanupStack::Pop();// >> active
 
         // Convert SIP entity URI from UTF to Unicode.
@@ -863,7 +863,7 @@ void CPresencePluginData::NotifyListToPrInfoL(
                         const TDesC8* uri8 = elem2->AttrValue( KPresenceUri8 );
                         MXIMPIdentity* terminated =
                             aFactory.NewIdentityLC();// << terminated
-                        aTerminated.Append( terminated );
+                        aTerminated.AppendL( terminated );
                         CleanupStack::Pop();                   // >> terminated
 
                         // Convert SIP entity URI from UTF to Unicode.

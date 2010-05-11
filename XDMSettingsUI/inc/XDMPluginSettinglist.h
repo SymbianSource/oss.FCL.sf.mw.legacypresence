@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -78,6 +78,13 @@ class CXDMPluginSettinglist : public CAknSettingItemList
         * otherwise access point name returns here
         */
         void GetAccessPointNameL(TInt32 aAP, TDes& aAccessPoint);
+        
+        /**
+        * For checking if access point is in use
+        * @param aAP Access point number as integer
+        * return ETrue if access point is in use
+        */
+        TBool IsAccessPointInUseL(TInt32 aAP);
       
         /**
         * Sets the focus to the first item of the settings list

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -27,6 +27,10 @@
 #include <StringLoader.h>
 #include <psuigspluginrsc.rsg>
 #include <XdmSettingsApi.h>
+#include <spentry.h>
+#include <spproperty.h>
+#include <spsettings.h>
+
 #include "psuigspluginmodel.h"
 
 // ========================= MEMBER FUNCTIONS ================================
@@ -71,6 +75,7 @@ CPSUIGSPluginModel::~CPSUIGSPluginModel()
 void CPSUIGSPluginModel::ConstructL()
     {
     RetrieveSettingsL();
+    ReadSipArrayFromEngineL();
     iVisibleSettingName = HBufC::NewL( 
         KPresSetNameMaxLength + 2 );// max chars + KColumnListSeparator
     }
@@ -244,10 +249,12 @@ void CPSUIGSPluginModel::DeleteSettingsL( TInt aToBeDeleted, TBool aIsIndex )
         __ASSERT_DEBUG( aToBeDeleted < iPSIdArray.Count() ,
             User::Panic( KPSUIGSPluginPanicCategory, KErrOverflow ));
         PresSettingsApi::RemoveSetL( iPSIdArray[ aToBeDeleted ]);
+        CleanServiceProviderSettingsDataL( iPSIdArray[ aToBeDeleted ] );
         }
     else
         {// is id
         PresSettingsApi::RemoveSetL( aToBeDeleted );
+        CleanServiceProviderSettingsDataL( aToBeDeleted );
         }
     RefreshPSArraysL();
     }
@@ -315,6 +322,94 @@ void CPSUIGSPluginModel::ReArrangePresenceSettingsL()
             }
         }
     CleanupStack::PopAndDestroy( &pairArray );
+    }
+
+// ---------------------------------------------------------------------------
+// CPSUIGSPluginModel::CleanServiceProviderSettingsDataL()
+// See header for details.
+// ---------------------------------------------------------------------------
+// 
+void CPSUIGSPluginModel::CleanServiceProviderSettingsDataL( TInt aPresenceId )
+    {
+    CSPSettings* spSettings = CSPSettings::NewLC();
+    
+    RArray<TUint> serviceIds; 
+    CleanupClosePushL( serviceIds );
+    spSettings->FindServiceIdsL( serviceIds );
+	
+    for ( TInt i( 0 ) ; i < serviceIds.Count() ; i++ )
+        {
+        CSPEntry* spEntry = CSPEntry::NewLC(); 
+        CSPProperty* property1 = CSPProperty::NewLC();
+
+        TInt err = spSettings->FindPropertyL( 
+            serviceIds[ i ],
+            ESubPropertyPresenceSettingsId,
+            *property1 );
+
+        if ( KErrNone == err )
+            {           
+            User::LeaveIfError(
+                spSettings->FindEntryL( serviceIds[ i ], *spEntry ) );
+				
+            TInt presenceId( 0 );
+            User::LeaveIfError( property1->GetValue( presenceId ) );
+			
+            if ( presenceId == aPresenceId )
+                {
+                // Delete all presence related properties from services which
+                // has this presence id (ESubPropertyPresenceSettingsId).                  
+                RPropertyNameArray propertyNameArray;
+                CleanupClosePushL( propertyNameArray );
+                RPropertyNameArray propertyNameArrayToBeDeleted;
+                CleanupClosePushL( propertyNameArrayToBeDeleted );
+                
+                // presence properties to be removed if found
+                propertyNameArray.Append( EPropertyPCSPluginId );
+                propertyNameArray.Append( EPropertyPresenceSubServicePluginId );
+                propertyNameArray.Append( ESubPropertyPresenceSettingsId );
+                propertyNameArray.Append( ESubPropertyPresencePreferredSNAPId );
+                propertyNameArray.Append( ESubPropertyPresencePreferredIAPId );
+                propertyNameArray.Append( ESubPropertyPresencePresentityIDFieldType );
+                propertyNameArray.Append( ESubPropertyPresenceLaunchMethod );
+                propertyNameArray.Append( ESubPropertyPresenceLaunchUid );
+                propertyNameArray.Append( ESubPropertyPresenceAddrScheme );
+                propertyNameArray.Append( ESubPropertyPresenceEnabled );
+                propertyNameArray.Append( ESubPropertyPresenceRequestPreference );
+
+                for ( TInt j( 0 ) ; j < propertyNameArray.Count() ; j++ )
+                    {
+                    CSPProperty* property2 = CSPProperty::NewLC();
+                
+                    TInt err = spSettings->FindPropertyL( 
+                        serviceIds[ i ],
+                        propertyNameArray[ j ],
+                        *property2 );
+						
+                    // if property found add to be deleted array
+                    if ( !err )
+                        {
+                        propertyNameArrayToBeDeleted.Append( 
+                            propertyNameArray[ j ] );
+                        }
+                        
+                    CleanupStack::PopAndDestroy( property2 ); 
+                    }
+                
+                spSettings->DeleteServicePropertiesL( 
+                    serviceIds[ i ], propertyNameArrayToBeDeleted );
+
+                CleanupStack::PopAndDestroy( &propertyNameArrayToBeDeleted );
+                CleanupStack::PopAndDestroy( &propertyNameArray );
+                }
+            }
+        
+        CleanupStack::PopAndDestroy( property1 );
+        CleanupStack::PopAndDestroy( spEntry );
+        }
+    
+    CleanupStack::PopAndDestroy( &serviceIds );
+    CleanupStack::PopAndDestroy( spSettings );
     }
 
 // ---------------------------------------------------------------------------
@@ -590,6 +685,32 @@ HBufC* CPSUIGSPluginModel::SipProfileNameL( TInt aId )
             }
         }
     return HBufC::NewL( 0 );// name not found
+    }
+
+// ---------------------------------------------------------------------------
+// CPSUIGSPluginModel::IsSipProfileRegisteredL()
+// See header for details.
+// ---------------------------------------------------------------------------
+// 
+TBool CPSUIGSPluginModel::IsSipProfileRegisteredL( TInt aIndex )
+    {
+    TBool registered( EFalse );  
+    TInt sipProfileId = SipProfileId( aIndex );
+    const TInt arrayCount = iSIPProfiles->Count();
+	
+    for ( TInt i = 0; i < arrayCount; i++ )
+        {
+        TUint32 tempValue;
+        iSIPProfiles->At( i )->GetParameter( KSIPProfileId, tempValue );
+		
+        if ( tempValue == sipProfileId )
+            {
+            iSIPProfiles->At( i )->GetParameter( 
+                KSIPProfileRegistered, registered );
+            }
+        }
+		
+    return registered;
     }
  
 // ---------------------------------------------------------------------------

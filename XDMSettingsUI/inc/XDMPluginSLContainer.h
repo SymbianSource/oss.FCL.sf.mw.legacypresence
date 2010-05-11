@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -163,6 +163,12 @@ class CXDMPluginSLContainer : public CCoeControl, MEikListBoxObserver
         * @return TDes reference to current set
         */
         TDes& GetCurrentSetName();
+               
+        /**
+        * Returns ETrue is AP used by XDM settings is in use
+        * @return ETrue if ap in use
+        */
+        TBool SettingsApInUseL(TDesC& aXDMSetName);
         
         
     private: // Most of these methods perform operations using iData

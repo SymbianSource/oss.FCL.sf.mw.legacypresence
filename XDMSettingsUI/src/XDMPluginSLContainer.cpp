@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -450,6 +450,36 @@ TBool CXDMPluginSLContainer::DisplayNewXDMSetOptionsL()
     }
     
 // ---------------------------------------------------------------------------
+// CXDMPluginSLContainer::IsAccessPointInUseL(TDesC& aXDMSetName)
+// ---------------------------------------------------------------------------
+//
+TBool CXDMPluginSLContainer::SettingsApInUseL(TDesC& aXDMSetName)
+    {
+    TBool inUse( EFalse );   
+    TLex16 myLex;
+    iData->Reset();
+     
+    iData->iSettingName = aXDMSetName;
+    AknTextUtils::ConvertDigitsTo(iData->iSettingName, EDigitTypeWestern );    
+    iData->iSettingId = GetSettingIdL(iData->iSettingName);
+       
+    CXdmSettingsCollection* xDMSet = NULL;
+       
+    // read the source setting
+    xDMSet = TXdmSettingsApi::SettingsCollectionL(iData->iSettingId);
+    CleanupStack::PushL(xDMSet);
+    iData->iAccessPointDes = xDMSet->Property(EXdmPropToNapId);
+    myLex.Assign(iData->iAccessPointDes);
+    myLex.Val(iData->iAccessPoint);
+    CleanupStack::PopAndDestroy(xDMSet);
+    
+    inUse = iSettingList->IsAccessPointInUseL( iData->iAccessPoint );
+    iData->Reset();
+	
+    return inUse;
+    }
+
+// ---------------------------------------------------------------------------
 // CXDMPluginSLContainer::SetTitlePaneTextL( const TDesC& aTitleText ) const
 // ---------------------------------------------------------------------------
 //
@@ -476,6 +506,7 @@ TBool CXDMPluginSLContainer::AreCompulsoryItemsFilled()
         {
         return ETrue;
         }
+    
     return EFalse;   
     }
     

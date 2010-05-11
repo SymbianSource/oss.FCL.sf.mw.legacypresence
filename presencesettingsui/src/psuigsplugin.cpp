@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -397,6 +397,33 @@ void CPSUIGSPlugin::DynInitMenuPaneL( TInt aResourceId, CEikMenuPane *aMenuPane 
         !FeatureManager::FeatureSupported( KFeatureIdHelp ) )
         {
         aMenuPane->DeleteMenuItem( EAknCmdHelp );
+        }
+    
+    TInt index( KErrNotFound );
+    SettingCountAndIndex( index );
+    
+    if ( KErrNotFound < index )
+        {
+        // Hide delete option if sip profile used with presence settings
+        // is registered.
+        if ( iPSModel->IsSipProfileRegisteredL( index ) )
+            {
+            TInt pos( KErrNotFound );
+            if ( aMenuPane->MenuItemExists( EPSUICmdDelete, pos ) )
+                {
+                aMenuPane->SetItemSpecific( EPSUICmdDelete, EFalse );
+                aMenuPane->SetItemDimmed( EPSUICmdDelete, ETrue );
+                }
+            }
+        else
+            {
+            TInt pos( KErrNotFound );
+            if ( aMenuPane->MenuItemExists( EPSUICmdDelete, pos ) )
+                {
+                aMenuPane->SetItemSpecific( EPSUICmdDelete, ETrue );
+                aMenuPane->SetItemDimmed( EPSUICmdDelete, EFalse );
+                }
+            }
         }
     }
 

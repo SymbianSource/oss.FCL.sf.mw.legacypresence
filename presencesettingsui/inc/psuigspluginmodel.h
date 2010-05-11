@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -217,6 +217,14 @@ class CPSUIGSPluginModel :
         */        
         HBufC* SipProfileNameL( TInt aId );
         
+	    /**
+        * Checks if SIP profile used by presence settings is in use
+        *
+        * @param aIndex is the index in the array
+        * @return ETrue if profile is registered
+        */    
+        TBool IsSipProfileRegisteredL( TInt aIndex );
+        
         //
         //
         // XDM related
@@ -280,8 +288,16 @@ class CPSUIGSPluginModel :
         * Re-arranges presence settings (name and id arrays) 
         * to alphabetical order.
         */
-        void ReArrangePresenceSettingsL();            
-
+        void ReArrangePresenceSettingsL();   
+        
+        /** 
+        * Cleans links to specific presence settings for 
+        * service provider settings.
+        * 
+        * @param aPresenceId presence settings id.
+        */
+        void CleanServiceProviderSettingsDataL( TInt aPresenceId );
+             
     private: // Functions from base classes
 
         /** 

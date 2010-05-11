@@ -531,7 +531,7 @@ void CSimplePluginData::CollectAllPresentitiesL(
     for ( TInt i = 0; i < count; i++ )
         {
         MPresenceInfo* info = aPresenceFactory.NewPresenceInfoLC();   // << info
-        aEntities.Append( info );
+        aEntities.AppendL( info );
         // aEntities may contain entries even this method leaves
         CleanupStack::Pop();                                      // >> info
 
@@ -539,7 +539,7 @@ void CSimplePluginData::CollectAllPresentitiesL(
 
         // Add SIP identity to active users list
         MXIMPIdentity* active = aFactory.NewIdentityLC();  // << active
-        aActives.Append( active );
+        aActives.AppendL( active );
         CleanupStack::Pop();                            // >> active
 
         // Convert SIP entity URI from UTF to Unicode.
@@ -731,7 +731,7 @@ void CSimplePluginData::SearchTerminatedInstanceL(
             {
             // Add presentity into terminated list
             MXIMPIdentity* terminated = aFactory.NewIdentityLC();  // +terminated
-            aTerminated.Append( terminated );
+            aTerminated.AppendL( terminated );
             CleanupStack::Pop();                   // -terminated
 
             // Convert SIP entity URI from UTF to Unicode.

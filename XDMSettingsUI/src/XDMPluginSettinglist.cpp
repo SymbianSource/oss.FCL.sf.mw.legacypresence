@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -286,6 +286,27 @@ void CXDMPluginSettinglist::GetAccessPointNameL(TInt32 aAP, TDes& aAccessPoint)
     // dont do anything if name not found or if some error occur
     CleanupStack::PopAndDestroy(2); // commsDb, aPUtils
 #endif 
+    }
+
+// -----------------------------------------------------------------------------
+// CXDMPluginSettinglist::IsAccessPointInUseL(TInt32 aAP)
+// -----------------------------------------------------------------------------
+// 
+TBool CXDMPluginSettinglist::IsAccessPointInUseL(TInt32 aAP)
+    {
+    TBool inUse( EFalse );
+    
+    CCommsDatabase* commsDb = CCommsDatabase::NewL( EDatabaseTypeIAP );
+    CleanupStack::PushL(commsDb);
+    CApUtils* aPUtils = CApUtils::NewLC( *commsDb );
+    TInt err(KErrNone);
+    // to remove id bug
+    TRAP(err, aAP = aPUtils->WapIdFromIapIdL(aAP)); 
+    inUse = aPUtils->IsAPInUseL( aAP );   
+    // dont do anything if name not found or if some error occur
+    CleanupStack::PopAndDestroy(2); // commsDb, aPUtils
+    
+    return inUse;
     }
 
 // -----------------------------------------------------------------------------

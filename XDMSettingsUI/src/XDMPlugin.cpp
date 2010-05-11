@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2005-2007 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -42,6 +42,9 @@
 
 
 // Constants
+
+const TInt KMaxNameLength = 255;
+
 _LIT( KGSXDMPluginResourceFileName, "z:\\resource\\XDMPluginRsc.rsc" );
 
 #ifdef __SCALABLE_ICONS
@@ -402,6 +405,35 @@ void CXDMPlugin::DynInitMenuPaneL(TInt aResourceId,CEikMenuPane* aMenuPane)
         if (iMainListContainer->IsListEmpty())
             {
             aMenuPane->SetItemDimmed(EGSXDMPluginCmdNewExisting, ETrue);
+            }
+        }
+    
+    if ( iSettingListContainer )
+        {
+        TBool inUse( EFalse );
+        HBufC* currentSetName = iMainListContainer->GetCurrentSetNameLC();
+        TBuf<KMaxNameLength> setName;
+        setName.Copy( currentSetName->Des() );
+        TRAP_IGNORE( inUse = iSettingListContainer->SettingsApInUseL( setName ) );
+        CleanupStack::PopAndDestroy( currentSetName );
+    
+        if ( inUse )
+            {
+            TInt pos( KErrNotFound );
+            if ( aMenuPane->MenuItemExists( EGSXDMPluginCmdDelete, pos ) )
+                {
+                aMenuPane->SetItemSpecific( EGSXDMPluginCmdDelete, EFalse );
+                aMenuPane->SetItemDimmed(EGSXDMPluginCmdDelete, ETrue);
+                }
+            }
+        else
+            {
+            TInt pos( KErrNotFound );
+            if ( aMenuPane->MenuItemExists( EGSXDMPluginCmdDelete, pos ) )
+                {
+                aMenuPane->SetItemSpecific( EGSXDMPluginCmdDelete, ETrue );
+                aMenuPane->SetItemDimmed(EGSXDMPluginCmdDelete, EFalse);
+                }
             }
         }
     }

@@ -108,7 +108,7 @@ void CPresencePluginConnection::ConstructL(
     const TDesC8& aETag )
     {
     DP_SDA("CPresencePluginConnection::ConstructL loaded");
-     
+    
     iETag = aETag.AllocL();                  
     
     iSession = CPresencePluginSession::NewL( aServiceInfo, *this );
@@ -195,6 +195,8 @@ void CPresencePluginConnection::ConstructL(
 CPresencePluginConnection::~CPresencePluginConnection()
     {
     DP_SDA("CPresencePluginConnection::~CPresencePluginConnection");
+    
+    Cancel();
     
     delete iSipPresentity;
     iSipPresentity = NULL;
@@ -876,16 +878,17 @@ void CPresencePluginConnection::DeleteImFeaturesPlugin( )
     }
 
 // ---------------------------------------------------------------------------
-// CPresencePluginPublisher::DoCancel()
+// CPresencePluginConnection::DoCancel()
 // ---------------------------------------------------------------------------
 //
 void CPresencePluginConnection::DoCancel(  )
     {
     DP_SDA("CPresencePluginConnection::DoCancel CANCEL");
+    iPublisher->Cancel();
     }
 
 // ---------------------------------------------------------------------------
-// CPresencePluginSession::RunL()
+// CPresencePluginConnection::RunL()
 // ---------------------------------------------------------------------------
 //
 void CPresencePluginConnection::RunL(  )
@@ -910,7 +913,7 @@ void CPresencePluginConnection::RunL(  )
     }
 
 // ---------------------------------------------------------------------------
-// CPresencePluginSession::RunError
+// CPresencePluginConnection::RunError
 // ---------------------------------------------------------------------------
 //
 TInt CPresencePluginConnection::RunError( TInt /*aError*/ )
