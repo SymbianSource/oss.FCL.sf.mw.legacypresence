@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -445,11 +445,10 @@ void CSimpleSipConnection::SendInstantMessageL( MSimpleEngineRequest& aReq )
         temp->Des().Copy( KSipPrefix() );
         temp->Des().Append( aReq.Recipient() );
         User::LeaveIfError( parser.Parse( *temp ));
-        CUri8* uri = CUri8::NewLC( parser );  // CS: 3
+        CUri8* uri = CUri8::NewL( parser );
         
         // Start to fill header, Remote URI
         CSIPRequestElements* elems = CSIPRequestElements::NewL( uri );
-        CleanupStack::Pop( uri ); // ownership given to elems  // CS: 2
         CleanupStack::PushL( elems );  // CS: 3
 
         TUriParser8 parser3;
@@ -1539,11 +1538,10 @@ CSIPClientTransaction* CSimpleSipConnection::DoPublishL(
     // get request uri from a request
     TUriParser8 parser;
     User::LeaveIfError( parser.Parse( aRemoteURI ));
-    CUri8* uri = CUri8::NewLC( parser );
+    CUri8* uri = CUri8::NewL( parser );
 
     // Start to fill headres,  Remote URI
-    CSIPRequestElements* elems = CSIPRequestElements::NewL(uri);
-    CleanupStack::Pop( uri); // ownership given to elems
+    CSIPRequestElements* elems = CSIPRequestElements::NewL( uri );
     CleanupStack::PushL( elems );
     // To header not needed when remote uri set
 
