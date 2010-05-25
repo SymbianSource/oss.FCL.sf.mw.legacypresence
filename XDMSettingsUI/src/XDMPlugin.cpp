@@ -408,7 +408,7 @@ void CXDMPlugin::DynInitMenuPaneL(TInt aResourceId,CEikMenuPane* aMenuPane)
             }
         }
     
-    if ( iSettingListContainer )
+    if ( iSettingListContainer && !iMainListContainer->IsListEmpty() )
         {
         TBool inUse( EFalse );
         HBufC* currentSetName = iMainListContainer->GetCurrentSetNameLC();
