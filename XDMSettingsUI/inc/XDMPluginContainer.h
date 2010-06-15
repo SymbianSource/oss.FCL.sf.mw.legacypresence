@@ -177,7 +177,7 @@ class CXDMPluginContainer : public CCoeControl, MEikListBoxObserver
         * Get the Setting ID of the current set
         * @return TInt setting ID of the current set
         */
-      TInt CXDMPluginContainer::GetCurrentSetIdL();
+      TInt GetCurrentSetIdL();
       
         /**
         * Load XDM Collection names with trap, useful when list doesnt have anything

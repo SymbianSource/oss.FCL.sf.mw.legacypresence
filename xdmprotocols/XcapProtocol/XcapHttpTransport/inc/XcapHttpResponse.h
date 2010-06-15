@@ -39,7 +39,7 @@ NONSHARABLE_CLASS( CXcapHttpResponse ) : public CBase,
         * A global logging function for 16 bit data.
         * @param aCommand command to be handled
         */
-        static CXcapHttpResponse* CXcapHttpResponse::NewL( CXcapHttpRequest* aHttpRequest,
+        static CXcapHttpResponse* NewL( CXcapHttpRequest* aHttpRequest,
                                                            CXcapHttpTransport& aTransportMain );
         
         /**

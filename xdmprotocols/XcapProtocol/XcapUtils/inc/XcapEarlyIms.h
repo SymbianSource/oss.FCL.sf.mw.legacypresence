@@ -72,7 +72,7 @@ class CXcapEarlyIms : public CActive
         * Clean the log file
         * @return void
         */
-        void CXcapEarlyIms::DeleteLogFileL();
+        void DeleteLogFileL();
         
         /**
         * A global logging function for 8 bit data.
