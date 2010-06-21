@@ -457,7 +457,6 @@ TBool CXDMPluginSLContainer::SettingsApInUseL(TDesC& aXDMSetName)
     {
     TBool inUse( EFalse );   
     TLex16 myLex;
-    iData->Reset();
      
     iData->iSettingName = aXDMSetName;
     AknTextUtils::ConvertDigitsTo(iData->iSettingName, EDigitTypeWestern );    
@@ -474,7 +473,6 @@ TBool CXDMPluginSLContainer::SettingsApInUseL(TDesC& aXDMSetName)
     CleanupStack::PopAndDestroy(xDMSet);
     
     inUse = iSettingList->IsAccessPointInUseL( iData->iAccessPoint );
-    iData->Reset();
 	
     return inUse;
     }

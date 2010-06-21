@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -73,14 +73,14 @@ enum TXDMSettingsIndex
 /**
  * Constants used in resources and in application
  */
-#define KMaxSettingSetNameLength 30
+#define KMaxSettingSetNameLength 32
 #define KMaxSettingSetNameArrayGran 10
 #define KMaxUserIDLength 100
 #define KMaxServerAddressLength 100
 #define KMaxPasswordLength 100
 #define KMaxSIPURLLength 100
-#define KMaxAccessPointNameLength 30
-#define KMaxAccessPointDesLength 30
+#define KMaxAccessPointNameLength 32
+#define KMaxAccessPointDesLength 32
 #define KMaxMessageToDisplayLength 100
 
 

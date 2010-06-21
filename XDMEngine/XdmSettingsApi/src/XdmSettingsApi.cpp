@@ -406,7 +406,7 @@ EXPORT_C CDesCArray* TXdmSettingsApi::CollectionNamesLC( RArray<TInt>& aSettingI
                 propertySet->AppendL( desc );
                 TLex id( identifier );
                 error = id.Val( numId );
-                aSettingIds.Append( error == KErrNone ? numId : error );
+                aSettingIds.AppendL( error == KErrNone ? numId : error );
                 }
             else
                 {

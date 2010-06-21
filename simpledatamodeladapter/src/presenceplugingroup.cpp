@@ -39,6 +39,7 @@
 #include "presenceplugindata.h"
 #include "presencepluginwatcher.h"
 #include "presencepluginauthorization.h"
+#include "presencepluginutility.h"
 
 // ======== MEMBER FUNCTIONS ========
 
@@ -220,20 +221,49 @@ void CPresencePluginGroups::DoAddPresentityGroupMemberL(
     if( !aGroupId.Identity().Compare( KPresenceBuddyList ) )
         {
         DP_SDA("CPresencePluginGroups::DoAddPresentityGroupMemberL - buddylist");
-        iOperation = EAddPresentityGroupMember;
+        TBool contactIsBlocked = EFalse;
+        RPointerArray<MXIMPIdentity> blockedList;
+        CleanupStack::PushL( TCleanupItem(
+            TPresencePluginUtility::ResetAndDestroyIdentities,
+            &blockedList ) );
+        iXdmUtils->SubscribeBlockListL( blockedList );
+        DP_SDA2( "CPresencePluginGroups::DoAddPresentityGroupMemberL - blockedList.Count = %d",
+            blockedList.Count() );
         
-        // write pending to presence cache
-        TBuf<20> buf;
-        buf.Copy( KPendingRequestExtensionValue );
+        for ( TInt i( 0 ); i < blockedList.Count() && !contactIsBlocked; i++ ) 
+            {
+            if ( 0 == blockedList[i]->Identity().Compare( aMemberId.Identity() ) )
+                {
+                // contact found from blocked list
+                contactIsBlocked = ETrue;
+                }
+            }
+        CleanupStack::PopAndDestroy( &blockedList );
         
-        iPresenceData->WriteStatusToCacheL( aMemberId.Identity(), 
-            MPresenceBuddyInfo2::ENotAvailable,
-            buf,
-            KNullDesC() ); 
-        
-        iConnObs.WatcherHandlerL()->DoPerformSubscribePresentityPresenceL( 
-            aMemberId, iStatus );
-        SetActive();
+        if ( contactIsBlocked )
+            {
+            DP_SDA( "CPresencePluginGroups::DoAddPresentityGroupMemberL - contact is Blocked" );
+            iOperation = EUnblockInAddPresentityGroupMember;
+            iConnObs.InternalPresenceAuthorization().
+                DoPerformCancelPresenceBlockFromPresentityL(
+                    aMemberId, iStatus  );
+            SetActive();
+            }
+        else
+            {
+            DP_SDA( "CPresencePluginGroups::DoAddPresentityGroupMemberL - contact is not Blocked" );
+            iOperation = EAddPresentityGroupMember;
+            // write pending to presence cache
+            TBuf<20> buf;
+            buf.Copy( KPendingRequestExtensionValue );
+            iPresenceData->WriteStatusToCacheL( aMemberId.Identity(), 
+                MPresenceBuddyInfo2::ENotAvailable,
+                buf,
+                KNullDesC() );
+            iConnObs.WatcherHandlerL()->DoPerformSubscribePresentityPresenceL( 
+                aMemberId, iStatus );
+            SetActive();
+            }
         }
     else if ( !aGroupId.Identity().Compare( KPresenceBlockedList ) )
         {
@@ -272,18 +302,18 @@ void CPresencePluginGroups::DoRemovePresentityGroupMemberL(
     
     if( !aGroupId.Identity().Compare( KPresenceBuddyList ) )
         {
-        DP_SDA(" DoRemovePresentityGroupMemberL - buddylist");
+        DP_SDA( "DoRemovePresentityGroupMemberL - buddylist" );
         iConnObs.WatcherHandlerL()->DoPerformUnsubscribePresentityPresenceL( 
             aMemberId, iStatus );
         SetActive();
         }
     else if ( !aGroupId.Identity().Compare( KPresenceBlockedList ) )
         {
-        DP_SDA(" DoRemovePresentityGroupMemberL - blockedlist");
-        iOperation = EUnblockPresentityGroupMember;
-        iConnObs.InternalPresenceAuthorization().
-            DoPerformCancelPresenceBlockFromPresentityL( aMemberId, iStatus );
-        SetActive();
+        DP_SDA( "DoRemovePresentityGroupMemberL - blockedlist" );
+        // Contact blocking is not cancelled when blocked contact is removed
+        // user can remove blocking from blocked list later
+        DeletePersonCacheL();
+        CompleteXIMPReq( KErrNone );
         }
     else
         {
@@ -485,10 +515,30 @@ void CPresencePluginGroups::CallActualXdmOperationL( TInt aCompleteStatus )
             }
             break;
             
+        case EUnblockInAddPresentityGroupMember:
+            {
+            DP_SDA(" CallActualXdmOperationL EUnblockInAddPresentityGroupMember");
+            iOperation = EAddPresentityGroupMember;
+            MXIMPIdentity* newIdentity = iConnObs.ObjectFactory().NewIdentityLC();
+            newIdentity->SetIdentityL( *iPresIdentity );
+            
+            TBuf<20> buf;
+            buf.Copy( KPendingRequestExtensionValue );
+            iPresenceData->WriteStatusToCacheL( *iPresIdentity,
+                MPresenceBuddyInfo2::ENotAvailable,
+                buf, KNullDesC() );
+            
+            iConnObs.WatcherHandlerL()->DoPerformSubscribePresentityPresenceL( 
+                *newIdentity, iStatus );
+            CleanupStack::PopAndDestroy(); // >> newIdentity
+            SetActive();
+            }
+            break;
+            
         default:
             User::Leave( KErrNotSupported );
             break;
-        }   
+        }
     DP_SDA("CPresencePluginGroups::CallActualXdmOperationL end");
     }
 

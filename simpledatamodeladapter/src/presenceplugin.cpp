@@ -196,7 +196,9 @@ MXIMPProtocolConnection& CPresencePlugin::AcquireConnectionL(
                 //Add this new connection to connectionArray
                 CPresenceConnectionInfo* connectionInfo =
                 	CPresenceConnectionInfo::NewL( connection );
-                iConnectionArray.Append( connectionInfo );
+                CleanupStack::PushL( connectionInfo );
+                iConnectionArray.AppendL( connectionInfo );
+                CleanupStack::Pop();
                 connection->SetConnectionArray( connectionInfo );
                 iConnections.AppendL( connection );
                 CleanupStack::Pop( connection ); 
@@ -232,7 +234,9 @@ MXIMPProtocolConnection& CPresencePlugin::AcquireConnectionL(
         //Add this new connection to connectionArray
         CPresenceConnectionInfo* connectionInfo =
         	CPresenceConnectionInfo::NewL( connection );
-        iConnectionArray.Append( connectionInfo );
+        CleanupStack::PushL( connectionInfo );
+        iConnectionArray.AppendL( connectionInfo );
+        CleanupStack::Pop();
         connection->SetConnectionArray( connectionInfo );
         //Add on binded client
         connectionInfo->IncreaseClientCount();

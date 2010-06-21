@@ -545,7 +545,7 @@ void CSimplePluginAuthorization::CopyBlockersToArrayL(
         {
         MXIMPIdentity* entity = myFactory.NewIdentityLC(); // << entity
         entity->SetIdentityL( aBlockers[i] );
-        aBlockedSouls.Append( entity );
+        aBlockedSouls.AppendL( entity );
         CleanupStack::Pop(); // >> entity
         }
     }

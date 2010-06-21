@@ -1172,7 +1172,7 @@ CXdmDocumentNode* CSimplePluginXdmUtils::SearchListUnderParentL(
     SXdmAttribute16 attr;
     attr.iName.Set( KSimpleName );
     attr.iValue.Set( aName );
-    attributeArray.Append( &attr );
+    attributeArray.AppendL( &attr );
 
     CXdmDocumentNode* currNode = NULL;
 
@@ -1900,7 +1900,7 @@ void CSimplePluginXdmUtils::DoAddUserToUserListL(
     SXdmAttribute16 attr;
     attr.iName.Set( KSimpleUri );
     attr.iValue.Set( aUser );
-    attributeArray.Append( &attr );
+    attributeArray.AppendL( &attr );
 
     // If member already exists then leave
     target->Find( KSimpleEntry, resultArray, attributeArray );

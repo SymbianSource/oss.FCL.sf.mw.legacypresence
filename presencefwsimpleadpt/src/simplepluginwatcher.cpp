@@ -407,7 +407,7 @@ CSimplePluginEntityWatcher* CSimplePluginWatcher::MatchWatcher2L(
         {
         CSimplePluginEntityWatcher* watcher = CSimplePluginEntityWatcher::NewL(
             iConnObs, iConnection, *this );
-        iWatchers.Append( watcher );
+        iWatchers.AppendL( watcher );
         return watcher;
         }
     }

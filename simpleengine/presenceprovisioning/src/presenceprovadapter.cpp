@@ -289,7 +289,7 @@ void CPresProvAdapter::GetSavingInfoL( TInt aIndex,
         // APPID into place [0].
         TPtrC8 appId ( KPresProvisioningAppId8 );
         HBufC8* appIdBuf = appId.AllocLC();             // << appIdBuf
-        aSavingInfo.Append( appIdBuf );
+        aSavingInfo.AppendL( appIdBuf );
         CleanupStack::Pop( appIdBuf );                  // >> appIdBuf
         appIdBuf = NULL;
         

@@ -2628,11 +2628,9 @@ void CSimpleSipConnection::RecognizeSipState(
     {
     if ( aState == ESimpleSipActive )
         {
-        // Check that both SIP Profile and SIP connection are ready.
+        // Check that SIP Profile is ready.
         // iProfileObserver is created in ConstructL.
-        if ( iProfileObserver->IsProfileActive() && 
-             iSipConnection &&
-             iSipConnection->State() == CSIPConnection::EActive )
+        if ( iProfileObserver->IsProfileActive() )
             {
             SetSipState( aState );            
             }

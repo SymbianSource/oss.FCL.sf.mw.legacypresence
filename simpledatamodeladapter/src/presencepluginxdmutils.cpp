@@ -829,7 +829,7 @@ CXdmDocumentNode* CPresencePluginXdmUtils::SearchListUnderParentL(
     SXdmAttribute16 attr;
     attr.iName.Set( KPresenceName );
     attr.iValue.Set( aName );
-    attributeArray.Append( &attr );
+    attributeArray.AppendL( &attr );
 
     CXdmDocumentNode* currNode = NULL;
 
@@ -864,27 +864,29 @@ void CPresencePluginXdmUtils::RemoveEntityFromGrantedL(
     TRequestStatus& aStatus )
     {
     DP_SDA("CPresencePluginXdmUtils::RemoveEntityFromGrantedL");
-    TRAPD(err, iEntityUri =  aUri.AllocL() );
-
+    
+    iEntityUri =  aUri.AllocL();
   	iConnObs.SubscribedContacts()->RemoveEntityL( iEntityUri->Des() );
+  	
+    iClientStatus = &aStatus;
+    *iClientStatus = KRequestPending;
+    
+    iRulesUpdateState = EStateRemoveFromWhiteList;
+    iOperation = EXdmRemoveUserFromGroup;
+
+    TRAPD( err, DoRemoveUserFromListL( KPresenceBuddyList, aUri ) );
     
     if ( !err )
         {
-        iClientStatus = &aStatus;
-        iRulesUpdateState = EStateRemoveFromWhiteList;
-        iOperation = EXdmRemoveUserFromGroup;
-
-        DoRemoveUserFromListL( KPresenceBuddyList, aUri );
         // send to the server and start wait a response
         UpdateXdmsL();
         iXdmState = EUpdateXdmList;
-        *iClientStatus = KRequestPending;
         }
     else
         {
-        //If error we can complete request
-        DP_SDA("RemoveEntityFromGrantedL SEND COMPLETE");
-  	    CompleteClientReq( KErrNone );
+        //complete request with error
+        DP_SDA2( "RemoveEntityFromGrantedL -DoRemoveUserFromListL error = %d", err );
+        CompleteClientReq( err );
         }
     }
 
@@ -1073,7 +1075,7 @@ void CPresencePluginXdmUtils::DoGetListMembersL(
                     MXIMPIdentity* entity =
                         myFactory.NewIdentityLC(); // << entity
                     entity->SetIdentityL( attr->AttributeValue() );
-                    aMembers.Append( entity );
+                    aMembers.AppendL( entity );
                     CleanupStack::Pop(); // >> entity
                     }
                 }

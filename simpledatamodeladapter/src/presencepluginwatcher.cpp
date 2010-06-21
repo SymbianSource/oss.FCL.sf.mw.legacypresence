@@ -384,7 +384,9 @@ CPresencePluginEntityWatcher* CPresencePluginWatcher::MatchWatcherL(
         CPresencePluginEntityWatcher* watcher =
             CPresencePluginEntityWatcher::NewL( 
             		iConnObs, iConnection, *this, iPresenceData );
-        iWatcherCandidates.Append( watcher );
+        CleanupStack::PushL( watcher );
+        iWatcherCandidates.AppendL( watcher );
+        CleanupStack::Pop();
         DP_SDA("CPresencePluginWatcher::MatchWatcherL end");
         return watcher;
         }

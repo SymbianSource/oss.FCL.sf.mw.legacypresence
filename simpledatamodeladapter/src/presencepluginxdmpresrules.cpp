@@ -1080,7 +1080,7 @@ CXdmDocumentNode* CPresencePluginXdmPresRules::SearchListUnderParentL(
     SXdmAttribute16 attr;
     attr.iName.Set( KPresenceId );
     attr.iValue.Set( aName );
-    attributeArray.Append( &attr );
+    attributeArray.AppendL( &attr );
     
     CXdmDocumentNode* currNode = NULL;
     
