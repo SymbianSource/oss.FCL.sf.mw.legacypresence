@@ -76,7 +76,7 @@ LIBRARY                         xcaputils.lib
 DEBUGLIBRARY                    flogger.lib
 
 
-#if defined( ARMCC )
+#if defined( EABI )
 DEFFILE ../eabi/ 
 #elif defined ( WINSCW )
 deffile ../bwinscw/ 

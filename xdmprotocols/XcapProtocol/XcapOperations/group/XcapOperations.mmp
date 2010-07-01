@@ -74,7 +74,7 @@ LIBRARY                         xcapappusage.lib
 LIBRARY                         xcapcacheclient.lib
 LIBRARY                         xcaphttptransport.lib
 
-#if defined( ARMCC )
+#if defined( EABI )
 DEFFILE ../eabi/ 
 #elif defined ( WINSCW )
 deffile ../BWINSCW/ 

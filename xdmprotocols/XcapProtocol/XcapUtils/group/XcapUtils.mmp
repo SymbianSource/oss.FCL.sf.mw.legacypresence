@@ -43,7 +43,7 @@ LIBRARY					etelmm.lib
 LIBRARY                 commsdat.lib
 DEBUGLIBRARY            flogger.lib
 
-#if defined( ARMCC )
+#if defined( EABI )
     deffile ../eabi/ 
 #elif defined ( WINSCW )
     deffile ../bwinscw/ 

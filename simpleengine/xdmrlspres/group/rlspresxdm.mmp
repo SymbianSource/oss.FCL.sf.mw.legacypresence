@@ -53,7 +53,7 @@ LIBRARY                         xdmengine.lib
 LIBRARY                         charconv.lib
 
 
-#if defined( ARMCC )
+#if defined( EABI )
 DEFFILE ../eabi/ 
 #elif defined ( WINSCW )
 deffile ../bwinscw/ 

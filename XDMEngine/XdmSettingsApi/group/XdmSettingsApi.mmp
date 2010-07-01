@@ -40,7 +40,7 @@ LIBRARY                         euser.lib
 LIBRARY                         centralrepository.lib
 LIBRARY                         flogger.lib
 
-#if defined( ARMCC )
+#if defined( EABI )
 DEFFILE ../eabi/ 
 #elif defined ( WINSCW )
 deffile ../BWINSCW/ 

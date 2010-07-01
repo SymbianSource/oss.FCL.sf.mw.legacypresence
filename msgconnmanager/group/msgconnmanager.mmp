@@ -39,7 +39,7 @@ LIBRARY                         euser.lib
 LIBRARY                         commdb.lib
 LIBRARY                         esock.lib
 
-#if defined( ARMCC )
+#if defined( EABI )
     DEFFILE ../eabi/ 
 #elif defined ( WINSCW )
     deffile ../bwinscw/ 

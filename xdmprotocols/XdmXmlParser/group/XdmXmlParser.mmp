@@ -50,7 +50,7 @@ DEBUGLIBRARY                    flogger.lib
 LIBRARY                         xdmengine.lib
 LIBRARY                         xmlframework.lib
 
-#if defined( ARMCC )
+#if defined( EABI )
     DEFFILE ../eabi/ 
 #elif defined ( WINSCW )
     deffile ../bwinscw/ 

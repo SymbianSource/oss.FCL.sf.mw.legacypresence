@@ -60,7 +60,7 @@ LIBRARY                         xdmengine.lib
 LIBRARY                         xdmxmlparser.lib
 LIBRARY                         localprotocol.lib
 
-#if defined( ARMCC )
+#if defined( EABI )
 DEFFILE ../eabi/ 
 #elif defined ( WINSCW )
 deffile ../BWINSCW/ 
