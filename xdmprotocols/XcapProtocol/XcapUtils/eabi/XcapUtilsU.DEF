@@ -1,9 +1,0 @@
-EXPORTS
-	_ZN13CXcapEarlyIms15RequestSimDataLEP16MXcapEarlyImsObs @ 1 NONAME
-	_ZN13CXcapEarlyIms4NewLEv @ 2 NONAME
-	_ZN13CXcapEarlyIms9PublicIDLEv @ 3 NONAME
-	_ZN15XcapStaticUtils16CheckFileExistsLER3RFsRK7TDesC16 @ 4 NONAME
-	_ZN15XcapStaticUtils18GenerateFileNameLCER3RFsRK7TDesC16S4_ @ 5 NONAME
-	_ZTI13CXcapEarlyIms @ 6 NONAME ; #<TI>#
-	_ZTV13CXcapEarlyIms @ 7 NONAME ; #<VT>#
-
