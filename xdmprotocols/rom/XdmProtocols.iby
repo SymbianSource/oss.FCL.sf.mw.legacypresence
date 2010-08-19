@@ -23,14 +23,14 @@
 
 #ifdef __XDM
     #ifdef __XDM_XCAP
-	      file=ABI_DIR\BUILD_DIR\XcapUtils.dll                    SHARED_LIB_DIR\XcapUtils.dll
-        file=ABI_DIR\BUILD_DIR\XcapCacheClient.dll              SHARED_LIB_DIR\XcapCacheClient.dll
-        file=ABI_DIR\BUILD_DIR\XcapCache.exe                    PROGRAMS_DIR\XcapCache.exe
-        file=ABI_DIR\BUILD_DIR\XcapHttpTransport.dll            SHARED_LIB_DIR\XcapHttpTransport.dll
+	      file=ABI_DIR/BUILD_DIR/XcapUtils.dll                    SHARED_LIB_DIR/XcapUtils.dll
+        file=ABI_DIR/BUILD_DIR/XcapCacheClient.dll              SHARED_LIB_DIR/XcapCacheClient.dll
+        file=ABI_DIR/BUILD_DIR/XcapCache.exe                    PROGRAMS_DIR/XcapCache.exe
+        file=ABI_DIR/BUILD_DIR/XcapHttpTransport.dll            SHARED_LIB_DIR/XcapHttpTransport.dll
         ECOM_PLUGIN(                                            XcapAppUsage.dll, 10207416.rsc) 
         ECOM_PLUGIN(                                            XcapOperations.dll, 10207410.rsc) 
         ECOM_PLUGIN(                                            XcapProtocol.dll, 1020740F.rsc)
-        data = DATAZ_\private\10207421\backup_registration.xml  private\10207421\backup_registration.xml
+        data = DATAZ_/private/10207421/backup_registration.xml  private/10207421/backup_registration.xml
     #endif //__XDM_XCAP
     #ifdef __XDM_LOCALSTORAGE
         ECOM_PLUGIN(                                            LocalProtocol.dll, 10207458.rsc)

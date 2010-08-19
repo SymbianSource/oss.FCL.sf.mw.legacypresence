@@ -22,9 +22,9 @@
 #define __XDMENGINE_IBY__
 
 #ifdef __XDM
-    file=ABI_DIR\BUILD_DIR\XdmEngine.dll                        SHARED_LIB_DIR\XdmEngine.dll
-    file=ABI_DIR\BUILD_DIR\XdmXmlParser.dll                     SHARED_LIB_DIR\XdmXmlParser.dll
-    file=ABI_DIR\BUILD_DIR\XdmSettingsApi.dll                   SHARED_LIB_DIR\XdmSettingsApi.dll
+    file=ABI_DIR/BUILD_DIR/XdmEngine.dll                        SHARED_LIB_DIR/XdmEngine.dll
+    file=ABI_DIR/BUILD_DIR/XdmXmlParser.dll                     SHARED_LIB_DIR/XdmXmlParser.dll
+    file=ABI_DIR/BUILD_DIR/XdmSettingsApi.dll                   SHARED_LIB_DIR/XdmSettingsApi.dll
     ECOM_PLUGIN(                                                XdmDeviceManagementAdapter.dll, 10275112.rsc) 
     ECOM_PLUGIN(                                                XdmProvisioning.dll, 1028237A.rsc) 
 #endif //__XDM

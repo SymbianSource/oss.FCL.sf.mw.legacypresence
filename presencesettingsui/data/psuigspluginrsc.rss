@@ -27,7 +27,7 @@ NAME    UIPS // 4 letter ID
 #include    <avkon.hrh>
 #include    <avkon.rsg>
 #include    <avkon.mbg>
-#include    <eikcore.rsg>
+#include    <EIKCORE.RSG>
 #include    <eikon.rh>
 #include    <eikon.rsg>
 #include    <avkon.loc>

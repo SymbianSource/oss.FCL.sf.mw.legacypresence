@@ -27,7 +27,7 @@
 #ifdef __SIP_SIMPLE_PRESENCE_PROTOCOL
 
 ECOM_PLUGIN(psuigsplugin.dll,10281ef0.rsc) 
-data=DATAZ_\BITMAP_DIR\psuigsplugin.mif BITMAP_DIR\psuigsplugin.mif
+data=DATAZ_/BITMAP_DIR/psuigsplugin.mif BITMAP_DIR/psuigsplugin.mif
 
 #endif RD_GS_RENOVATION_PHASE2
 #endif __SIP_SIMPLE_PRESENCE_PROTOCOL

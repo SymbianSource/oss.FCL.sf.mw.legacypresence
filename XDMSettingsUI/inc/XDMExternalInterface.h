@@ -22,7 +22,7 @@
 
 #include <e32std.h>
 #include <bldvariant.hrh>
-#include <XDMPluginRsc.rsg>
+#include <xdmpluginrsc.rsg>
 #include "XDMPlugin.h"
 #define XDM_PLUGIN
 

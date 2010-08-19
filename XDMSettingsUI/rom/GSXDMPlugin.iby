@@ -28,7 +28,7 @@
 // GS XDM Plugin UI
 ECOM_PLUGIN(GSXDMPlugin.dll,10207428.rsc) // this publishes the DLL and the 
             // resource file to the correct location
-data=DATAZ_\BITMAP_DIR\GSXDMplugin.mif BITMAP_DIR\GSXDMplugin.mif
+data=DATAZ_/BITMAP_DIR/GSXDMplugin.mif BITMAP_DIR/GSXDMplugin.mif
 
 #endif //RD_GS_RENOVATION
 

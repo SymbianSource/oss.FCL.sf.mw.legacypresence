@@ -32,7 +32,7 @@
 #include "psuigsplugin.h"
 #include "psuigspluginids.hrh"
 #include <csxhelp/pre.hlp.hrh>
-#include <AknTextSettingPage.h>
+#include <akntextsettingpage.h>
 
 
 // ========================= MEMBER FUNCTIONS ================================

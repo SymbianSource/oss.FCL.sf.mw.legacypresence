@@ -34,7 +34,7 @@
     #endif //__PRESENCE
 
     #ifdef __INCLUDE_CM__
-        file=ABI_DIR\BUILD_DIR\msgconnmanager.dll       SHARED_LIB_DIR\msgconnmanager.dll
+        file=ABI_DIR/BUILD_DIR/msgconnmanager.dll       SHARED_LIB_DIR/msgconnmanager.dll
     #endif //__INCLUDE_CM__
 
 #endif //__MSGCONNMANAGER_IBY__
