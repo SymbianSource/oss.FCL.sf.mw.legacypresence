@@ -137,7 +137,7 @@ class CXdmProvItem : public CBase, public MWPVisitor
         * @param aName Name of the parameter
         * @param aValue Value of the parameter
         */
-        void DetermineNamedParameterL( const TDesC& aName, 
+        void DetermineNamedParameter( const TDesC& aName, 
                                       const TDesC& aValue );
         
         /**

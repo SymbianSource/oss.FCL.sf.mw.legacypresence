@@ -709,7 +709,7 @@ EXPORT_C TInt CRLSXDM::SetCurrentpathL(const MDesCArray& aLists)
     RPointerArray<CXdmDocumentNode> confirmedNodes;
     
     CXdmDocumentNode* currentNode = serviceUriNode;
-    confirmedNodes.AppendL(currentNode);
+    confirmedNodes.Append(currentNode);
     
     if(count>1) // if some list(s) exist in path info
         {
@@ -734,7 +734,7 @@ EXPORT_C TInt CRLSXDM::SetCurrentpathL(const MDesCArray& aLists)
     for (TInt j=0;j<count;j++)
         {
         iListPath->AppendL(aLists.MdcaPoint(j));
-        iListPointerPath.AppendL(confirmedNodes[j]);
+        iListPointerPath.Append(confirmedNodes[j]);
         }
     
     confirmedNodes.Close();    

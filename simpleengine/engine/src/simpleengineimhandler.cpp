@@ -11,9 +11,10 @@
 *
 * Contributors:
 *
-* Description:    SIMPLE Engine IM Handler
+* Description:  SIMPLE ENGINE IM Handler
 *
 */
+
 
 #include "simpleengineimhandler.h"
 #include "simpleenginerequest.h"

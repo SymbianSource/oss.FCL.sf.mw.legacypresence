@@ -270,7 +270,7 @@ void CXdmProvItem::VisitL( CWPParameter& aParameter )
             
         case EWPParameterToAppRef:
             {
-            iToAppReferences.AppendL( aParameter.Value() );  
+            iToAppReferences.Append( aParameter.Value() );  
 #ifdef _DEBUG 
     CXdmProvAdapter::WriteToLog( _L8( "CXdmProvItem::EWPParameterToAppRef" ) );
 #endif
@@ -332,7 +332,7 @@ void CXdmProvItem::VisitL( CWPParameter& aParameter )
             break;   
         default:
             {
-            DetermineNamedParameterL( aParameter.Name(), aParameter.Value() );
+            DetermineNamedParameter( aParameter.Name(), aParameter.Value() );
             }
             break;
         }
@@ -342,7 +342,7 @@ void CXdmProvItem::VisitL( CWPParameter& aParameter )
 // CXdmProvItem::DetermineNamedParameter
 // -----------------------------------------------------------------------------
 //
-void CXdmProvItem::DetermineNamedParameterL( const TDesC& aName, const TDesC& aValue )
+void CXdmProvItem::DetermineNamedParameter( const TDesC& aName, const TDesC& aValue )
     {
     if ( !aName.Compare( KXdmProvAppRef ) )
         {
@@ -350,7 +350,7 @@ void CXdmProvItem::DetermineNamedParameterL( const TDesC& aName, const TDesC& aV
         }
     else if ( !aName.Compare( KXdmProvToAppRef ) )
         {
-        iToAppReferences.AppendL( aValue );
+        iToAppReferences.Append( aValue ); 
         }
     }
 // -----------------------------------------------------------------------------

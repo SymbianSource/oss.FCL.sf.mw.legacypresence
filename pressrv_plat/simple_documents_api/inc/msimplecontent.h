@@ -22,7 +22,7 @@
 #define M_simplecontent_H
 
 #include <e32std.h>
-// #include <s32strm.h>
+// #include <S32strm.h>
 
 // FORWARD DECLARATION
 

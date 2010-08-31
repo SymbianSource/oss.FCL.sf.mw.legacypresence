@@ -164,7 +164,7 @@ class CPresProvItem : public CBase, public MWPVisitor
         * @param aName Name of the parameter
         * @param aValue Value of the parameter
         */
-        void DetermineNamedParameterL( const TDesC& aName, const TDesC& aValue );
+        void DetermineNamedParameter( const TDesC& aName, const TDesC& aValue );
         
         /**
         * Check presence settings duplicate names, provide alternate name

@@ -48,9 +48,6 @@ _LIT8( KXdmOmaPresRulesUsageAUID,          "/org.openmobilealliance.pres-rules/"
 _LIT8( KXdmPocGroupUsageAUID,              "/org.openmobilealliance.poc-groups/" );
 // add new AUID definitions here
 //_LIT8( KXdmTestAppUsageAUID,               "/org.foo.bar/" );
-// PRES-CONTENT starts
-_LIT8( KXdmPresContentAUID,                "/org.openmobilealliance.pres-content/" );
-// PRES-CONTENT ends
 
 // ContentTypes
 _LIT8( KXdmResourceListsUsageContType,     "application/resource-lists+xml" );
@@ -66,10 +63,7 @@ _LIT8( KXdmRlsServicesUsageContType,       "application/rls-services+xml" );
 _LIT8( KXdmPocGroupUsageContType,          "application/vnd.oma.poc.groups+xml" );
 // add new content types here
 //_LIT8( KXdmTestAppUsageContType,           "application/test-type+xml" );
-// PRES-CONTENT starts
-_LIT8( KXdmPresContentContType,            "application/vnd.oma.pres-content+xml" );
-_LIT8( KXdmPresContentContTypeOld,         "application/vnd.oma.content+xml" );
-// PRES-CONTENT ends
+
 
 // Namespaces
 _LIT8( KXdmResourceListsNamespace,         "urn:ietf:params:xml:ns:resource-lists" );
@@ -84,9 +78,6 @@ _LIT8( KXdmSharedXDMUriUsageNamespace,     "urn:oma:params:xml:ns:resource-list:
 _LIT8( KXdmPocUserAccessNamespace,         "urn:oma:xml:poc:poc-rules" );
 _LIT8( KXdmPocGroupNamespace,              "urn:oma:xml:poc:list-service" );
 // add new namespace definitions here
-// PRES-CONTENT starts
-_LIT8( KXdmPresContentNamespace,           "urn:oma:xml:prs:pres-content" );
-// PRES-CONTENT ends
 
 // Namespace prefixes
 _LIT8( KXdmSharedXDMUriUsageNsPrefix,       "ou" );
@@ -239,15 +230,6 @@ _LIT(  KXdmResourceList,                    "resource-list" );
 _LIT(  KXdmPackages,                        "packages" );
 _LIT(  KXdmPackage,                         "package" );
 _LIT8( KXdmPresence,                        "presence" );
-
-// PRES-CONTENT starts
-_LIT( KXdmMimeType,                         "mime-type");
-_LIT( KXdmEncoding,                         "encoding");
-_LIT( KXdmDescription,                      "description");
-_LIT( KXdmData,                             "data");
-_LIT( KXdmSvg,                              "svg");
-_LIT( KXdmRect,                             "rect");
-// PRES-CONTENT ends
 
 #endif      //__XCAPAPPUSAGEDEF__
             

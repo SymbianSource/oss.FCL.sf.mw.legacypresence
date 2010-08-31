@@ -19,10 +19,4 @@
 
 #include "../pressrv_plat/group/bld.inf"
 #include "../XDMEngine/group/bld.inf"
-#include "../XDMSettingsUI/group/bld.inf"
-#include "../xdmprotocols/group/bld.inf"
-#include "../msgconnmanager/group/bld.inf"
-#include "../presencesettingsui/group/bld.inf"
-#include "../simpleengine/group/bld.inf"
-#include "../presencefwsimpleadpt/group/bld.inf"
-#include "../simpledatamodeladapter/group/bld.inf"
+//#include "../simpleengine/group/bld.inf"

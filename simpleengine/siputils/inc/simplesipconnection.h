@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -118,12 +118,6 @@ public:
 	 */
     IMPORT_C MSimpleEngineRequest::TSimpleSipSubscriptionState SipSubscriptionState( 
         MSimpleEngineRequest& aReq );	   
-    
-    /**
-     * Set service id
-     * @param aServiceId new service id 
-     */
-    IMPORT_C void SetServiceId( TInt32 aServiceId );
     
     /**
      * Search the corresponding client request
@@ -247,13 +241,6 @@ public:
      */
     TInt HandleReceivedMessage( const TDesC8& aFrom,
         const TDesC8& aContent );
-    
-    /**
-     * Connection method has changed (Roaming). 
-     * 
-     * @since S60 3.2.3
-     */
-    void ConnectionChanged();  
 
 protected:
 
@@ -373,15 +360,7 @@ private:
      * @since S60 v3.2       
      */
     void DeleteRequests();
-    
-    /**
-     * Delete all pending specified type of requests.
-     *
-     * @since S60 5.0 
-     * @param aRequestType request type
-     */
-    void DeleteRequests( CSimpleRequest::TSimpleSipReqType aRequestType );
-    
+
     /**
      * Destroy the request
      *
@@ -580,13 +559,6 @@ private:
      */
     void DoHandleReceivedMessageL( const TDesC8& aFrom,
         const TDesC8& aContent, CSimpleRequest& aRequest );
-    
-    /**
-     * Stores ETag to vimpstsettingstore
-     *
-     * @since S60 5.0       
-     */
-    void StoreETagL( HBufC8& aTag );
 
 private:    // Data
 
@@ -639,11 +611,6 @@ private:    // Data
      * Current number of subscriptions
      */
     TUint iCurrentNbrSubs;
-    
-    /**
-     * Service id of current service
-     */
-    TInt32 iServiceId;
 
 #ifdef _DEBUG
     friend class T_CSimpleSipConnection;

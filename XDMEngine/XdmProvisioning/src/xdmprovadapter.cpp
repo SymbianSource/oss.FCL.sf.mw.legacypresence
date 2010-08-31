@@ -28,8 +28,6 @@
 #include "xdmprovitem.h"
 #include "xdmprovadapter.h"
 
-// for CleanupResetAndDestroyPushL
-#include <mmf/common/mmfcontrollerpluginresolver.h>
 
 #ifdef _DEBUG
     #include <flogger.h>
@@ -307,9 +305,6 @@ void CXdmProvAdapter::GetSavingInfoL( TInt aIndex,
 #ifdef _DEBUG 
     WriteToLog( _L8( "CXdmProvAdapter::GetSavingInfoL" ) );
 #endif    
-
-    CleanupResetAndDestroyPushL( aSavingInfo ); 
- 
     if ( aIndex < iProvItems.Count() - 1 )
         {
 #ifdef _DEBUG 
@@ -344,9 +339,7 @@ void CXdmProvAdapter::GetSavingInfoL( TInt aIndex,
         CleanupStack::Pop( idBuf );                     // >> idBuf
         idBuf = NULL;
         }
-    
-    CleanupStack::Pop( &aSavingInfo ); 
-    
+        
 #ifdef _DEBUG 
     WriteToLog( _L8( "CXdmProvAdapter::GetSavingInfoL done" ) );
 #endif
