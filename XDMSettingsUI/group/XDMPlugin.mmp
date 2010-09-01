@@ -1,0 +1,84 @@
+/*
+* Copyright (c) 2005-2007 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:    This is project specification file for GS XDMPlugin.
+*
+*/
+
+
+
+
+#include <data_caging_paths.hrh>
+#include <platform_paths.hrh>
+
+CAPABILITY          CAP_ECOM_PLUGIN
+TARGET              gsxdmplugin.dll
+TARGETTYPE          PLUGIN
+UID                 0x10009D8D 0x10207428
+VENDORID            VID_DEFAULT
+
+SOURCEPATH          ../src
+SOURCE              XDMPluginImplementationTable.cpp
+SOURCE              XDMPlugin.cpp
+SOURCE              XDMPluginContainer.cpp
+SOURCE              SettingsData.cpp
+SOURCE              XDMPluginSettinglist.cpp
+SOURCE              XDMPluginSLContainer.cpp
+
+USERINCLUDE         ../inc
+USERINCLUDE         ../data
+
+APP_LAYER_SYSTEMINCLUDE
+SYSTEMINCLUDE       /epoc32/include/ecom
+
+SOURCEPATH          ../data
+
+//ECOM resource definition
+START RESOURCE      10207428.rss
+    TARGET              gsxdmplugin.rsc
+END // ECOM resource definition
+
+//XDMPlugin resources
+START RESOURCE      XDMPluginRsc.rss
+    HEADER
+    TARGETPATH          RESOURCE_FILES_DIR
+    LANGUAGE_IDS
+END // XDMPlugin resources
+
+LIBRARY             euser.lib
+LIBRARY             ecom.lib
+LIBRARY             efsrv.lib
+LIBRARY             avkon.lib
+LIBRARY             bafl.lib 
+LIBRARY             cone.lib 
+LIBRARY             eikcoctl.lib 
+LIBRARY             eikcore.lib
+LIBRARY             eikctl.lib
+LIBRARY             commonengine.lib//For RConeResourceLoader
+
+LIBRARY             egul.lib // CGulIcon
+LIBRARY             aknskins.lib // AknsUtils.h
+LIBRARY             apsettingshandlerui.lib  // access point UI
+LIBRARY             commdb.lib
+LIBRARY             apengine.lib  //AP engine
+LIBRARY             xdmsettingsapi.lib
+LIBRARY             gsecomplugin.lib //GS Ecom plugin
+LIBRARY             agentdialog.lib // To show access points only in emulator
+
+LIBRARY		        featmgr.lib // Feature Manager
+LIBRARY		        hlplch.lib // HlpLauncher
+LIBRARY             inetprotutil.lib // conversions
+
+// This is optional - used only by Codewarrior for convenience.
+DOCUMENT            10207428.rss
+// End of File

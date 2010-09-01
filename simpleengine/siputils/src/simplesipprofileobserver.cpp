@@ -272,7 +272,14 @@ void CSimpleSipProfileObserver::ProfileRegistryEventOccurred(
         }     
     else if ( aEvent == EProfileUpdated )
         {
-        iObs.ProfileStateChanged( CSIPConnection::EUnavailable, KErrNone );
+#ifdef _DEBUG
+        TSimpleLogger::Log(_L("SipProfileObserver: EProfileUpdated - ProfileEnabled : %d" ), iRegistry->IsEnabled( *iProfile ) );
+        TSimpleLogger::Log(_L("SipProfileObserver: EProfileUpdated - Profile reg er : %d" ), iRegistry->LastRegistrationError( *iProfile ) );
+        TSimpleLogger::Log(_L("SipProfileObserver: EProfileUpdated - IsContextActive : %d" ), iProfile->IsContextActive() );
+#endif
+
+        // Notify observer to refresh SIP connection.
+        iObs.ProfileUpdated();
         }           
     else if ( aEvent == EProfileDestroyed )
         {      

@@ -160,6 +160,18 @@ void CSimpleSipConnectionObserver::ProfileStateChanged(
     }     
     
 // -----------------------------------------------------------------------------
+// CSimpleSipConnectionObserver::ProfileUpdated
+// -----------------------------------------------------------------------------
+//
+void CSimpleSipConnectionObserver::ProfileUpdated()
+    {
+#ifdef _DEBUG
+    TSimpleLogger::Log(_L("SipConnectionObserver: ProfileUpdated"));
+#endif
+    iCallback.ConnectionChanged();
+    }
+
+// -----------------------------------------------------------------------------
 // CSimpleSipConnectionObserver::ConnectionStateChanged2
 // -----------------------------------------------------------------------------
 //
@@ -568,13 +580,15 @@ void CSimpleSipConnectionObserver::DoIncomingRequestL(
             Extract( EUriUserinfo );
         const TDesC8& host = fromHeader->SIPAddress().Uri8().Uri().
             Extract( EUriHost );
+        
+        CleanupStack::PushL( aTransaction ); // CS: 1
+        
         HBufC8* from = HBufC8::NewLC( user.Length() + KAt().Length() +
             host.Length() ); // CS: 1
         from->Des().Copy( user );
         from->Des().Append( KAt() );
         from->Des().Append( host );
         
-        CleanupStack::PushL( aTransaction ); // CS: 2
         CSIPResponseElements* respElem = CSIPResponseElements::NewLC( // CS: 3
             KSimpleOK, SIPStrings::StringF( SipStrConsts::EPhraseOk ) );
         
@@ -582,10 +596,10 @@ void CSimpleSipConnectionObserver::DoIncomingRequestL(
         aTransaction->SendResponseL( respElem );
         
         CleanupStack::Pop( respElem );     // CS: 2
-        CleanupStack::Pop( aTransaction ); // CS: 1
-        
+
         iCallback.HandleReceivedMessage( *from, content );
-        CleanupStack::PopAndDestroy( from ); // CS: 0
+        CleanupStack::PopAndDestroy( from ); // CS: 1
+        CleanupStack::Pop( aTransaction ); // CS: 0
         }
     
     // We no longer need aTransaction. Just delete it.

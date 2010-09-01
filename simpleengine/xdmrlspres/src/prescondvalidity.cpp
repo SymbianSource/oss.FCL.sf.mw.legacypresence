@@ -61,6 +61,8 @@ EXPORT_C TInt TPresCondValidity::GetValidityL(const TDesC& aRuleID,
     OPENG_DP(D_OPENG_LIT( "TPresCondValidity::GetValidity()" ) );
     OPENG_DP(D_OPENG_LIT( "     aRuleID = %S"),&aRuleID);
 
+    CleanupClosePushL (aValidTimes);
+    
 	CXdmDocumentNode* validityNode = GetValidityNodeL(aRuleID, EFalse);
 	if(validityNode==NULL)
 	    return KErrNotFound;
@@ -99,7 +101,7 @@ EXPORT_C TInt TPresCondValidity::GetValidityL(const TDesC& aRuleID,
 
 	for(TInt i=0; i<nodeCount; i++)
 	    {
-        aValidTimes.Append(myTimePeriod);
+        aValidTimes.AppendL(myTimePeriod);
 
 	    // processing from
 	    (fromNodes[i])->SetLeafNode(ETrue);
@@ -134,6 +136,8 @@ EXPORT_C TInt TPresCondValidity::GetValidityL(const TDesC& aRuleID,
 	    
     fromNodes.Close();
     untilNodes.Close();
+    
+    CleanupStack::Pop();
 	return KErrNone;
 	}
 

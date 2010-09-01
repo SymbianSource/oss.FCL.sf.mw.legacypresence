@@ -1,0 +1,7 @@
+EXPORTS
+	_Z18NewMsgConnManagerLi @ 1 NONAME
+	_ZTI13CMsgConnTimer @ 2 NONAME ; #<TI>#
+	_ZTI15CMsgConnManager @ 3 NONAME ; #<TI>#
+	_ZTV13CMsgConnTimer @ 4 NONAME ; #<VT>#
+	_ZTV15CMsgConnManager @ 5 NONAME ; #<VT>#
+

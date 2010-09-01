@@ -1,0 +1,71 @@
+/*
+* Copyright (c) 2005 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: LocalOperations.mmp
+*
+*/
+
+
+
+#include <platform_paths.hrh>
+
+TARGET                          localoperations.dll
+UID                             0x10009D8D 0x10275086
+CAPABILITY                      CAP_ECOM_PLUGIN
+VENDORID                        VID_DEFAULT
+TARGETTYPE                      PLUGIN
+
+SOURCEPATH                      ../src
+
+START RESOURCE                  10275086.rss
+ 
+    TARGET                      localoperations.rsc
+ 
+END
+
+SOURCE                          LocalAddition.cpp
+SOURCE                          LocalDeletion.cpp
+SOURCE                          LocalRetrieval.cpp
+SOURCE                          LocalReplacement.cpp
+SOURCE                          LocalOperationBase.cpp
+SOURCE                          LocalOperationFactory.cpp
+
+USERINCLUDE                     ../inc
+USERINCLUDE                     ../../inc
+USERINCLUDE                     ../../../inc
+
+//Parser
+USERINCLUDE                     ../../../XdmXmlParser/inc
+
+MW_LAYER_SYSTEMINCLUDE
+SYSTEMINCLUDE                   /epoc32/include/xml
+SYSTEMINCLUDE                   /epoc32/include/ecom
+SYSTEMINCLUDE                   ../../../../inc
+
+LIBRARY                         hal.lib
+LIBRARY                         ecom.lib
+LIBRARY                         efsrv.lib
+LIBRARY                         euser.lib
+LIBRARY                         xdmengine.lib
+LIBRARY                         xdmxmlparser.lib
+LIBRARY                         localprotocol.lib
+
+#if defined( ARMCC )
+DEFFILE ../eabi/ 
+#elif defined ( WINSCW )
+deffile ../BWINSCW/ 
+#elif defined (WINS )
+deffile ../BWINS/ 
+#endif
+
+

@@ -1,0 +1,12 @@
+EXPORTS
+	??0RXcapCache@@QAE@XZ @ 1 NONAME ; RXcapCache::RXcapCache(void)
+	??1RXcapCache@@QAE@XZ @ 2 NONAME ; RXcapCache::~RXcapCache(void)
+	?Connect@RXcapCache@@QAEHXZ @ 3 NONAME ; int RXcapCache::Connect(void)
+	?Delete@RXcapCache@@QAEHABVTDesC16@@ABVTDesC8@@@Z @ 4 NONAME ; int RXcapCache::Delete(class TDesC16 const &, class TDesC8 const &)
+	?FetchDocumentContent@RXcapCache@@QAEXAAVTDes8@@ABVTDesC16@@ABVTDesC8@@@Z @ 5 NONAME ; void RXcapCache::FetchDocumentContent(class TDes8 &, class TDesC16 const &, class TDesC8 const &)
+	?FetchDocumentInfo@RXcapCache@@QAEHAAVTDes8@@ABVTDesC16@@ABVTDesC8@@AAVTCacheEntryInfo@@@Z @ 6 NONAME ; int RXcapCache::FetchDocumentInfo(class TDes8 &, class TDesC16 const &, class TDesC8 const &, class TCacheEntryInfo &)
+	?Flush@RXcapCache@@QAEXXZ @ 7 NONAME ; void RXcapCache::Flush(void)
+	?IsCurrent@RXcapCache@@QAEHABVTDesC8@@ABVTDesC16@@0@Z @ 8 NONAME ; int RXcapCache::IsCurrent(class TDesC8 const &, class TDesC16 const &, class TDesC8 const &)
+	?Store@RXcapCache@@QAEXABVTDesC8@@ABVTDesC16@@00@Z @ 9 NONAME ; void RXcapCache::Store(class TDesC8 const &, class TDesC16 const &, class TDesC8 const &, class TDesC8 const &)
+	?Version@RXcapCache@@QBE?AVTVersion@@XZ @ 10 NONAME ; class TVersion RXcapCache::Version(void) const
+

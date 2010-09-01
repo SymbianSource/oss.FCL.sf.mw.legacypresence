@@ -1,0 +1,35 @@
+/*
+* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:    Header file for Presence Settings GS plugin id consts
+*
+*/
+
+
+
+
+#ifndef __PSUIGSPLUGINIDS_HRH_
+#define __PSUIGSPLUGINIDS_HRH_
+
+/**
+* UID of the Presence Settings GS plugin dll
+*/
+#define PSUIGSPluginDllUid    0x10281EF0
+
+/**
+* UID of the Presence Settings GS plugin implementation
+*/
+#define PSUIGSPluginImplUid     0x10281EF1
+
+#endif // PSUIGSPLUGINIDS_HRH_
+

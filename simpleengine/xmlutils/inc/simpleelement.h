@@ -276,7 +276,7 @@ protected:
     void ConstructL( const TDesC8& aNsUri,
         const TDesC8& aLocalName );
 
-    void ConstructL(
+    void CSimpleElement::ConstructL(
         CSenElement* aElem,
         TBool aOwn );
 

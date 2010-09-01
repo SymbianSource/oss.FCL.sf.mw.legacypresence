@@ -251,7 +251,7 @@ void CPresProvItem::VisitL( CWPParameter& aParameter )
         case EWPParameterToAppRef:
             {
             PRES_PROV_LOG(LOG_LIT8( " EWPParameterToAppRef"));
-            iToAppReferences.Append( aParameter.Value() );  
+            iToAppReferences.AppendL( aParameter.Value() );  
             }
             break;
     
@@ -271,7 +271,7 @@ void CPresProvItem::VisitL( CWPParameter& aParameter )
                                  
         default:
             {
-            DetermineNamedParameter( aParameter.Name(), aParameter.Value() );
+            DetermineNamedParameterL( aParameter.Name(), aParameter.Value() );
             }
             break;
         }
@@ -282,7 +282,7 @@ void CPresProvItem::VisitL( CWPParameter& aParameter )
 // CPresProvItem::DetermineNamedParameter
 // -----------------------------------------------------------------------------
 //
-void CPresProvItem::DetermineNamedParameter( const TDesC& aName, const TDesC& aValue )
+void CPresProvItem::DetermineNamedParameterL( const TDesC& aName, const TDesC& aValue )
     {
     PRES_PROV_LOG(LOG_LIT( "DetermineNamedParameter(%S, %S)"), &aName, &aValue);
     if ( !aName.Compare( KPresProvClientObjDataLim ) )
@@ -316,7 +316,7 @@ void CPresProvItem::DetermineNamedParameter( const TDesC& aName, const TDesC& aV
     else if (!aName.Compare(KPresIToAppRef))
         {
         if(iToAppReferences.Count() < 2) // if any of SIP or XDM id is missing
-            iToAppReferences.Append(aValue);        
+            iToAppReferences.AppendL(aValue);        
         }
     PRES_PROV_LOG(LOG_LIT8( "   CPresProvItem::DetermineNamedParameter ends" ) );      
     }

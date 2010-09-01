@@ -226,7 +226,7 @@ private:
      * Zero length is ignored.
      * @return operation id
      */        
-    TInt DoStartPublishL( MSimpleDocument& aDocument,
+    TInt CSimplePublisher::DoStartPublishL( MSimpleDocument& aDocument,
         TBool aRefresh, const TDesC8& aETag );
 
 

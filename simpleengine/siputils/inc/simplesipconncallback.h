@@ -53,6 +53,13 @@ public:
      */
     virtual void ConnectionStateChange( 
         TSimpleSipState aState, TInt aSipError) = 0;
+    
+    /**
+     * Connection method has changed (Roaming). 
+     * 
+     * @since S60 3.2.3
+     */
+    virtual void ConnectionChanged() = 0;
 
     /**
      * Time to refresh a request

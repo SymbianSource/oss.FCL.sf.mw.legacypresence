@@ -181,7 +181,7 @@ EXPORT_C TInt TPresenceTransformXDM::GetTransComplexL(const TDesC& aRuleID,
         if ((nodeName==KPresAllDevices)||(nodeName==KPresAllPersons)||
                                                     (nodeName==KPresAllServices))
             {
-            aTypeAndValues.Append(myDataCompo);
+            aTypeAndValues.AppendL(myDataCompo);
             break;
             }
        

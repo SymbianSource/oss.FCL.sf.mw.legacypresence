@@ -53,6 +53,8 @@ public:
      */
     static CSimpleConnection* NewL( MSimpleConnectionObserver& aObserver );
 
+    static CSimpleConnection* NewL( MSimpleConnectionObserver& aObserver, TInt32 aServiceId );
+    
     /**
      * Destructor.
      */
@@ -134,7 +136,7 @@ private:
     /**
      * Two-phase constructor
      */
-    void ConstructL( );
+    void ConstructL( TInt32 aServiceId );
 
     /**
      * constructor

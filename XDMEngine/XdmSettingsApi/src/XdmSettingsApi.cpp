@@ -31,11 +31,11 @@
 EXPORT_C TInt TXdmSettingsApi::CreateCollectionL( const CXdmSettingsCollection& aCollection )
     {
     #ifdef _DEBUG
-        WriteToLog( _L8( "TXdmSettingsApi::CreateCollectionL()" ) );
+        WriteToLog( _L8( "TXdmSettingsApi::CreateCollectionL() - begin" ) );
     #endif
     TInt error = KErrArgument;
     CRepository* repository = CRepository::NewL( KCRUidXdmEngine );
-    CleanupStack::PushL( repository );
+    CleanupStack::PushL( repository );  // CS: 1
     TInt row = LastRow( repository );
     TInt count = aCollection.Count();
     __ASSERT_DEBUG( count > 0, User::Leave( KErrArgument ) );
@@ -364,8 +364,10 @@ void TXdmSettingsApi::WriteToLog( TRefByValue<const TDesC8> aFmt,... )
 EXPORT_C CDesCArray* TXdmSettingsApi::CollectionNamesLC( RArray<TInt>& aSettingIds )
     {
     #ifdef _DEBUG
-        WriteToLog( _L8( "TXdmSettingsApi::CollectionNamesL()" ) );
+        WriteToLog( _L8( "TXdmSettingsApi::CollectionNamesLC() - begin" ) );
     #endif
+    TInt nameError = KErrNone;
+    TInt idError = KErrNone;
     TInt error = KErrNone;
     CDesCArrayFlat* propertySet = new ( ELeave ) CDesCArrayFlat( 10 );
     CleanupStack::PushL( propertySet );
@@ -390,9 +392,9 @@ EXPORT_C CDesCArray* TXdmSettingsApi::CollectionNamesLC( RArray<TInt>& aSettingI
             identifier.Zero();
             name = HBufC::NewLC( NCentralRepositoryConstants::KMaxUnicodeStringLength );
             TPtr desc( name->Des());
-            error = repository->Get( nameKeys[i], desc );
-            error = repository->Get( idKeys[i], identifier );
-            if( error == KErrNone && desc.Length() > 0 && identifier.Length() > 0 )
+            nameError = repository->Get( nameKeys[i], desc );
+            idError = repository->Get( idKeys[i], identifier );
+            if( idError == KErrNone && desc.Length() > 0 && identifier.Length() > 0 )
                 {
                 #ifdef _DEBUG
                     HBufC8* eightName = HBufC8::NewLC( desc.Length() );
@@ -404,18 +406,21 @@ EXPORT_C CDesCArray* TXdmSettingsApi::CollectionNamesLC( RArray<TInt>& aSettingI
                 propertySet->AppendL( desc );
                 TLex id( identifier );
                 error = id.Val( numId );
-                aSettingIds.Append( error == KErrNone ? numId : error );
+                aSettingIds.AppendL( error == KErrNone ? numId : error );
                 }
             else
                 {
                 #ifdef _DEBUG
-                    WriteToLog( _L8( " Fetching of the name no. %d failed with: %d" ), i, error );
+                    WriteToLog( _L8( " Fetching of the name no. %d failed with idError:%d & nameError:%d" ), i, idError, nameError );
                 #endif
                 }
             CleanupStack::PopAndDestroy();  //name
             }
         }
     CleanupStack::PopAndDestroy( 3 );   //idKeys, nameKeys, repository
+#ifdef _DEBUG
+        WriteToLog( _L8( "TXdmSettingsApi::CollectionNamesLC() - end" ) );
+#endif
     return propertySet;
     }
                                             
@@ -518,6 +523,7 @@ EXPORT_C HBufC* TXdmSettingsApi::PropertyL( TInt aSettingsId,
         User::Leave( error );
         }
     CleanupStack::PopAndDestroy( 2 );  //keys, repository
+    WriteToLog( _L8( "  Return:           %S" ), buf );
     return buf;
     }
             

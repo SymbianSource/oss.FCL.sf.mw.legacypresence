@@ -40,7 +40,9 @@ enum TXdmDocType
     EXdmIetfCommonPolicy,
     EXdmOmaCommonPolicy,
     EXdmIetfPresenceRules,
-    EXdmOmaPresenceRules
+    EXdmOmaPresenceRules,
+    EXdmPresContent,
+    EXdmPresContentNSN
     };
 
 //Helper class for searching documents; 16-bit 

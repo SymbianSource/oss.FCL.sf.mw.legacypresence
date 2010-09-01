@@ -1,0 +1,6 @@
+EXPORTS
+	_ZN16CXcapCacheServer10WriteToLogE11TRefByValueIK6TDesC8Ez @ 1 NONAME
+	_ZN16CXcapCacheServer11StartThreadEv @ 2 NONAME
+	_ZTI16CXcapCacheServer @ 3 NONAME ; #<TI>#
+	_ZTV16CXcapCacheServer @ 4 NONAME ; #<VT>#
+

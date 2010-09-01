@@ -1,0 +1,18 @@
+EXPORTS
+	?ImplementationGroupProxy@@YAPBUTImplementationProxy@@AAH@Z @ 1 NONAME ; struct TImplementationProxy const * ImplementationGroupProxy(int &)
+	??1CLocalDocumentNode@@UAE@XZ @ 2 NONAME ; CLocalDocumentNode::~CLocalDocumentNode(void)
+	??1CXdmNamespace@@UAE@XZ @ 3 NONAME ; CXdmNamespace::~CXdmNamespace(void)
+	?AppendLocalL@CLocalDocumentNode@@QAEXPAVCXdmDocumentNode@@@Z @ 4 NONAME ; void CLocalDocumentNode::AppendLocalL(class CXdmDocumentNode *)
+	?FileSession@CLocalProtocol@@SAAAVRFs@@XZ @ 5 NONAME ; class RFs & CLocalProtocol::FileSession(void)
+	?IsSubset@CLocalDocument@@QBEHXZ @ 6 NONAME ; int CLocalDocument::IsSubset(void) const
+	?NewL@CXdmNamespace@@SAPAV1@ABVTDesC8@@0@Z @ 7 NONAME ; class CXdmNamespace * CXdmNamespace::NewL(class TDesC8 const &, class TDesC8 const &)
+	?Prefix@CXdmNamespace@@QBE?AVTPtrC8@@XZ @ 8 NONAME ; class TPtrC8 CXdmNamespace::Prefix(void) const
+	?RemoveData@CLocalDocument@@QAEXPAVCLocalDocumentNode@@@Z @ 9 NONAME ; void CLocalDocument::RemoveData(class CLocalDocumentNode *)
+	?RemoveLocalL@CLocalDocumentNode@@QAEXPAVCXdmDocumentNode@@@Z @ 10 NONAME ; void CLocalDocumentNode::RemoveLocalL(class CXdmDocumentNode *)
+	?ReplaceLocalL@CLocalDocumentNode@@QAEXPAVCXdmDocumentNode@@0@Z @ 11 NONAME ; void CLocalDocumentNode::ReplaceLocalL(class CXdmDocumentNode *, class CXdmDocumentNode *)
+	?ResetSubset@CLocalDocument@@UAEXXZ @ 12 NONAME ; void CLocalDocument::ResetSubset(void)
+	?RootFolder@CLocalProtocol@@SA?AVTPtrC16@@XZ @ 13 NONAME ; class TPtrC16 CLocalProtocol::RootFolder(void)
+	?TempCopyL@CLocalDocument@@QAEPAV1@XZ @ 14 NONAME ; class CLocalDocument * CLocalDocument::TempCopyL(void)
+	?Uri@CXdmNamespace@@QBE?AVTPtrC8@@XZ @ 15 NONAME ; class TPtrC8 CXdmNamespace::Uri(void) const
+	?XmlFilePath@CLocalDocument@@QBE?AVTPtrC16@@XZ @ 16 NONAME ; class TPtrC16 CLocalDocument::XmlFilePath(void) const
+

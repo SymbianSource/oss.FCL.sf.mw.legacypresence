@@ -127,8 +127,8 @@ void TSimpleSettings::ReadCentRepSettings( )
     TRAP_IGNORE( repository = CRepository::NewL( KCRUIDSimpleVariation ));
     if ( repository )
         {
-        TRAP_IGNORE( iExpiryPuhlish = GetCenRepIntValueL(
-            repository, KSimplePublishRefresh ));
+        //TRAP_IGNORE( iExpiryPuhlish = GetCenRepIntValueL(
+        //    repository, KSimplePublishRefresh ));
         TRAP_IGNORE( iExpiryWatcher = GetCenRepIntValueL(
             repository, KSimpleSubscribeRefresh ));
         TRAP_IGNORE( iExpiryWinfo = GetCenRepIntValueL(

@@ -235,13 +235,18 @@ void CXdmDMAdapter::ChildURIListL( const TDesC8& aUri,
             }
         Callback().SetResultsL( aResultsRef, *currentList, KNullDesC8 );
         Callback().SetStatusL( aStatusRef, retValue );
-        CleanupStack::PopAndDestroy( 3, currentList ); // >>> settingIds, names, currentList
+        CleanupStack::PopAndDestroy( names );       // >>> names
+        CleanupStack::PopAndDestroy();              // >>> settingIds
+        CleanupStack::PopAndDestroy( currentList ); // >>> currentList
         return;
         }   
 
     // ./OMA_XDM/X   
     if( NSmlDmURI::NumOfURISegs( aUri ) == KXdmDmLevel )   
         {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::ChildURIListL(): /OMA_XDM/X") );
+#endif 
         segmentName.Copy( KXdmDmAppId );
         currentList->InsertL( currentList->Size(), segmentName );
         currentList->InsertL( currentList->Size(), KXdmDmSeparator );
@@ -278,6 +283,9 @@ void CXdmDMAdapter::ChildURIListL( const TDesC8& aUri,
     // ./OMA_XDM/X/ToConRef   
     else if ( Match( lastUriSeg, KXdmDmToConRef ) ) 
         {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::ChildURIListL(): /OMA_XDM/X/ToConRef") );
+#endif
         segmentName.Copy( KXdmDmSip );
         currentList->InsertL( currentList->Size(), segmentName );
         currentList->InsertL( currentList->Size(), KXdmDmSeparator );
@@ -290,6 +298,9 @@ void CXdmDMAdapter::ChildURIListL( const TDesC8& aUri,
     // ./OMA_XDM/X/ToConRef/SIP
     else if( Match( lastUriSeg, KXdmDmSip ) ) 
         {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::ChildURIListL(): /OMA_XDM/X/ToConRef/SIP") );
+#endif
         segmentName.Copy( KXdmDmConRef );
         currentList->InsertL( currentList->Size(), segmentName );
         currentList->InsertL( currentList->Size(), KXdmDmSeparator );
@@ -298,6 +309,9 @@ void CXdmDMAdapter::ChildURIListL( const TDesC8& aUri,
     // ./OMA_XDM/X/ToConRef/TO-NAPID
     else if( Match ( lastUriSeg, KXdmDmToNapId ) ) 
         {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::ChildURIListL(): /OMA_XDM/X/ToConRef/TO-NAPID") );
+#endif
         segmentName.Copy( KXdmDmConRef );
         currentList->InsertL( currentList->Size(), segmentName );
         currentList->InsertL( currentList->Size(), KXdmDmSeparator );
@@ -305,6 +319,9 @@ void CXdmDMAdapter::ChildURIListL( const TDesC8& aUri,
     else
         {
         // if none of asked nodes found return error.
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::ChildURIListL(): return ENotFound") );
+#endif
         retValue = CSmlDmAdapter::ENotFound;
         }
        
@@ -502,6 +519,9 @@ void CXdmDMAdapter::UpdateLeafObjectL( const TDesC8& aUri,
     {
 #ifdef _DEBUG
     WriteToLog(_L8("CXdmDMAdapter::UpdateLeafObjectL(): begin") );
+    WriteToLog(_L8("CXdmDMAdapter::UpdateLeafObjectL() -    aUri: %S"), &aUri );
+    WriteToLog(_L8("CXdmDMAdapter::UpdateLeafObjectL() -   aLUID: %S"), &aLUID );
+    WriteToLog(_L8("CXdmDMAdapter::UpdateLeafObjectL() - aObject: %S"), &aObject );
 #endif   
     CSmlDmAdapter::TError status = CSmlDmAdapter::EOk;
 
@@ -521,6 +541,9 @@ void CXdmDMAdapter::UpdateLeafObjectL( const TDesC8& aUri,
         HBufC* current = NULL;
         TInt error( KErrNone );
         TRAP( error, ( current = TXdmSettingsApi::PropertyL( settingsId, EXdmPropName ) ) );
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UpdateLeafObjectL() - EXdmPropName error: %d"), error );
+#endif 
         if ( error == KErrNone )
             {
             TBool same ( EFalse );
@@ -530,16 +553,20 @@ void CXdmDMAdapter::UpdateLeafObjectL( const TDesC8& aUri,
                 {
                 same = ETrue;
                 }
-            CleanupStack::PopAndDestroy( 2, current8 );  // >>> current, current8
+            CleanupStack::PopAndDestroy( current8 );  // >>> current8
+            CleanupStack::PopAndDestroy( current );  // >>> current
             if ( same )
                 {
                 Callback().SetStatusL( aStatusRef, status );
-                return;
+                return; // value was same, just return without change
                 }
             }
         // if the name is already in use, new name with index is created
         HBufC* value = CheckExistingNamesLC( aObject );     // << value
         TRAP( error, TXdmSettingsApi::UpdatePropertyL( settingsId, *value, EXdmPropName ) );
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UpdateLeafObjectL() - EXdmPropName error: %d"), error );
+#endif
         CleanupStack::PopAndDestroy( value );                      // >>> value
         if ( error != KErrNone )
             {
@@ -647,14 +674,33 @@ void CXdmDMAdapter::AddNodeObjectL( const TDesC8& aUri,
         TInt id = TXdmSettingsApi::CreateCollectionL( *collection );
         HBufC8* luid = IntToDes8LC( id );   // << luid
         Callback().SetMappingL( aUri, *luid );
-        CleanupStack::PopAndDestroy( 2, luid );   // >>> collection, luid  
-        status =  CSmlDmAdapter::EOk;  
+        status =  CSmlDmAdapter::EOk;
 #ifdef _DEBUG
     WriteToLog(_L8("CXdmDMAdapter::AddNodeObjectL(): Settings created id=%d"), id );
 #endif
+        HBufC8* nameUri = HBufC8::NewLC( aUri.Length() +
+                                         KXdmDmSeparator().Length() +
+                                         KXdmDmName().Length() );
+        TPtr8 nameUriPtr = nameUri->Des();
+        nameUriPtr.Append( aUri );
+        nameUriPtr.Append( KXdmDmSeparator );
+        nameUriPtr.Append( KXdmDmName );
+
+        // Update Node's NAME to default so UI can recognize settings
+        UpdateLeafObjectL( nameUriPtr,
+                           *luid,
+                           KXdmDefaultSettingsName,
+                           KXdmDmName,
+                           aStatusRef );
+        CleanupStack::PopAndDestroy( nameUri );    // >> nameUri
+        CleanupStack::PopAndDestroy( luid );       // >> luid
+        CleanupStack::PopAndDestroy( collection ); // >> collection
         }
-    Callback().SetStatusL( aStatusRef, status );
-    
+    else
+        {
+        Callback().SetStatusL( aStatusRef, status );
+        }
+        
 #ifdef _DEBUG
     WriteToLog(_L8("CXdmDMAdapter::AddNodeObjectL(): end") );
 #endif
@@ -703,6 +749,9 @@ void CXdmDMAdapter::UpdateLeafObjectL( const TDesC8& /*aUri*/,
                                        const TDesC8& /*aType*/, 
                                        const TInt aStatusRef )
     {  
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UpdateLeafObjectL( ): begin / end") );
+#endif
     // Update from stream not used
     Callback().SetStatusL( aStatusRef, CSmlDmAdapter::EError );
     }
@@ -717,6 +766,9 @@ void CXdmDMAdapter::ExecuteCommandL( const TDesC8& /*aUri*/,
                                      const TDesC8& /*aType*/, 
                                      const TInt aStatusRef )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::ExecuteCommandL( ): Not supported") );
+#endif
     // Not supported 
     Callback().SetStatusL( aStatusRef, CSmlDmAdapter::EError );
     }
@@ -731,6 +783,9 @@ void CXdmDMAdapter::ExecuteCommandL( const TDesC8& /*aUri*/,
                                      const TDesC8& /*aType*/, 
                                      const TInt aStatusRef )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::ExecuteCommandL( ): Not supported") );
+#endif
     // Not supported
     Callback().SetStatusL( aStatusRef, CSmlDmAdapter::EError );
     }
@@ -746,6 +801,9 @@ void CXdmDMAdapter::CopyCommandL( const TDesC8& /*aTargetURI*/,
                                   const TDesC8& /*aType*/, 
                                   TInt aStatusRef )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::CopyCommandL( ): Not supported") );
+#endif
     // Not supported
     Callback().SetStatusL( aStatusRef, CSmlDmAdapter::EError );
     }
@@ -757,6 +815,9 @@ void CXdmDMAdapter::CopyCommandL( const TDesC8& /*aTargetURI*/,
 void CXdmDMAdapter::StartAtomicL()
     {
     // Not supported
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::StartAtomicL( ): Not supported") );
+#endif
     }
 
 // -----------------------------------------------------------------------------
@@ -766,6 +827,9 @@ void CXdmDMAdapter::StartAtomicL()
 void CXdmDMAdapter::CommitAtomicL()
     {
     // Not supported
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::CommitAtomicL( ): Not supported") );
+#endif
     }
 
 // -----------------------------------------------------------------------------
@@ -775,6 +839,9 @@ void CXdmDMAdapter::CommitAtomicL()
 void CXdmDMAdapter::RollbackAtomicL()
     {
     // Not supported
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::RollBackAtomicL( ): Not supported") );
+#endif
     }
 
 // -----------------------------------------------------------------------------
@@ -783,6 +850,9 @@ void CXdmDMAdapter::RollbackAtomicL()
 //
 TBool CXdmDMAdapter::StreamingSupport( TInt& /*aItemSize*/ )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::StreamingSupport( ): Return EFalse") );
+#endif
     return EFalse;
     }
 
@@ -793,6 +863,9 @@ TBool CXdmDMAdapter::StreamingSupport( TInt& /*aItemSize*/ )
 void CXdmDMAdapter::StreamCommittedL()
     {
     // Not supported
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::StreamCommittedL( ): Not supported") );
+#endif
     }
     
 // -----------------------------------------------------------------------------
@@ -814,6 +887,9 @@ CSmlDmAdapter::TError CXdmDMAdapter::GetPropertyL( TInt aSettingsId,
                                                    TXdmSettingsProperty aProperty, 
                                                    CBufBase& aObject )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::GetPropertyL( ) - aSettingsId = %d"), &aSettingsId );
+#endif
     HBufC* value = NULL;
     TInt error( KErrNone );
     TRAP( error, ( value = TXdmSettingsApi::PropertyL( aSettingsId, aProperty ) ) );
@@ -822,9 +898,16 @@ CSmlDmAdapter::TError CXdmDMAdapter::GetPropertyL( TInt aSettingsId,
         CleanupStack::PushL( value );           // << value
         HBufC8* utfValue = ConvertLC( *value ); // << utfValue
         aObject.InsertL( 0, *utfValue );
-        CleanupStack::PopAndDestroy( 2, utfValue );       // >>> value, utfValue
+        CleanupStack::PopAndDestroy( utfValue );       // >>> utfValue
+        CleanupStack::PopAndDestroy( value );       // >>> value
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::GetPropertyL( ): return EOk") );
+#endif
         return CSmlDmAdapter::EOk;
         }
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::GetPropertyL( ): return ENotFound") );
+#endif
     return CSmlDmAdapter::ENotFound;
     }
     
@@ -837,6 +920,9 @@ CSmlDmAdapter::TError CXdmDMAdapter::UpdatePropertyL( TInt aSettingsId,
                                                       TXdmSettingsProperty aProperty, 
                                                       const TDesC8& aObject )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UpdatePropertyL( ): begin") );
+#endif
     HBufC* value = ConvertLC( aObject ); // << value
     TInt error( KErrNone );
     TRAP( error, TXdmSettingsApi::UpdatePropertyL( aSettingsId, *value, aProperty )  );
@@ -844,8 +930,14 @@ CSmlDmAdapter::TError CXdmDMAdapter::UpdatePropertyL( TInt aSettingsId,
 
     if ( error == KErrNone )
         {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UpdatePropertyL( ): return EOk") );
+#endif
         return CSmlDmAdapter::EOk;
         }
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UpdatePropertyL( ): return ENotFound") );
+#endif
     return CSmlDmAdapter::ENotFound;
     }
           
@@ -861,6 +953,9 @@ void CXdmDMAdapter::FillNodeInfoL( MSmlDmDDFObject& aNode,
                                    MSmlDmDDFObject::TDFFormat aFormat,
                                    const TDesC8& aDescription)
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::FillNodeInfoL( ): begin") );
+#endif
     aNode.SetAccessTypesL( aAccTypes );
     aNode.SetOccurenceL( aOccurrence );
     aNode.SetScopeL( aScope );
@@ -871,6 +966,9 @@ void CXdmDMAdapter::FillNodeInfoL( MSmlDmDDFObject& aNode,
         aNode.AddDFTypeMimeTypeL( KXdmDmTextPlain );
         }
     aNode.SetDescriptionL( aDescription );
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::FillNodeInfoL( ): end") );
+#endif
     }
     
 
@@ -880,6 +978,9 @@ void CXdmDMAdapter::FillNodeInfoL( MSmlDmDDFObject& aNode,
 //
 TInt CXdmDMAdapter::IapIdFromURIL( const TDesC8& aUri )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::IapIdFromUriL( ): begin") );
+#endif
     TInt id( KErrNotFound );
     MSmlDmAdapter::TError status( MSmlDmAdapter::EError );
     CBufBase* result = CBufFlat::NewL(1);
@@ -901,6 +1002,9 @@ TInt CXdmDMAdapter::IapIdFromURIL( const TDesC8& aUri )
         }
 
     CleanupStack::PopAndDestroy( result );  // >>> result
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::IapIdFromUriL( ): end") );
+#endif
     return id;
     } 
 
@@ -910,6 +1014,9 @@ TInt CXdmDMAdapter::IapIdFromURIL( const TDesC8& aUri )
 //
 HBufC8* CXdmDMAdapter::URIFromIapIdL( TInt aId )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UriFromIapIdL( ): begin") );
+#endif
     CBufBase *allIds = CBufFlat::NewL(KXdmDmIdTableSize);
     CleanupStack::PushL( allIds );  // << allIds
     MSmlDmAdapter::TError status;
@@ -936,7 +1043,7 @@ HBufC8* CXdmDMAdapter::URIFromIapIdL( TInt aId )
             else
                 {
                 TPtrC8 uriSeg8Ptr = allIds->Ptr(segStart).Mid( 0, index );
-                uriSeg = uriSeg8Ptr.AllocLC();  // << uriSeg8Ptr
+                uriSeg = uriSeg8Ptr.AllocLC();  // << uriSeg
                 }
             // Construct the uri
             HBufC8* uri = HBufC8::NewLC( KXdmDmAP().Length() 
@@ -957,17 +1064,25 @@ HBufC8* CXdmDMAdapter::URIFromIapIdL( TInt aId )
                 if ( id == aId )
                     {
                     // The correct one found
-                    CleanupStack::Pop();  // >>> uri
-                    CleanupStack::PopAndDestroy( 2, allIds );  // >>> uriSeg, allIds
+                    CleanupStack::Pop();                     // >>> uri
+                    CleanupStack::PopAndDestroy( uriSeg );   // >>> uriSeg 
+                    CleanupStack::PopAndDestroy( allIds );   // >>> allIds
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UriFromIapIdL( ): return uri") );
+#endif
                     return uri;
                     }
                 }
             // This was wrong, delete and get the next one
-            CleanupStack::PopAndDestroy( 2, uriSeg ); // >>> uri, uriSeg
+            CleanupStack::PopAndDestroy( uri );      // >>> uri
+            CleanupStack::PopAndDestroy( uriSeg );   // >>> uriSeg 
             segStart += index + 1;
             }        
         }
     CleanupStack::PopAndDestroy( allIds ); // >>> allIds
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::UriFromIapIdL( ): return NULL") );
+#endif
     return NULL;
     }  
 // -----------------------------------------------------------------------------
@@ -976,7 +1091,9 @@ HBufC8* CXdmDMAdapter::URIFromIapIdL( TInt aId )
 //
 TInt CXdmDMAdapter::GetSipIdL( const TDesC8& aUri )
     {
-
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::GetSipIdL( ): begin") );
+#endif
     CSmlDmAdapter::TError status = EOk;
     CBufBase* result = CBufFlat::NewL(1);
     CleanupStack::PushL( result );    // << result
@@ -991,10 +1108,16 @@ TInt CXdmDMAdapter::GetSipIdL( const TDesC8& aUri )
         TPtrC8 hexIndex = uri.Right( KXdmDmHexLength );
         TLex8 lexer( hexIndex );
         lexer.Val( id, EHex );
-        CleanupStack::PopAndDestroy( result );   // >>> result   
+        CleanupStack::PopAndDestroy( result );   // >>> result
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::GetSipIdL( ): return id: %d"), id );
+#endif
         return id;       
         }
-    CleanupStack::PopAndDestroy( result );   // >>> result   
+    CleanupStack::PopAndDestroy( result );   // >>> result
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::GetSipIdL( ): return KErrNotFound") );
+#endif
     return KErrNotFound;       
     }
 // -----------------------------------------------------------------------------
@@ -1004,7 +1127,9 @@ TInt CXdmDMAdapter::GetSipIdL( const TDesC8& aUri )
 CSmlDmAdapter::TError CXdmDMAdapter::FetchSipConRefL( TInt aSettingsId,
                                                       CBufBase& aObject)
     {
-
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::FetchSipConRefL( ): begin") );
+#endif
     CSmlDmAdapter::TError status = CSmlDmAdapter::EOk;
     TInt sipSettingsId( KErrNotFound );
     
@@ -1084,7 +1209,9 @@ CSmlDmAdapter::TError CXdmDMAdapter::FetchSipConRefL( TInt aSettingsId,
         {
         status = CSmlDmAdapter::ENotFound;
         }
-    
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::FetchSipConRefL( ): return status") );
+#endif
     return status;
     }   
 
@@ -1094,10 +1221,16 @@ CSmlDmAdapter::TError CXdmDMAdapter::FetchSipConRefL( TInt aSettingsId,
 //      
 TInt CXdmDMAdapter::FindSettingsIdL( const TDesC8& aLUID, const TDesC8& aUri )
     {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::FindSettingsIdL( ): begin") );
+#endif
     TInt settingsId(0);
     if ( aLUID.Length() > 0 )
         {
         settingsId = DesToInt( aLUID );
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::FindSettingsIdL( ): return settingsId: %d "), settingsId );
+#endif
         return settingsId;
         }
     else
@@ -1107,6 +1240,9 @@ TInt CXdmDMAdapter::FindSettingsIdL( const TDesC8& aLUID, const TDesC8& aUri )
         HBufC8* luid = IntToDes8LC( settingsId ); // << luid
         Callback().SetMappingL( aUri, *luid );
         CleanupStack::PopAndDestroy( luid ); // luid 
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::FindSettingsIdL( ): return settingsId: %d "), settingsId );
+#endif
         return settingsId;
         }
     }
@@ -1116,7 +1252,10 @@ TInt CXdmDMAdapter::FindSettingsIdL( const TDesC8& aLUID, const TDesC8& aUri )
 // -----------------------------------------------------------------------------
 // 
 HBufC* CXdmDMAdapter::CheckExistingNamesLC( const TDesC8& aName )
-    {    
+    {
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::CheckExistingNamesLC( ): begin") );
+#endif
     TBool ready( EFalse );  
     RArray<TInt> settingIds;
     CleanupClosePushL( settingIds );                // << settingIds
@@ -1147,8 +1286,12 @@ HBufC* CXdmDMAdapter::CheckExistingNamesLC( const TDesC8& aName )
             ready = ETrue;
             }
         }
-    CleanupStack::PopAndDestroy( 2 );   // >>> settingNames, settingIds
+    CleanupStack::PopAndDestroy( settingNames );   // >>> settingNames
+    CleanupStack::PopAndDestroy();                 // >>> settingIds
     HBufC* newName = tempName.AllocLC();    // << newName
+#ifdef _DEBUG
+    WriteToLog(_L8("CXdmDMAdapter::CheckExistingNamesLC( ): end") );
+#endif
     return newName;
     }
     

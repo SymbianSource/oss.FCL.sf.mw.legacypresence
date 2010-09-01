@@ -196,12 +196,14 @@ CSimpleDocument* CSimpleDocument::NewInMultiPartL(
 void CSimpleDocument::GetDirectContentsL( 
     RPointerArray<MSimpleContent>& aContents )
     {
+    CleanupClosePushL( aContents ); 
     aContents.Reset();
     TInt myCount = iContents.Count();
     for ( TInt i = 0; i<myCount; i++ )
         {
-        User::LeaveIfError( aContents.Append( iContents[i] ));
-        }               
+        aContents.AppendL( iContents[i] );
+        }
+    CleanupStack::Pop( &aContents );
     }
     
 // ----------------------------------------------------------
@@ -653,7 +655,7 @@ void CSimpleDocument::DoExternalizeMultiPartL(
     // Let's convert first ROOT element into CBodyPart
     CBodyPart* root = CBodyPart::NewL();
     // Add into cleanup array
-    aBodies.Append( root );     
+    aBodies.AppendL( root );     
     CSenElement* e = Root()->BaseElement();
     
     // externalize the document into stream
@@ -676,7 +678,7 @@ void CSimpleDocument::DoExternalizeMultiPartL(
     // calculate the size of headers
     TInt headerSize = KContentTypeSize + KCIDSize;
     HBufC8* headers = HBufC8::NewL( headerSize );  
-    aBuffers.Append( headers );
+    aBuffers.AppendL( headers );
     TPtr8 pH(headers->Des());
     // append to MIME headers for the root part   
     pH.Append( NSimpleDocument::NSimpleRoot::KContentType );
@@ -689,7 +691,7 @@ void CSimpleDocument::DoExternalizeMultiPartL(
         { 
         // Let's convert next element into CBodyPart
         CBodyPart* cp = CBodyPart::NewL();
-        aBodies.Append( cp );                
+        aBodies.AppendL( cp );                
          
         // Set Headers
         headerSize = NSimpleDocument::NSimpleContent::KContentTypeSize + 
@@ -700,7 +702,7 @@ void CSimpleDocument::DoExternalizeMultiPartL(
         
         headers = HBufC8::NewL( headerSize );
         // Append to cleanup array  
-        aBuffers.Append( headers );
+        aBuffers.AppendL( headers );
         pH.Set( headers->Des() );
 
         // _LIT8( KMyContentType, "Content-Type: %S\r\n"); 
@@ -716,7 +718,7 @@ void CSimpleDocument::DoExternalizeMultiPartL(
                     
         // BASE64 encode
         HBufC8* body64 = HBufC8::NewL( (iContents[i])->Body().Length() * KB64Expand );  
-        aBuffers.Append( body64 );        
+        aBuffers.AppendL( body64 );        
         TImCodecB64 codec64;
         codec64.Initialise();        
         TPtr8 desti8 = body64->Des();  

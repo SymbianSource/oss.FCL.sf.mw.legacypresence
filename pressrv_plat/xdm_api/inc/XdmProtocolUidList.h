@@ -43,6 +43,8 @@ const TInt KXdmIetfCommonPolicyUsageUid   = 0x10275081;
 const TInt KXdmOmaCommonPolicyUsageUid    = 0x10275082;
 const TInt KXdmIetfPresRulesUsageUid      = 0x10275083;
 const TInt KXdmOmaPresRulesUsageUid       = 0x102750AB;
+const TInt KXdmUsageUid                   = 0x20028701;
+const TInt KXdmNSNUsageUid                = 0x20028702;
 
 #endif      //__XDMPROTOCOLUIDLIST__
             

@@ -1,0 +1,185 @@
+/*
+* Copyright (c) 2005 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:    Localization strings for GS XDM Plugin
+*
+*/
+
+
+
+
+//  LOCALISATION STRINGS
+
+//d:Caption string for AIF file (short)
+//d:GS XDM Settings plugin
+//l:cell_app_pane_t1
+//r:3.0
+#define qtn_apps_xdm_grid                       "XDMSettingsApp"
+
+//d:Caption string for AIF file (long)
+//d:GS XDM Settings plugin
+//l:list_single_large_graphic_pane_t1
+//r:3.0
+#define qtn_apps_xdm_list                       "XDMSettingsApp"
+
+//d:Popup confirmation dialog text when deleting the last XDM set of the list
+//d:GS XDM Settings plugin
+//l:popup_note_window
+//r:3.1
+#define qtn_xdm_conf_delete_last "%U is the last XDM set. Are you sure to delete it?"
+
+//d:Popup confirmation dialog text when deleting a XDM set, not the last.
+//d:GS XDM Settings plugin
+//l:popup_note_window
+//r:3.1
+#define qtn_xdm_conf_delete "Delete %U?"
+
+//d:Menu Item use existing set
+//d:GS XDM Settings plugin
+//l:heading_pane_t1
+//r:3.1
+#define qtn_xdm_propmt_use_exist "Use existing set"
+
+//d:Menu Item to change a specific setting in an XDM set
+//d:GS XDM Settings plugin
+//l:list_single_pane_t1_cp2
+//r:3.1
+#define qtn_xdm_settings_change "Change"
+
+//d:Default text in password setting field
+//d:GS XDM Settings plugin
+//l:list_set_graphic_pane_t1
+//r:3.1
+#define qtn_xdm_text_password "****"
+
+//d:Title for password setting field
+//d:GS XDM Settings plugin
+//l:list_setting_pane_t1
+//r:3.1
+#define qtn_xdm_settings_password "HTTP password"
+
+//d:Title for SIP setting field
+//d:GS XDM Settings plugin
+//l:list_setting_pane_t1
+//r:3.1
+#define qtn_xdm_settings_sip "SIP in use"
+
+//d:Title for user id settings
+//d:GS XDM Settings plugin
+//l:list_setting_pane_t1
+//r:3.1
+#define qtn_xdm_settings_username "HTTP username"
+
+//d:Title of the service address setting field
+//d:GS XDM Settings plugin
+//l:list_setting_pane_t1
+//r:3.1
+#define qtn_xdm_settings_address "XDM service address"
+
+//d:Default text in compulsory setting fields
+//d:GS XDM Settings plugin
+//l:list_set_graphic_pane_t1
+//r:3.1
+#define qtn_xdm_settings_must_define "Must be defined"
+
+//d:Title of the access point setting field
+//d:GS XDM Settings plugin
+//l:list_setting_pane_t1
+//r:3.1
+#define qtn_xdm_settings_access_point "Access point"
+
+//d:Default xdm set name
+//d:GS XDM Settings plugin
+//l:list_set_graphic_pane_t1
+//r:3.1
+#define qtn_xdm_text_new_set_many "New XDM set(%N)"
+
+//d:Menu item for setting up a new XDM set
+//d:GS XDM Settings plugin
+//l:list_single_pane_t1_cp2
+//r:3.1
+#define qtn_xdm_text_new_set "New XDM set"
+
+//d:Title of XDM set name setting
+//d:GS XDM Settings plugin
+//l:list_setting_pane_t1
+//r:3.1
+#define qtn_xdm_settings_set_name "XDM set name"
+
+//d:Menu item delete, to delete an specific XDM set
+//d:GS XDM Settings plugin
+//l:list_single_pane_t1_cp2
+//r:3.1
+#define qtn_xdm_options_delete "Delete"
+
+//d:Title of the popup sub menu
+//d:GS XDM Settings plugin
+//l:list_single_popup_submenu_pane_t1
+//r:3.1
+#define qtn_xdm_options_new_sub_existing "Use existing set"
+
+//d:Menu item to edit an XDM set
+//d:GS XDM Settings plugin
+//l:list_single_pane_t1_cp2
+//r:3.1
+#define qtn_xdm_options_edit_set "Edit XDM set"
+
+//d: Menu Item to use default set template for a new set
+//d:GS XDM Settings plugin
+//l:list_single_popup_submenu_pane_t1
+//r:3.1
+#define qtn_xdm_options_new_sub_default "Use default set"
+
+//d:Menu item New XDM set
+//d:GS XDM Settings plugin
+//l:list_single_pane_t1_cp2/opt3
+//r:3.1
+#define qtn_xdm_options_new_set "New XDM set"
+
+//d:Compulsory setting item indicator
+//d:GS XDM Settings plugin
+//l:list_set_graphic_pane_t1
+//r:3.1
+#define qtn_xdm_compulsory_indicator "*"
+
+//d:XDM sets, empty list primary text
+//d:GS XDM Settings plugin
+//l:main_pane_empty_t1/opt2
+//r:3.1
+#define qtn_xdm_main_empty_info_text "No XDM settings"
+
+//d:XDM sets, empty list secondary text
+//d:GS XDM Settings plugin
+//l:main_list_empty_pane/opt2
+//r:3.1
+#define qtn_xdm_main_empty_info_text_secondary "Create new settings from Options menu"
+
+//d:Text in main title pane
+//d:GS XDM Settings plugin
+//l:title_pane_t2/opt12
+//r:3.1
+#define qtn_xdm_title "XDM settings"
+
+//d:Text in pop up query dialog for reminding compulsory settings
+//d:GS XDM Settings plugin
+//l:popup_note_window
+//r:3.1
+#define qtn_xdm_compulsory_query_info_text "Incomplete XDM setting set. Delete set?"
+
+//d:Text in info note that a given xdm set name is already exist
+//d:GS XDM Settings plugin
+//l:popup_note_window
+//r:3.1
+#define qtn_xdm_set_already_exist_info "Name already in use: %U"
+
+//End of file

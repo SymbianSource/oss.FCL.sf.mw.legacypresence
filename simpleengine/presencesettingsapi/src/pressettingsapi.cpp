@@ -78,7 +78,7 @@ EXPORT_C CDesCArray* PresSettingsApi::GetAllSetsNamesLC( RArray<TInt>& aSetIds )
         else
             {
             sets->AppendL(setName);
-            aSetIds.Append(setId);
+            aSetIds.AppendL(setId);
             }
         setName.Zero();           
         }

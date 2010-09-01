@@ -221,6 +221,7 @@ void CSimpleElement::SetContentUnicodeL( const TDesC& aContent )
 TInt CSimpleElement::SimpleElementsL( 
     RPointerArray<MSimpleElement>& aElementArray )
     {
+    CleanupClosePushL( aElementArray );
     // Reset the output array first.
     aElementArray.Reset();
     iElements.ResetAndDestroy();
@@ -234,10 +235,12 @@ TInt CSimpleElement::SimpleElementsL(
         CSenElement* pElement = elems[i];
         CSimpleElement* simple = CSimpleElement::NewL( pElement, EFalse );
         CleanupStack::PushL( simple );
-        User::LeaveIfError( aElementArray.Append( simple ));
+        iElements.AppendL( simple );
         CleanupStack::Pop( simple );
-        User::LeaveIfError( iElements.Append( simple ) );
+        aElementArray.AppendL( simple );
         }
+    CleanupStack::Pop( &aElementArray ); 
+    
     return elemCount ? KErrNone : KErrNotFound;
     }
 
@@ -292,6 +295,8 @@ void CSimpleElement::AddAttr8L( const TDesC8& aName, const TDesC8& aValue )
 //
 TInt CSimpleElement::SimpleAttributesL( RPointerArray<MSimpleAttribute>& aArray )
     {  
+    CleanupClosePushL( aArray );
+    
     // Reset the output array first.
     aArray.Reset();
     iAttributes.ResetAndDestroy();
@@ -304,10 +309,12 @@ TInt CSimpleElement::SimpleAttributesL( RPointerArray<MSimpleAttribute>& aArray 
         CSenBaseAttribute* pAttr = elems[i];
         CSimpleAttribute* attr = CSimpleAttribute::NewL( pAttr );
         CleanupStack::PushL( attr );
-        User::LeaveIfError(iAttributes.Append( attr ));
+        iAttributes.AppendL( attr );
         CleanupStack::Pop( attr );        
-        User::LeaveIfError(aArray.Append( attr ));
+        aArray.AppendL( attr );
         }
+    CleanupStack::Pop( &aArray );
+    
     return elemCount ? KErrNone : KErrNotFound;
     }
 

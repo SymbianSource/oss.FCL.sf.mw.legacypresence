@@ -120,7 +120,7 @@ private:
      * @param aId key id
      * @return value of the key      
      */
-    TInt GetCenRepIntValueL( 
+    TInt TSimpleSettings::GetCenRepIntValueL( 
         CRepository* aRepository,
         TUint32 aId );
                 

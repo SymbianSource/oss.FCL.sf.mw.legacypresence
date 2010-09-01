@@ -1,0 +1,46 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:  XdmProtocolInfo
+*
+*/
+
+
+// 10207410.RSS
+//
+#include "registryinfo.rh"
+
+//Declares the interface implementations provided
+RESOURCE REGISTRY_INFO XdmProtocolInfo
+	{
+	dll_uid = 0x10207410;
+	interfaces = 
+		{
+		INTERFACE_INFO
+			{
+			interface_uid = 0x10207425;
+			implementations = 
+				{
+				IMPLEMENTATION_INFO
+					{
+					implementation_uid = 0x10207426;
+					version_no = 1;
+					display_name = "XCAP Operation API||Copyright © 2005 Nokia Ltd. All rights reserved.";
+					default_data = "";
+					opaque_data = "";
+					}
+				};
+			}
+		};
+	}
+

@@ -1,0 +1,9 @@
+EXPORTS
+	??1CXdmXmlParser@@UAE@XZ @ 1 NONAME ; CXdmXmlParser::~CXdmXmlParser(void)
+	?FormatToXmlLC@CXdmXmlParser@@QAEPAVHBufC8@@ABVTDesC8@@PBVCXdmDocument@@PBVCXdmDocumentNode@@@Z @ 2 NONAME ; class HBufC8 * CXdmXmlParser::FormatToXmlLC(class TDesC8 const &, class CXdmDocument const *, class CXdmDocumentNode const *)
+	?FormatToXmlLC@CXdmXmlParser@@QAEPAVHBufC8@@HPBVCXdmDocument@@PBVCXdmDocumentNode@@@Z @ 3 NONAME ; class HBufC8 * CXdmXmlParser::FormatToXmlLC(int, class CXdmDocument const *, class CXdmDocumentNode const *)
+	?NewL@CXdmXmlParser@@SAPAV1@XZ @ 4 NONAME ; class CXdmXmlParser * CXdmXmlParser::NewL(void)
+	?ParseDocumentL@CXdmXmlParser@@QAEXABVTDesC8@@PAVCXdmDocumentNode@@@Z @ 5 NONAME ; void CXdmXmlParser::ParseDocumentL(class TDesC8 const &, class CXdmDocumentNode *)
+	?ParseDocumentL@CXdmXmlParser@@QAEXPAVCXdmDocument@@ABVTDesC8@@@Z @ 6 NONAME ; void CXdmXmlParser::ParseDocumentL(class CXdmDocument *, class TDesC8 const &)
+	?ParseDocumentL@CXdmXmlParser@@QAEXPAVCXdmDocument@@ABVTDesC8@@PAVCXdmDocumentNode@@@Z @ 7 NONAME ; void CXdmXmlParser::ParseDocumentL(class CXdmDocument *, class TDesC8 const &, class CXdmDocumentNode *)
+

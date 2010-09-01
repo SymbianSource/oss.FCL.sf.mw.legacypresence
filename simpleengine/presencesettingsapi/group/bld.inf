@@ -27,6 +27,6 @@ PRJ_MMPFILES
 presencesettingsapi.mmp
 
 PRJ_EXPORTS
-../inc/pressettingsapi.h	MW_LAYER_PLATFORM_EXPORT_PATH(pressettingsapi.h)
-../inc/simpleenginedomaincrkeys.h	MW_LAYER_PLATFORM_EXPORT_PATH(simpleenginedomaincrkeys.h)
-../inc/pressettingsset.h	MW_LAYER_PLATFORM_EXPORT_PATH(pressettingsset.h)
+../inc/pressettingsapi.h	/epoc32/include/mw/pressettingsapi.h
+../inc/simpleenginedomaincrkeys.h	/epoc32/include/mw/simpleenginedomaincrkeys.h
+../inc/pressettingsset.h	/epoc32/include/mw/pressettingsset.h

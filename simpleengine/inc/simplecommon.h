@@ -28,6 +28,7 @@
 const TInt KRangeSize = 100;  // range of operation ids for each client handle
     
 const TUint KSimpleOK = 200;  // return code for SIP
+const TUint KCreatedOK = 201; // return code for SIP
 const TUint KSimpleAccepted = 202;  // return code for SIP
 
 _LIT8 ( KSimpleApplicationType, "application");

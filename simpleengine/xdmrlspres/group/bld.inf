@@ -27,14 +27,14 @@ PRJ_MMPFILES
 rlspresxdm.mmp
 
 PRJ_EXPORTS
-../inc/rlspresxdmconsts.h	MW_LAYER_PLATFORM_EXPORT_PATH(rlspresxdmconsts.h)
-../inc/cpresencexdm.h	MW_LAYER_PLATFORM_EXPORT_PATH(cpresencexdm.h)
-../inc/mrlspresxdmasynchandler.h	MW_LAYER_PLATFORM_EXPORT_PATH(mrlspresxdmasynchandler.h)
-../inc/presenceactionxdm.h	MW_LAYER_PLATFORM_EXPORT_PATH(presenceactionxdm.h)
-../inc/prescondidentityone.h	MW_LAYER_PLATFORM_EXPORT_PATH(prescondidentityone.h)
-../inc/prescondidentitymany.h	MW_LAYER_PLATFORM_EXPORT_PATH(prescondidentitymany.h)
-../inc/prescondvalidity.h	MW_LAYER_PLATFORM_EXPORT_PATH(prescondvalidity.h)
-../inc/prescondsphere.h	MW_LAYER_PLATFORM_EXPORT_PATH(prescondsphere.h)
-../inc/presencetransformxdm.h	MW_LAYER_PLATFORM_EXPORT_PATH(presencetransformxdm.h)
-../inc/crlsxdm.h	MW_LAYER_PLATFORM_EXPORT_PATH(crlsxdm.h)
-../inc/prescondmisc.h    MW_LAYER_PLATFORM_EXPORT_PATH(prescondmisc.h)
+../inc/rlspresxdmconsts.h	/epoc32/include/mw/rlspresxdmconsts.h
+../inc/cpresencexdm.h	/epoc32/include/mw/cpresencexdm.h
+../inc/mrlspresxdmasynchandler.h	/epoc32/include/mw/mrlspresxdmasynchandler.h
+../inc/presenceactionxdm.h	/epoc32/include/mw/presenceactionxdm.h
+../inc/prescondidentityone.h	/epoc32/include/mw/prescondidentityone.h
+../inc/prescondidentitymany.h	/epoc32/include/mw/prescondidentitymany.h
+../inc/prescondvalidity.h	/epoc32/include/mw/prescondvalidity.h
+../inc/prescondsphere.h	/epoc32/include/mw/prescondsphere.h
+../inc/presencetransformxdm.h	/epoc32/include/mw/presencetransformxdm.h
+../inc/crlsxdm.h	/epoc32/include/mw/crlsxdm.h
+../inc/prescondmisc.h    /epoc32/include/mw/prescondmisc.h

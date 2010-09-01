@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -14,9 +14,6 @@
 * Description:    OMA Presence Settings Device Management Adapter's source file 
 *
 */
-
-
-
  
 #include <implementationproxy.h>
 #include <nsmldmuri.h>
@@ -362,6 +359,7 @@ CSmlDmAdapter::TError CPresenceDMAdapter::FetchObjectL( const TDesC8& aUri,
     TPresSettingsProperty property;
 
     HBufC8* luid = Callback().GetLuidAllocL( aUri );
+    PRES_DM_LOG(LOG_LIT8("   GetLuidAllocL() => '%S'"), luid );
     TInt settingsId = DesToInt( *luid );
     
     PRES_DM_LOG(LOG_LIT("   settingsId after callback:%d"), settingsId);
@@ -370,12 +368,16 @@ CSmlDmAdapter::TError CPresenceDMAdapter::FetchObjectL( const TDesC8& aUri,
     if (!IsPresIDValidL(settingsId))
         {
         //try to find it another way
-        TPtrC8 removedLastSeg = NSmlDmURI::RemoveLastSeg(aUri);
-        TPtrC8 idSegment = NSmlDmURI::LastURISeg(removedLastSeg);
-        TInt settingsId = DesToInt(idSegment);
-        if (!IsPresIDValidL(settingsId))
-            status = CSmlDmAdapter::ENotFound;
-        PRES_DM_LOG(LOG_LIT("   settingsId found local way:%d"), settingsId);
+        if( NSmlDmURI::NumOfURISegs( aUri ) > 1 )
+            {
+            TPtrC8 idSegment = NSmlDmURI::URISeg( aUri, 2 );
+            settingsId = DesToInt(idSegment);
+            if(!IsPresIDValidL(settingsId))
+                {
+                status = CSmlDmAdapter::ENotFound;
+                }
+            PRES_DM_LOG(LOG_LIT("   settingsId found local way:%d"), settingsId);
+            }
         }
     
     // if previous settings id processing was ok
@@ -519,12 +521,16 @@ void CPresenceDMAdapter::UpdateLeafObjectL(const TDesC8& aUri,
     if (!IsPresIDValidL(settingsId))
         {
         //try to find it another way
-        TPtrC8 removedLastSeg = NSmlDmURI::RemoveLastSeg(aUri);
-        TPtrC8 idSegment = NSmlDmURI::LastURISeg(removedLastSeg);
-        TInt settingsId = DesToInt(idSegment);
-        if (!IsPresIDValidL(settingsId))
-            status = CSmlDmAdapter::ENotFound; 
-        PRES_DM_LOG(LOG_LIT("   settingsId found local way:%d"), settingsId);
+        if( NSmlDmURI::NumOfURISegs( aUri ) > 1 )
+            {
+            TPtrC8 idSegment = NSmlDmURI::URISeg( aUri, 2 );
+            settingsId = DesToInt(idSegment);
+            if (!IsPresIDValidL(settingsId))
+                {
+                status = CSmlDmAdapter::ENotFound;
+                }
+            PRES_DM_LOG(LOG_LIT("   settingsId found local way:%d"), settingsId);
+            }
         }
     
     // if previous settings id processing was ok
@@ -722,6 +728,7 @@ void CPresenceDMAdapter::ExecuteCommandL( const TDesC8& /*aUri*/,
                                          const TInt aStatusRef )
     {
     // Not supported 
+    PRES_DM_LOG(LOG_LIT("ExecuteCommandL"));    
     Callback().SetStatusL( aStatusRef, CSmlDmAdapter::EError );
     }
 
@@ -736,6 +743,7 @@ void CPresenceDMAdapter::ExecuteCommandL( const TDesC8& /*aUri*/,
                                          const TInt aStatusRef )
     {
     // Not supported
+    PRES_DM_LOG(LOG_LIT("ExecuteCommandL"));
     Callback().SetStatusL( aStatusRef, CSmlDmAdapter::EError );
     }
 
@@ -751,6 +759,7 @@ void CPresenceDMAdapter::CopyCommandL( const TDesC8& /*aTargetURI*/,
                                       TInt aStatusRef )
     {
     // Not supported
+    PRES_DM_LOG(LOG_LIT("CopyCommandL"));    
     Callback().SetStatusL( aStatusRef, CSmlDmAdapter::EError );
     }
 
@@ -760,6 +769,7 @@ void CPresenceDMAdapter::CopyCommandL( const TDesC8& /*aTargetURI*/,
 //
 void CPresenceDMAdapter::StartAtomicL()
     {
+    PRES_DM_LOG(LOG_LIT("StartAtomicL"));
     // Not supported
     }
 
@@ -769,6 +779,7 @@ void CPresenceDMAdapter::StartAtomicL()
 //
 void CPresenceDMAdapter::CommitAtomicL()
     {
+    PRES_DM_LOG(LOG_LIT("CommitAtomicL"));
     // Not supported
     }
 
@@ -778,6 +789,7 @@ void CPresenceDMAdapter::CommitAtomicL()
 //
 void CPresenceDMAdapter::RollbackAtomicL()
     {
+    PRES_DM_LOG(LOG_LIT("RollbackAtomicL"));
     // Not supported
     }
 
@@ -787,6 +799,7 @@ void CPresenceDMAdapter::RollbackAtomicL()
 //
 TBool CPresenceDMAdapter::StreamingSupport( TInt& /*aItemSize*/ )
     {
+    PRES_DM_LOG(LOG_LIT("StreamingSupport"));    
     return EFalse;
     }
 
@@ -796,6 +809,7 @@ TBool CPresenceDMAdapter::StreamingSupport( TInt& /*aItemSize*/ )
 //
 void CPresenceDMAdapter::StreamCommittedL()
     {
+    PRES_DM_LOG(LOG_LIT("StreamCommittedL"));    
     // Not supported
     }
     
@@ -877,10 +891,10 @@ CSmlDmAdapter::TError CPresenceDMAdapter::GetPropertyL( TInt aSetId,
         aObject.InsertL( 0, *utfValue );
         CleanupStack::PopAndDestroy(utfValue);  // >>> utfValue
         CleanupStack::PopAndDestroy(value);  // >>> value
-        PRES_DM_LOG(LOG_LIT(" return(%d)"),CSmlDmAdapter::EOk);  
+        PRES_DM_LOG(LOG_LIT(" return( EOk )"));  
         return CSmlDmAdapter::EOk;
         }
-    PRES_DM_LOG(LOG_LIT(" return(%d)"),CSmlDmAdapter::ENotFound);      
+    PRES_DM_LOG(LOG_LIT(" return( ENotFound )"));      
     return CSmlDmAdapter::ENotFound;
     }
     
@@ -1056,7 +1070,7 @@ HBufC* CPresenceDMAdapter::IntToDesLC( const TInt aLuid ) const
 CSmlDmAdapter::TError CPresenceDMAdapter::GetConRefFromSipIDL( TInt aSipID,
                                                       CBufBase& aObject)
     {
-    PRES_DM_LOG(LOG_LIT(" GetConRefFromSipIDL(%d)"),aSipID);
+    PRES_DM_LOG(LOG_LIT(" GetConRefFromSipIDL(aSipId:%d)"),aSipID);
 
     CSmlDmAdapter::TError status = CSmlDmAdapter::EOk;
     
@@ -1069,12 +1083,14 @@ CSmlDmAdapter::TError CPresenceDMAdapter::GetConRefFromSipIDL( TInt aSipID,
         
         // Request all the sip settings identifiers 
         Callback().FetchLinkL( KPresDMSipDMNode, *result, status);
+        PRES_DM_LOG(LOG_LIT("   FetchLinkL(SIP) status : %d"), status );
         
         if( status == EOk )
             {
             TPtr8 uriSeg8Ptr = result->Ptr(0);
             
-            HBufC8* uriSegBuffer = uriSeg8Ptr.AllocLC();
+            HBufC8* uriSegBuffer = uriSeg8Ptr.AllocLC(); // << uriSegBuffer
+            PRES_DM_LOG(LOG_LIT8("   uri : '%S'"), uriSegBuffer );
             
             TPtr8 uriSegBufferPtr = uriSegBuffer->Des();
             
@@ -1087,7 +1103,7 @@ CSmlDmAdapter::TError CPresenceDMAdapter::GetConRefFromSipIDL( TInt aSipID,
                      
             // Check if given SIP set id match with any of found
             // SIP settings identifiers
-            while( numOfUriSegs > 1)
+            while( numOfUriSegs > 0 )
                 {
                 idLinkBuffer = NSmlDmURI::LastURISeg(uriSegBufferPtr);
                 uriSegBufferPtr = NSmlDmURI::RemoveLastSeg(uriSegBufferPtr);
@@ -1102,17 +1118,20 @@ CSmlDmAdapter::TError CPresenceDMAdapter::GetConRefFromSipIDL( TInt aSipID,
                 //Reqest the ID
                 result->Reset();
                 Callback().FetchLinkL( finalLink, *result, status);
-                        
-                foundId = DesToInt(result->Ptr(0));
-                        
-                if (foundId == aSipID)
+                PRES_DM_LOG(LOG_LIT8("   FetchLinkL(%S) status : %d"), &idLinkBuffer, status );                        
+                if( status == EOk )
                     {
-                    found = ETrue;
-                    aObject.InsertL(0, NSmlDmURI::RemoveLastSeg(finalLink));
+                    foundId = DesToInt(result->Ptr(0));
+                    PRES_DM_LOG(LOG_LIT("   foundId : %d"), foundId );                        
+                    if (foundId == aSipID)
+                        {
+                        found = ETrue;
+                        aObject.InsertL(0, NSmlDmURI::RemoveLastSeg(finalLink));
                         break;
                         }
+                    }
                 
-                numOfUriSegs -= 1;  
+                numOfUriSegs--;  
                 }
             CleanupStack::PopAndDestroy( uriSegBuffer );    // >>> uriSegBuffer
             }
@@ -1137,7 +1156,7 @@ CSmlDmAdapter::TError CPresenceDMAdapter::GetConRefFromSipIDL( TInt aSipID,
 CSmlDmAdapter::TError CPresenceDMAdapter::GetConRefFromXdmIDL( TInt aXdmID,
                                                       CBufBase& aObject)
     {
-    PRES_DM_LOG(LOG_LIT(" GetConRefFromXdmIDL(%d)"),aXdmID);
+    PRES_DM_LOG(LOG_LIT(" GetConRefFromXdmIDL(aXdmId:%d)"),aXdmID);
 
     CSmlDmAdapter::TError status = CSmlDmAdapter::ENotFound;
     
@@ -1148,6 +1167,7 @@ CSmlDmAdapter::TError CPresenceDMAdapter::GetConRefFromXdmIDL( TInt aXdmID,
         
         // Request all the XDM settings identifiers 
         Callback().FetchLinkL( KPresDMXdmDMNode, *result, status);
+        PRES_DM_LOG(LOG_LIT("   FetchLinkL(XDM) status : %d"), status );
         TInt id(KErrNotFound);
         
         TPtrC8 lastUriSegXdm;
@@ -1211,6 +1231,7 @@ TBool CPresenceDMAdapter::IsPresIDValidL(TInt aSetId)
     TPresSettingsSet tempSet;
     if ((PresSettingsApi::SettingsSetL(aSetId,tempSet)) == KErrNone)
         return ETrue;
+    PRES_DM_LOG(LOG_LIT8(" IsPresIDValidL - Invalid settings : %d"), aSetId );
     return EFalse;   
     }
     
@@ -1248,8 +1269,7 @@ TInt CPresenceDMAdapter::GetSipIdFromConRefL(const TDesC8& aUri )
         
     if( status == EOk )
         {
-        TUint32 id(NULL);
-        id = DesToInt( result->Ptr( 0 ) );
+        TUint32 id = DesToInt( result->Ptr( 0 ) );
         returnId = (TInt)id;       
         }
     CleanupStack::PopAndDestroy( result );   // >>> result   
