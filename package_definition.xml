@@ -53,6 +53,26 @@
    <component id="simple_instant_msg_api" name="Simple Instant Msg API" class="api" filter="s60">
     <unit bldFile="pressrv_plat/simple_instant_msg_api/group"/>
    </component>
-  </collection>
+  </collection>  
+  <collection id="XDMEngine" name="Legacy Presence XDMEngine implementation" level="engine">    
+   <component id="XdmDeviceManagement" name="XDM OMA Device Management Adapter" class="plugin" filter="s60">
+    <meta rel="comments">
+    <comments>Implementation for XDM OMA Device Management Adapter</comments>
+    </meta>
+    <unit bldFile="XDMEngine/XdmDeviceManagement/group"/>
+   </component>
+   <component id="XdmProvisioning" name="XDM OMA Provisioning Adapter" class="plugin" filter="s60">
+    <meta rel="comments">
+    <comments>Implementation for XDM OMA Provisioning Adapter</comments>
+    </meta>
+    <unit bldFile="XDMEngine/XdmProvisioning/group"/>
+   </component>
+   <component id="XdmSettingsApi" name="XDM Settings API implementation" filter="s60">
+    <meta rel="comments">
+    <comments>Implementation for XDM Settings API, needed for accessing and creating XDM settings.</comments>
+    </meta>
+    <unit bldFile="XDMEngine/XdmSettingsApi/group"/>
+   </component>
+   </collection>        
  </package>
 </SystemDefinition>
