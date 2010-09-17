@@ -53,26 +53,18 @@
    <component id="simple_instant_msg_api" name="Simple Instant Msg API" class="api" filter="s60">
     <unit bldFile="pressrv_plat/simple_instant_msg_api/group"/>
    </component>
-  </collection>  
-  <collection id="XDMEngine" name="Legacy Presence XDMEngine implementation" level="engine">    
-   <component id="XdmDeviceManagement" name="XDM OMA Device Management Adapter" class="plugin" filter="s60">
-    <meta rel="comments">
-    <comments>Implementation for XDM OMA Device Management Adapter</comments>
-    </meta>
-    <unit bldFile="XDMEngine/XdmDeviceManagement/group"/>
+  </collection>
+  <collection id="xdmengine" name="XDM Engine" level="engine">
+   <!-- collection is really a component. Need to move down a directory (eg xdm/xdmengine)-->
+   <component id="xdmengine_build" filter="s60" name="XDM Engine Build">
+    <unit bldFile="xdmengine/group"/>
    </component>
-   <component id="XdmProvisioning" name="XDM OMA Provisioning Adapter" class="plugin" filter="s60">
-    <meta rel="comments">
-    <comments>Implementation for XDM OMA Provisioning Adapter</comments>
-    </meta>
-    <unit bldFile="XDMEngine/XdmProvisioning/group"/>
+  </collection>
+  <collection id="simpleengine" name="SIMPLE Engine" level="engine">
+   <!-- collection is really a component. Need to move down a directory-->
+   <component id="simpleengine_build" filter="s60" name="SIMPLE Engine Build">
+    <!-- <unit bldFile="simpleengine/group"/> not built -->
    </component>
-   <component id="XdmSettingsApi" name="XDM Settings API implementation" filter="s60">
-    <meta rel="comments">
-    <comments>Implementation for XDM Settings API, needed for accessing and creating XDM settings.</comments>
-    </meta>
-    <unit bldFile="XDMEngine/XdmSettingsApi/group"/>
-   </component>
-   </collection>        
+  </collection>
  </package>
 </SystemDefinition>
