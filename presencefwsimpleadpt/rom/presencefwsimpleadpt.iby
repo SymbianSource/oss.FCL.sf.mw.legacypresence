@@ -30,7 +30,7 @@
 ECOM_PLUGIN( simpleplugin.dll, simpleplugin.rss )
 
 // stub SIS, provides support for SIS upgrading
-data=DATAZ_/system/install/presencefwsimpleadptstub.sis     system/install/presencefwsimpleadptstub.sis
+data=DATAZ_\system\install\presencefwsimpleadptstub.sis     system\install\presencefwsimpleadptstub.sis
 
 #endif      // __SIP_SIMPLE_PRESENCE_PROTOCOL
 #endif      // __PRESENCE_FRAMEWORK

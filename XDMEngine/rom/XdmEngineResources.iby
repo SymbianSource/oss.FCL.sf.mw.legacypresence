@@ -23,7 +23,7 @@
 //
 // Settings provisioning adapter plugin resources
 //
-data=DATAZ_/RESOURCE_FILES_DIR/XdmProvisioningTexts.RSC RESOURCE_FILES_DIR/XdmProvisioningTexts.RSC
+data=DATAZ_\RESOURCE_FILES_DIR\XdmProvisioningTexts.RSC RESOURCE_FILES_DIR\XdmProvisioningTexts.RSC
 
 #endif //__XDMENGINE_RESOURCES_IBY__
 

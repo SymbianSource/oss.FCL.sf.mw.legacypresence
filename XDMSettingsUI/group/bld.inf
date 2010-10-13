@@ -33,7 +33,7 @@ PRJ_EXPORTS
 ../rom/GSXDMPlugin.iby CORE_MW_LAYER_IBY_EXPORT_PATH(gsxdmplugin.iby)
 ../rom/GSXDMPluginResources.iby LANGUAGE_MW_LAYER_IBY_EXPORT_PATH(gsxdmpluginresources.iby)
 // LOC
-../loc/gsxdmplugin.loc MW_LAYER_LOC_EXPORT_PATH(gsxdmplugin.loc)
+../loc/GSXDMPlugin.loc MW_LAYER_LOC_EXPORT_PATH(gsxdmplugin.loc)
 
 PRJ_EXTENSIONS
 START EXTENSION s60/mifconv

@@ -22,7 +22,7 @@
 #define M_simpledocument_H
 
 #include <e32std.h>
-#include <s32strm.h>
+#include <S32strm.h>
 #include <msimpleelement.h>
 
 // FORWARD DECLARATION
