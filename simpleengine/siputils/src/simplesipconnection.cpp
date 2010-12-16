@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006-2009 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -1282,8 +1282,12 @@ void CSimpleSipConnection::ConnectionChanged()
     TRAPD( err, conn = iProfileObserver->GiveConnectionL() );
     if( !err )
         {
-        delete iSipConnection;
-        iSipConnection = conn;
+        if ( iSipConnection != conn )
+            {
+            // The new and the old are two different connections.
+            delete iSipConnection;
+            iSipConnection = conn;
+            }
 #ifdef _DEBUG
         TSimpleLogger::Log(_L("SipConnection: ConnectionChanged : new conn state %d"), iSipConnection->State() );
         TSimpleLogger::Log(_L("SipConnection: ConnectionChanged : new IAP %d"),  iSipConnection->IapId() );

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2006 Nokia Corporation and/or its subsidiary(-ies).
+* Copyright (c) 2006-2010 Nokia Corporation and/or its subsidiary(-ies).
 * All rights reserved.
 * This component and the accompanying materials are made available
 * under the terms of "Eclipse Public License v1.0"
@@ -183,12 +183,23 @@ MXIMPProtocolConnection& CPresencePlugin::AcquireConnectionL(
 			else if ( CPresencePluginConnection::ETerminated == status )
                 {
                 DP_SDA("AcquireConnectionL ETerminated CREATE NEW CONNECTION ");
-                //Roamning try use lates ETag
-                //Delete old terminaded connection and create new with old ETag                             
-                CPresencePluginConnection* connection =
-                	CPresencePluginConnection::NewL(
-                        aServiceInfo, aContextClient,
-                        *iConnectionArray[i]->GetConnectionEtag() );
+                CPresencePluginConnection* connection = NULL;
+                if ( iConnectionArray[i]->GetConnectionEtag() )
+                    {
+                    // Roaming try to use the old ETag.
+                    // Create a new connection with the old ETag.  
+                    connection = CPresencePluginConnection::NewL(
+                                  aServiceInfo, aContextClient,
+                                  *iConnectionArray[i]->GetConnectionEtag() );
+
+                    }
+                else
+                    {
+                    // The old ETag is not exist.
+                    // Create a new connection without ETag.
+                    connection = CPresencePluginConnection::NewL(
+                                  aServiceInfo, aContextClient);
+                    }
                 CleanupStack::PushL( connection );
                 
                 DeleteConnection( i );

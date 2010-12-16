@@ -216,11 +216,11 @@ CPresencePluginConnection::~CPresencePluginConnection()
     delete iGroups;
     iGroups = NULL;
     
-    delete iSession;
-    iSession = NULL;
-    
     delete iImFeatures;
     
+    delete iSession;
+    iSession = NULL;
+        
     REComSession::FinalClose();
     
     delete iSubscribedBuddys;

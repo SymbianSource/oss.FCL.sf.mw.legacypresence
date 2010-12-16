@@ -1115,14 +1115,15 @@ void CPresencePluginPublisher::CreatePublisherL()
     DP_SDA("CPresencePluginPublisher::CreatePublisherL");
     if( iPublisher )
         {
-        DP_SDA("CPresencePluginPublisher::CreatePublisherL create");
+        // Close the old publisher
+        DP_SDA("CPresencePluginPublisher::CreatePublisherL close");
         iPublisher->Close();
         iPublisher = NULL; 
-        iPublisher = TSimpleFactory::NewPublisherL( iConnection, *this );
         }
+    iPublisher = TSimpleFactory::NewPublisherL( iConnection, *this );
     DP_SDA("CPresencePluginPublisher::CreatePublisherL end");
     }
-	
+
 // ---------------------------------------------------------------------------
 // CPresencePluginPublisher::StoreOwnStatusToCacheL
 // --------------------------------------------------------------------------- 
